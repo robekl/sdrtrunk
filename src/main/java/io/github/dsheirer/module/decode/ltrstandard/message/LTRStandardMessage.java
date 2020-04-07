@@ -134,7 +134,7 @@ public abstract class LTRStandardMessage extends Message
     {
         if(mTalkgroup == null)
         {
-            mTalkgroup = LTRTalkgroup.create((getHomeRepeater() << 8) + getGroup());
+            mTalkgroup = LTRTalkgroup.create((getArea() << 13) + (getHomeRepeater() << 8) + getGroup());
         }
 
         return mTalkgroup;
