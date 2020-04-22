@@ -44,8 +44,8 @@ public class ComplexSampleLineChart extends LineChart implements Listener<Reusab
 
     private ComplexCircularBuffer mComplexCircularBuffer;
     private ComplexCircularBuffer mDemodulationCircularBuffer;
-    private ObservableList<XYChart.Data<Integer,Float>> mISamples = FXCollections.observableArrayList();
-    private ObservableList<XYChart.Data<Integer,Float>> mQSamples = FXCollections.observableArrayList();
+    private ObservableList<XYChart.Data<Integer,Double>> mISamples = FXCollections.observableArrayList();
+    private ObservableList<XYChart.Data<Integer,Double>> mQSamples = FXCollections.observableArrayList();
     private IntegerProperty mLengthProperty = new SimpleIntegerProperty(40);
 
     public ComplexSampleLineChart(String label, int length, int samplesPerSymbol)
@@ -53,9 +53,9 @@ public class ComplexSampleLineChart extends LineChart implements Listener<Reusab
         super(new NumberAxis(label, 0, length, 10),
             new NumberAxis("Value", -1.0, 1.0, 0.25));
 
-        LineChart.Series<Integer,Float> iSampleSeries = new LineChart.Series<>("Inphase", mISamples);
-        LineChart.Series<Integer,Float> qSampleSeries = new LineChart.Series<>("Quadrature", mQSamples);
-        ObservableList<XYChart.Series<Integer,Float>> observableList =
+        LineChart.Series<Integer,Double> iSampleSeries = new LineChart.Series<>("Inphase", mISamples);
+        LineChart.Series<Integer,Double> qSampleSeries = new LineChart.Series<>("Quadrature", mQSamples);
+        ObservableList<XYChart.Series<Integer,Double>> observableList =
             FXCollections.observableArrayList(iSampleSeries, qSampleSeries);
 
         setData(observableList);
@@ -99,7 +99,7 @@ public class ComplexSampleLineChart extends LineChart implements Listener<Reusab
     @Override
     public void receive(ReusableComplexBuffer complexBuffer)
     {
-        float[] samples = complexBuffer.getSamples();
+        double[] samples = complexBuffer.getSamples();
 
         for(int x = 0; x < samples.length; x += 2)
         {
@@ -110,7 +110,7 @@ public class ComplexSampleLineChart extends LineChart implements Listener<Reusab
     }
 
     @Override
-    public void receive(float i, float q)
+    public void receive(double i, double q)
     {
         Complex sample = new Complex(i,q);
         sample.normalize();

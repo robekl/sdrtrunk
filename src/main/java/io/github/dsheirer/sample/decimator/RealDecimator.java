@@ -36,7 +36,7 @@ public class RealDecimator implements RealSampleListener
 	 * to the registered listener
 	 */
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		mCounter++;
 		

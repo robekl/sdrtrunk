@@ -116,7 +116,7 @@ public class AudioSegmentRecorder
         {
             WaveWriter writer = new WaveWriter(AudioFormats.PCM_SIGNED_8KHZ_16BITS_MONO, path);
 
-            for(float[] audioBuffer: audioSegment.getAudioBuffers())
+            for(double[] audioBuffer: audioSegment.getAudioBuffers())
             {
                 writer.writeData(ConversionUtils.convertToSigned16BitSamples(audioBuffer));
             }

@@ -477,7 +477,7 @@ public class OverlayPanel extends JPanel implements Listener<ChannelEvent>, ISou
      */
     private double getAxisFromFrequency(long frequency)
     {
-        double screenWidth = (double)getSize().getWidth();
+        double screenWidth = getSize().getWidth();
 
         double pixelsPerBin = screenWidth / (double)mDFTSize.getSize();
 
@@ -526,9 +526,9 @@ public class OverlayPanel extends JPanel implements Listener<ChannelEvent>, ISou
 
         Rectangle2D rect = fontMetrics.getStringBounds(label, graphics);
 
-        float xOffset = (float)rect.getWidth() / 2;
+        double xOffset = rect.getWidth() / 2;
 
-        graphics.drawString(label, (float)(xaxis - xOffset), (float)(getSize().getHeight() - 2.0f));
+        graphics.drawString(label, (float)(xaxis - xOffset), (float)(getSize().getHeight() - 2.0d));
     }
 
 

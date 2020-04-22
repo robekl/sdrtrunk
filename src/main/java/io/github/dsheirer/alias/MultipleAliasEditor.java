@@ -79,7 +79,7 @@ public class MultipleAliasEditor extends Editor<List<Alias>>
     {
         if (hasItem())
         {
-            return (List<Alias>) getItem();
+            return getItem();
         }
 
         return null;

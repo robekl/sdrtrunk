@@ -282,7 +282,7 @@ public abstract class TunerController implements Tunable, ISourceEventProcessor,
      */
     public int getUsableHalfBandwidth()
     {
-        return (int)(getUsableBandwidth() / 2);
+        return getUsableBandwidth() / 2;
     }
 
     /**

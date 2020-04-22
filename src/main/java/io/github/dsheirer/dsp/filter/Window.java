@@ -118,7 +118,7 @@ public class Window
 
         if(length % 2 == 0) //Even length
         {
-            int half = (int)((length - 1) / 2);
+            int half = (length - 1) / 2;
 
             for(int x = -half; x < length / 2 + 1; x++)
             {
@@ -128,7 +128,7 @@ public class Window
         }
         else //Odd length
         {
-            int half = (int)length / 2;
+            int half = length / 2;
 
             for(int x = -half; x < half + 1; x++)
             {

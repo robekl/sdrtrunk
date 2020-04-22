@@ -25,7 +25,7 @@ public class SampleBufferInstrumented extends SampleBuffer
      * @param samplesPerSymbol
      * @param symbolTimingGain
      */
-    public SampleBufferInstrumented(float samplesPerSymbol, float symbolTimingGain)
+    public SampleBufferInstrumented(double samplesPerSymbol, double symbolTimingGain)
     {
         super(samplesPerSymbol, symbolTimingGain);
     }
@@ -56,7 +56,7 @@ public class SampleBufferInstrumented extends SampleBuffer
      * Current symbol timing gain value
      * @return
      */
-    public float getSymbolTimingGain()
+    public double getSymbolTimingGain()
     {
         return mSymbolTimingGain;
     }
@@ -64,12 +64,12 @@ public class SampleBufferInstrumented extends SampleBuffer
     /**
      * Current mid-symbol sampling point
      */
-    public float getMidSymbolSamplingPoint()
+    public double getMidSymbolSamplingPoint()
     {
         return mMidSymbolSamplingPoint;
     }
 
-    public float getSamplesPerSymbol()
+    public double getSamplesPerSymbol()
     {
         return mSamplesPerSymbol;
     }

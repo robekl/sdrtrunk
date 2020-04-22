@@ -20,12 +20,12 @@
 package io.github.dsheirer.dsp.afsk;
 
 import io.github.dsheirer.bits.IBinarySymbolProcessor;
-import io.github.dsheirer.buffer.FloatAveragingBuffer;
+import io.github.dsheirer.buffer.DoubleAveragingBuffer;
 import io.github.dsheirer.dsp.filter.resample.RealResampler;
 import io.github.dsheirer.dsp.mixer.IOscillator;
 import io.github.dsheirer.dsp.mixer.Oscillator;
 import io.github.dsheirer.sample.Listener;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.apache.commons.math3.util.FastMath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  * Provides normal or inverted decoded output.
  */
-public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
+public class AFSK1200Decoder implements Listener<ReusableDoubleBuffer>
 {
     private final static Logger mLog = LoggerFactory.getLogger(AFSK1200Decoder.class);
 
@@ -56,15 +56,15 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
     public static final int AVERAGING_PERIOD = SAMPLES_PER_SYMBOL + 1;
     public static final double MARK = 1200.0;
     public static final double SPACE = 1800.0;
-    public static final float TIMING_ERROR_GAIN = 1.0f / 3.0f; //Timing error adjustments over 3 symbol periods
+    public static final double TIMING_ERROR_GAIN = 1.0d / 3.0d; //Timing error adjustments over 3 symbol periods
 
     private Correlator mCorrelatorMark = new Correlator(SAMPLE_RATE, MARK, AVERAGING_PERIOD, CORRELATION_PERIOD);
     private Correlator mCorrelatorSpace = new Correlator(SAMPLE_RATE, SPACE, AVERAGING_PERIOD, CORRELATION_PERIOD);
-    private float[] mCorrelationValuesMark;
-    private float[] mCorrelationValuesSpace;
+    private double[] mCorrelationValuesMark;
+    private double[] mCorrelationValuesSpace;
 
     protected boolean mNormalOutput;
-    protected float mSymbolTimingGain = TIMING_ERROR_GAIN;
+    protected double mSymbolTimingGain = TIMING_ERROR_GAIN;
     protected AFSKSampleBuffer mSampleBuffer;
     protected AFSKTimingErrorDetector mTimingErrorDetector = new AFSKTimingErrorDetector(SAMPLES_PER_SYMBOL);
     protected IBinarySymbolProcessor mBinarySymbolProcessor;
@@ -115,7 +115,7 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
      * @param buffer containing 8.0 kHz unfiltered FM demodulated audio samples with sub-audible LTR signalling.
      */
     @Override
-    public void receive(ReusableFloatBuffer buffer)
+    public void receive(ReusableDoubleBuffer buffer)
     {
         mResampler.resample(buffer);
     }
@@ -147,10 +147,10 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
     }
 
 
-    public class Decoder implements Listener<ReusableFloatBuffer>
+    public class Decoder implements Listener<ReusableDoubleBuffer>
     {
         @Override
-        public void receive(ReusableFloatBuffer buffer)
+        public void receive(ReusableDoubleBuffer buffer)
         {
             //Calculate correlation values against each 1200/1800 reference signal
             mCorrelationValuesMark = mCorrelatorMark.process(buffer);
@@ -189,11 +189,11 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
      */
     public class Correlator
     {
-        private FloatAveragingBuffer mAveragingBuffer;
-        private float[] mReferenceSamples;
-        private float[] mDemodulatedSamples;
-        private float[] mCorrelationValues;
-        private float mCorrelationAccumulator;
+        private DoubleAveragingBuffer mAveragingBuffer;
+        private double[] mReferenceSamples;
+        private double[] mDemodulatedSamples;
+        private double[] mCorrelationValues;
+        private double mCorrelationAccumulator;
 
         /**
          * Constructs a correlator instance,
@@ -205,29 +205,29 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
          */
         public Correlator(double sampleRate, double frequency, int averagingPeriod, int correlationPeriod)
         {
-            mAveragingBuffer = new FloatAveragingBuffer(averagingPeriod);
+            mAveragingBuffer = new DoubleAveragingBuffer(averagingPeriod);
 
             IOscillator referenceSignalGenerator = new Oscillator(frequency, sampleRate);
             mReferenceSamples = referenceSignalGenerator.generateReal(correlationPeriod);
 
-            mDemodulatedSamples = new float[correlationPeriod];
+            mDemodulatedSamples = new double[correlationPeriod];
         }
 
         /**
          * Processes each sample in the incoming sample buffer against a generated reference sample set for one symbol
          * period to derive a correlation value that is in-turn averaged over one symbol period.
          *
-         * @param reusableFloatBuffer containing FM demodulated samples
+         * @param reusableDoubleBuffer containing FM demodulated samples
          * @return a reusable array of correlation values for each sample
          */
-        public float[] process(ReusableFloatBuffer reusableFloatBuffer)
+        public double[] process(ReusableDoubleBuffer reusableDoubleBuffer)
         {
-            if(mCorrelationValues == null || mCorrelationValues.length != reusableFloatBuffer.getSampleCount())
+            if(mCorrelationValues == null || mCorrelationValues.length != reusableDoubleBuffer.getSampleCount())
             {
-                mCorrelationValues = new float[reusableFloatBuffer.getSampleCount()];
+                mCorrelationValues = new double[reusableDoubleBuffer.getSampleCount()];
             }
 
-            float[] samples = reusableFloatBuffer.getSamples();
+            double[] samples = reusableDoubleBuffer.getSamples();
 
             int y;
 
@@ -238,7 +238,7 @@ public class AFSK1200Decoder implements Listener<ReusableFloatBuffer>
                 System.arraycopy(mDemodulatedSamples, 1, mDemodulatedSamples, 0, mDemodulatedSamples.length - 1);
                 mDemodulatedSamples[mDemodulatedSamples.length - 1] = samples[x];
 
-                mCorrelationAccumulator = 0.0f;
+                mCorrelationAccumulator = 0.0d;
 
                 for(y = 0; y < mDemodulatedSamples.length; y++)
                 {

@@ -22,7 +22,7 @@ public interface IReusableBufferProvider
     /**
      * Adds the listener to receive complex buffer samples
      */
-    void setBufferListener(Listener<ReusableFloatBuffer> listener);
+    void setBufferListener(Listener<ReusableDoubleBuffer> listener);
 
     /**
      * Removes the listener from receiving complex buffer samples

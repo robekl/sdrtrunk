@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 public class AFSK1200SampleBufferChart extends LineChart
 {
     private final static Logger mLog = LoggerFactory.getLogger(AFSK1200SampleBufferChart.class);
-    private ObservableList<Data<Integer,Float>> mSamples = FXCollections.observableArrayList();
-    private Series<Integer,Float> mSampleSeries = new Series<>("Samples", mSamples);
+    private ObservableList<Data<Integer,Double>> mSamples = FXCollections.observableArrayList();
+    private Series<Integer,Double> mSampleSeries = new Series<>("Samples", mSamples);
 
     private ObservableList<Data<Number,Number>> mSamplePoints = FXCollections.observableArrayList();
     private Series<Number,Number> mSamplePointSeries = new Series<>("Pointers", mSamplePoints);
@@ -64,7 +64,7 @@ public class AFSK1200SampleBufferChart extends LineChart
     {
         while(mSamples.size() < buffer.length)
         {
-            Data<Integer,Float> sample = new Data<>(mSamples.size(), 0.0f);
+            Data<Integer,Double> sample = new Data<>(mSamples.size(), 0.0d);
             mSamples.add(sample);
 
             //Turn off the data point marker symbols - yes I know this is inefficient
@@ -77,9 +77,9 @@ public class AFSK1200SampleBufferChart extends LineChart
 
         for(int x = 0; x < buffer.length; x++)
         {
-            Data<Integer,Float> sample = mSamples.get(x);
+            Data<Integer,Double> sample = mSamples.get(x);
 
-            sample.setYValue(buffer[x] ? 0.5f : -0.5f);
+            sample.setYValue(buffer[x] ? 0.5d : -0.5d);
         }
     }
 
@@ -120,14 +120,14 @@ public class AFSK1200SampleBufferChart extends LineChart
             mSamplePoints.get(0).setXValue(pointer1);
             mSamplePoints.get(1).setXValue(pointer2);
 
-            float samplesPerSymbol = mIInstrumentedAFSK1200Decoder.getAFSK1200Decoder().getSampleBuffer().getSamplesPerSymbol();
+            double samplesPerSymbol = mIInstrumentedAFSK1200Decoder.getAFSK1200Decoder().getSampleBuffer().getSamplesPerSymbol();
 
             boolean symbol = mIInstrumentedAFSK1200Decoder.getAFSK1200Decoder().getSampleBuffer().getLastSymbol();
             int symbolStart = mIInstrumentedAFSK1200Decoder.getAFSK1200Decoder().getSampleBuffer().getSymbolStart();
             int symbolEnd = mIInstrumentedAFSK1200Decoder.getAFSK1200Decoder().getSampleBuffer().getSymbolEnd();
 
-            float start = pointer1 + samplesPerSymbol - 1;
-            float end = symbolEnd;
+            double start = pointer1 + samplesPerSymbol - 1;
+            double end = symbolEnd;
 
             mSymbolSamples.get(0).setXValue(start);
             mSymbolSamples.get(1).setXValue(end);

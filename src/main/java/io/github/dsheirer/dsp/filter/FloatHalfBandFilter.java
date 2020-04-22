@@ -25,11 +25,11 @@ import java.util.ArrayList;
 public class FloatHalfBandFilter implements RealSampleListener
 {
 	private RealSampleListener mListener;
-	private ArrayList<Float> mBuffer;
+	private ArrayList<Double> mBuffer;
     private int mBufferSize = 1; //Temporary initial value
 	private int mBufferPointer = 0;
-	private float mGain;
-	private float[] mCoefficients;
+	private double mGain;
+	private double[] mCoefficients;
 	private int[][] mIndexMap;
 	private int mCenterCoefficient;
 	private int mCenterCoefficientMapIndex;
@@ -51,16 +51,16 @@ public class FloatHalfBandFilter implements RealSampleListener
 	 * @param filter - filter coefficients
 	 * @param gain - gain multiplier.  Use 1.0 for unity/no gain
 	 */
-	public FloatHalfBandFilter( Filters filter, float gain )
+	public FloatHalfBandFilter( Filters filter, double gain )
 	{
 		mCoefficients = filter.getCoefficients();
-		mBuffer = new ArrayList<Float>();
+		mBuffer = new ArrayList<Double>();
 		mBufferSize = mCoefficients.length;
 		
 		//Fill the buffer with zero valued samples
 		for( int x = 0; x < mCoefficients.length; x++ )
 		{
-			mBuffer.add( 0.0f );
+			mBuffer.add( 0.0d );
 		}
 		
 		generateIndexMap( mCoefficients.length );
@@ -76,7 +76,7 @@ public class FloatHalfBandFilter implements RealSampleListener
 	 * Calculate the filtered value by applying the coefficients against
 	 * the complex samples in mBuffer
 	 */
-	public void receive( float newSample )
+	public void receive( double newSample )
 	{
 		//Add the new sample to the buffer
 		mBuffer.set( mBufferPointer, newSample );
@@ -98,7 +98,7 @@ public class FloatHalfBandFilter implements RealSampleListener
 		{
 			//Convolution - multiply filter coefficients by the circular buffer
 			//samples to calculate a new filtered value
-			float accumulator = 0;
+			double accumulator = 0d;
 
 			//Start with the center tap value
 			accumulator += mCoefficients[ mCenterCoefficient ] * 
@@ -117,7 +117,7 @@ public class FloatHalfBandFilter implements RealSampleListener
 			//send it on it's merry way
 			if( mListener != null )
 			{
-				mListener.receive( (float)( accumulator * mGain ) );
+				mListener.receive(  accumulator * mGain );
 			}
 		}
 	}

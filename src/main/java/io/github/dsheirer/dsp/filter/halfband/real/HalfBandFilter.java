@@ -20,17 +20,17 @@
 package io.github.dsheirer.dsp.filter.halfband.real;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.apache.commons.lang3.Validate;
 
 public class HalfBandFilter
 {
-    private float[] mBuffer;
+    private double[] mBuffer;
     private int mBufferSize = 1; //Temporary initial value
     private int mBufferPointer = 0;
 
-    private float mGain;
-    private float[] mCoefficients;
+    private double mGain;
+    private double[] mCoefficients;
     private int[][] mIndexMap;
 
     private int mCenterCoefficient;
@@ -49,7 +49,7 @@ public class HalfBandFilter
      * @param filter - filter coefficients
      * @param gain - gain multiplier.  Use 1.0 for unity/no gain
      */
-    public HalfBandFilter(float[] coefficients, float gain)
+    public HalfBandFilter(double[] coefficients, double gain)
     {
         //TODO: update this to use SIMD structures with 2 float arrays and a toggle operation
 
@@ -58,12 +58,12 @@ public class HalfBandFilter
         mGain = gain;
 
         mBufferSize = mCoefficients.length;
-        mBuffer = new float[mBufferSize];
+        mBuffer = new double[mBufferSize];
 
         generateIndexMap(mCoefficients.length);
     }
 
-    public HalfBandFilter(float[] coefficients, float gain, boolean decimate)
+    public HalfBandFilter(double[] coefficients, double gain, boolean decimate)
     {
         this(coefficients, gain);
 
@@ -77,7 +77,7 @@ public class HalfBandFilter
     /**
      * Inserts the sample into the buffer without calculating a filtered value
      */
-    public void insert(float sample)
+    public void insert(double sample)
     {
         mBuffer[mBufferPointer] = sample;
 
@@ -86,11 +86,11 @@ public class HalfBandFilter
         mBufferPointer = mBufferPointer % mBufferSize;
     }
 
-    public ReusableFloatBuffer filter(ReusableFloatBuffer input)
+    public ReusableDoubleBuffer filter(ReusableDoubleBuffer input)
     {
-        float[] inputSamples = input.getSamples();
-		ReusableFloatBuffer output = mReusableBufferQueue.getBuffer(inputSamples.length);
-		float[] outputSamples = output.getSamples();
+        double[] inputSamples = input.getSamples();
+		ReusableDoubleBuffer output = mReusableBufferQueue.getBuffer(inputSamples.length);
+        double[] outputSamples = output.getSamples();
 
 		for(int x = 0; x < inputSamples.length; x++)
         {
@@ -105,11 +105,11 @@ public class HalfBandFilter
     /**
      * Calculate the filtered value by applying the coefficients against the samples in mBuffer
      */
-    public float filter(float sample)
+    public double filter(double sample)
     {
         insert(sample);
 
-        float accumulator = 0;
+        double accumulator = 0;
 
         //Start with the center tap value
         accumulator += mCoefficients[mCenterCoefficient] * mBuffer[mIndexMap[mBufferPointer][mCenterCoefficientMapIndex]];

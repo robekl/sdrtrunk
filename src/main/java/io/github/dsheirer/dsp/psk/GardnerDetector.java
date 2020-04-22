@@ -20,9 +20,9 @@ import org.apache.commons.math3.util.FastMath;
 
 public class GardnerDetector
 {
-    private float mErrorInphase;
-    private float mErrorQuadrature;
-    private float mError;
+    private double mErrorInphase;
+    private double mErrorQuadrature;
+    private double mError;
 
     /**
      * Gardner detector for recovering symbol timing error.
@@ -40,11 +40,11 @@ public class GardnerDetector
      * @param current symbol
      * @return symbol timing error
      */
-    public float getError(Complex previous, Complex middle, Complex current)
+    public double getError(Complex previous, Complex middle, Complex current)
     {
         mErrorInphase = (FastMath.abs(previous.inphase()) - FastMath.abs(current.inphase())) * FastMath.abs(middle.inphase());
         mErrorQuadrature = (FastMath.abs(previous.quadrature()) - FastMath.abs(current.quadrature())) * FastMath.abs(middle.quadrature());
-        mError = normalize(mErrorInphase + mErrorQuadrature, 1.0f);
+        mError = normalize(mErrorInphase + mErrorQuadrature, 1.0d);
 
         return mError;
     }
@@ -52,11 +52,11 @@ public class GardnerDetector
     /**
      * Constrains timing error to +/- the maximum value and corrects any floating point invalid numbers
      */
-    public static float normalize(float error, float maximum)
+    public static double normalize(double error, double maximum)
     {
-        if(Float.isNaN(error))
+        if(Double.isNaN(error))
         {
-            return 0.0f;
+            return 0.0d;
         }
         else
         {
@@ -67,7 +67,7 @@ public class GardnerDetector
     /**
      * Constrains value to the range of ( -maximum <> maximum )
      */
-    public static float clip(float value, float maximum)
+    public static double clip(double value, double maximum)
     {
         if(value > maximum)
         {

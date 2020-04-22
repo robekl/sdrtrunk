@@ -34,7 +34,7 @@ public class ComplexFIRFilter2 extends FIRFilter
      * @param coefficients - filter taps
      * @param gain - gain to apply to filtered outputs - use 1.0f for no gain
      */
-    public ComplexFIRFilter2(float[] coefficients, float gain)
+    public ComplexFIRFilter2(double[] coefficients, double gain)
     {
         mIFilter = new RealFIRFilter2(coefficients, gain);
         mQFilter = new RealFIRFilter2(coefficients, gain);
@@ -46,9 +46,9 @@ public class ComplexFIRFilter2 extends FIRFilter
      *
      * @param coefficients - filter taps
      */
-    public ComplexFIRFilter2(float[] coefficients)
+    public ComplexFIRFilter2(double[] coefficients)
     {
-        this(coefficients, 1.0f);
+        this(coefficients, 1.0d);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ComplexFIRFilter2 extends FIRFilter
      * @param sample to filter
      * @return filtered sample
      */
-    public float filterInphase(float sample)
+    public double filterInphase(double sample)
     {
         return mIFilter.filter(sample);
     }
@@ -64,7 +64,7 @@ public class ComplexFIRFilter2 extends FIRFilter
     /**
      * Current filtered inphase sample value after invoking the filterInphase() method.
      */
-    public float currentInphaseValue()
+    public double currentInphaseValue()
     {
         return mIFilter.currentValue();
     }
@@ -74,7 +74,7 @@ public class ComplexFIRFilter2 extends FIRFilter
      * @param sample to filter
      * @return filtered sample
      */
-    public float filterQuadrature(float sample)
+    public double filterQuadrature(double sample)
     {
         return mQFilter.filter(sample);
     }
@@ -82,7 +82,7 @@ public class ComplexFIRFilter2 extends FIRFilter
     /**
      * Current filtered quadrature sample value after invoking the filterInphase() method.
      */
-    public float currentQuadratureValue()
+    public double currentQuadratureValue()
     {
         return mQFilter.currentValue();
     }
@@ -94,8 +94,8 @@ public class ComplexFIRFilter2 extends FIRFilter
      */
     public Complex filter(Complex sample)
     {
-        float i = filterInphase(sample.inphase());
-        float q = filterQuadrature(sample.quadrature());
+        double i = filterInphase(sample.inphase());
+        double q = filterQuadrature(sample.quadrature());
 
         return new Complex(i, q);
     }
@@ -114,8 +114,8 @@ public class ComplexFIRFilter2 extends FIRFilter
         ReusableComplexBuffer filteredBuffer = mReusableComplexBufferQueue.getBuffer(originalBuffer.getSamples().length);
         filteredBuffer.setTimestamp(originalBuffer.getTimestamp());
 
-        float[] samples = originalBuffer.getSamples();
-        float[] filteredSamples = filteredBuffer.getSamples();
+        double[] samples = originalBuffer.getSamples();
+        double[] filteredSamples = filteredBuffer.getSamples();
 
         for(int x = 0; x < originalBuffer.getSamples().length; x += 2)
         {

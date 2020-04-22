@@ -25,26 +25,26 @@ import java.util.ArrayList;
 public class FloatFIRFilter implements RealSampleListener
 {
 	private RealSampleListener mListener;
-	private ArrayList<Float> mBuffer;
+	private ArrayList<Double> mBuffer;
     private int mBufferSize = 1; //Temporary initial value
 	private int mBufferPointer = 0;
-	private float[] mCoefficients;
+	private double[] mCoefficients;
 	private int[][] mIndexMap;
 	private int mCenterCoefficient;
 	private int mCenterCoefficientMapIndex;
-	private float mGain;
+	private double mGain;
 
-	public FloatFIRFilter( float[] coefficients, float gain )
+	public FloatFIRFilter( double[] coefficients, double gain )
 	{
 		mCoefficients = coefficients;
-		mBuffer = new ArrayList<Float>();
+		mBuffer = new ArrayList<Double>();
 		mBufferSize = mCoefficients.length;
 		mGain = gain;
 		
 		//Fill the buffer with zero valued samples, so we don't have to check for null
 		for( int x = 0; x < mCoefficients.length; x++ )
 		{
-			mBuffer.add( 0.0f );
+			mBuffer.add( 0.0d );
 		}
 		
 		generateIndexMap( mCoefficients.length );
@@ -67,12 +67,12 @@ public class FloatFIRFilter implements RealSampleListener
 		mListener = listener;
 	}
 
-	public void receive( float newSample )
+	public void receive( double newSample )
 	{
 		send( get( newSample ) );
 	}
 
-	public float get( float newSample )
+	public double get( double newSample )
 	{
 		//Add the new sample to the buffer
 		mBuffer.set( mBufferPointer, newSample );
@@ -87,7 +87,7 @@ public class FloatFIRFilter implements RealSampleListener
 
 		//Convolution - multiply filter coefficients by the circular buffer
 		//samples to calculate a new filtered value
-		float accumulator = 0.0f;
+		double accumulator = 0.0d;
 
 		//Start with the center tap value
 		accumulator += mCoefficients[ mCenterCoefficient ] * 
@@ -110,7 +110,7 @@ public class FloatFIRFilter implements RealSampleListener
 	/**
 	 * Dispatch the filtered sample to all registered listeners
 	 */
-	private void send( float sample )
+	private void send( double sample )
 	{
 		if( mListener != null )
 		{
@@ -146,7 +146,7 @@ public class FloatFIRFilter implements RealSampleListener
 		
 		//Last column will be the center coefficient index value for each row
 		mCenterCoefficientMapIndex = size - 1;
-		mCenterCoefficient = (int)( size / 2 );
+		mCenterCoefficient = size / 2;
 		
 		//Setup the first row.  Offset is the first row's center coefficient value
 		//and will become the index value we place in the last column

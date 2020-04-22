@@ -119,9 +119,9 @@ public abstract class P25P2Decoder extends FeedbackDecoder implements ISourceEve
     /**
      * Samples per symbol based on current sample rate and symbol rate.
      */
-    public float getSamplesPerSymbol()
+    public double getSamplesPerSymbol()
     {
-        return (float)(getSampleRate() / getSymbolRate());
+        return (getSampleRate() / getSymbolRate());
     }
 
     public void dispose()

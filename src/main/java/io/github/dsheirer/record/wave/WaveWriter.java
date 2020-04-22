@@ -200,7 +200,7 @@ public class WaveWriter implements AutoCloseable
             int remaining = (int)(mMaxSize - mFileChannel.size());
 
             /* Ensure we write full frames to fill up the remaining size */
-            remaining -= (int)(remaining % mAudioFormat.getFrameSize());
+            remaining -= remaining % mAudioFormat.getFrameSize();
 
             byte[] bytes = buffer.array();
 

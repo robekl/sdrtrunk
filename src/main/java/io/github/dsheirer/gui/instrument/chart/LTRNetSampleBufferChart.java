@@ -121,11 +121,11 @@ public class LTRNetSampleBufferChart extends LineChart
             mSamplePoints.get(0).setXValue(pointer1);
             mSamplePoints.get(1).setXValue(pointer2);
 
-            float samplesRemaining = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getMidSymbolSamplingPoint();
-            float samplesPerSymbol = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getSamplesPerSymbol();
+            double samplesRemaining = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getMidSymbolSamplingPoint();
+            double samplesPerSymbol = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getSamplesPerSymbol();
 
-            float start = pointer1 + samplesRemaining;
-            float end = start + samplesPerSymbol;
+            double start = pointer1 + samplesRemaining;
+            double end = start + samplesPerSymbol;
 
             mSymbolSamples.get(0).setXValue(start);
             mSymbolSamples.get(1).setXValue(end);
@@ -155,14 +155,14 @@ public class LTRNetSampleBufferChart extends LineChart
             int pointer1 = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getDelayLinePointer();
             int pointer2 = mLTRNetDecoderInstrumented.getLTRDecoder().getSampleBuffer().getDelayLineSecondPointer();
 
-            float zeroCrossingIdeal = mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getZeroCrossingIdeal();
-            float detectedZeroCrossing = zeroCrossingIdeal - ((Number)newValue).floatValue();
+            double zeroCrossingIdeal = mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getZeroCrossingIdeal();
+            double detectedZeroCrossing = zeroCrossingIdeal - ((Number)newValue).floatValue();
 
             int reference = (zeroCrossingIdeal < pointer1 || detectedZeroCrossing < pointer1 ? pointer2 : pointer1);
             reference--;
 
-            float start = reference - zeroCrossingIdeal;
-            float end = reference - detectedZeroCrossing;
+            double start = reference - zeroCrossingIdeal;
+            double end = reference - detectedZeroCrossing;
 
             mZeroCrossing.get(0).setXValue(start);
             mZeroCrossing.get(1).setXValue(end);

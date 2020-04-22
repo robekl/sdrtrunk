@@ -16,7 +16,7 @@
 package io.github.dsheirer.dsp.filter.dc;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +29,9 @@ public class BufferDCFilter
     /**
      * Calculates the DC offset present in the samples and subtracts the offset from all samples.
      */
-    public void filterReal(float[] samples)
+    public void filterReal(double[] samples)
     {
-        float adjustment = getOffset(samples);
+        double adjustment = getOffset(samples);
 
         for(int x = 0; x < samples.length; x++)
         {
@@ -39,21 +39,21 @@ public class BufferDCFilter
         }
     }
 
-    private float getOffset(float[] samples)
+    private double getOffset(double[] samples)
     {
         mAccumulator = 0.0;
 
-        for (float sample : samples) {
+        for (double sample : samples) {
             mAccumulator += sample;
         }
 
-        return (float)(mAccumulator / (double)samples.length);
+        return mAccumulator / (double)samples.length;
     }
 
     /**
      * Calculates the DC offset present in the samples and subtracts the offset from all samples.
      */
-    public static void filterComplex(float[] samples)
+    public static void filterComplex(double[] samples)
     {
         double iAccumulator = 0.0;
         double qAccumulator = 0.0;
@@ -66,8 +66,8 @@ public class BufferDCFilter
 
         double half = (double)samples.length / 2.0;
 
-        float iAdjustment = (float)(iAccumulator / half);
-        float qAdjustment = (float)(qAccumulator / half);
+        double iAdjustment = iAccumulator / half;
+        double qAdjustment = qAccumulator / half;
 
         for(int x = 0; x < samples.length; x += 2)
         {
@@ -76,14 +76,14 @@ public class BufferDCFilter
         }
     }
 
-    public ReusableFloatBuffer filter(ReusableFloatBuffer unfilteredBuffer)
+    public ReusableDoubleBuffer filter(ReusableDoubleBuffer unfilteredBuffer)
     {
-        float[] unfilteredSamples = unfilteredBuffer.getSamples();
+        double[] unfilteredSamples = unfilteredBuffer.getSamples();
 
-        ReusableFloatBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredSamples.length);
-        float[] filteredSamples = filteredBuffer.getSamples();
+        ReusableDoubleBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredSamples.length);
+        double[] filteredSamples = filteredBuffer.getSamples();
 
-        float offset = getOffset(unfilteredSamples);
+        double offset = getOffset(unfilteredSamples);
 
         for(int x = 0; x < unfilteredSamples.length; x++)
         {

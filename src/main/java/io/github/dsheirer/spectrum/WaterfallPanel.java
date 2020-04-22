@@ -378,7 +378,7 @@ public class WaterfallPanel extends JPanel implements DFTResultsListener,
      * primary method for receiving new frequency bin results.
      */
     @Override
-    public void receive(float[] update)
+    public void receive(double[] update)
     {
         mDisabled = false;
 
@@ -403,13 +403,13 @@ public class WaterfallPanel extends JPanel implements DFTResultsListener,
             sum += update[x];
         }
 
-        float average = (float)(sum / (double)update.length - 1);
+        double average = sum / (double)update.length - 1;
 
-        float scale = 256.0f / average;
+        double scale = 256.0d / average;
 
         for(int x = 0; x < update.length - 1; x++)
         {
-            float value = (average - update[x]) * scale;
+            double value = (average - update[x]) * scale;
 
             if(value < 0)
             {

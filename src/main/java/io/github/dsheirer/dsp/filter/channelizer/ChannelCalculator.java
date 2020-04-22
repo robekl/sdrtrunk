@@ -75,7 +75,7 @@ public class ChannelCalculator
      */
     private void updateChannelBandwidth()
     {
-        mChannelBandwidth = (double)mSampleRate / (double)mChannelCount;
+        mChannelBandwidth = mSampleRate / (double)mChannelCount;
     }
 
     /**

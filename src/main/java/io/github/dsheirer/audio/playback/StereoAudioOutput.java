@@ -45,7 +45,7 @@ public class StereoAudioOutput extends AudioOutput
      * channel containing the audio and the other channel containing zero
      * valued (silent) samples.
      */
-    protected ByteBuffer convert(float[] samples)
+    protected ByteBuffer convert(double[] samples)
     {
         ByteBuffer buffer = null;
 
@@ -58,7 +58,7 @@ public class StereoAudioOutput extends AudioOutput
 
             if(getMixerChannel() == MixerChannel.LEFT)
             {
-                for(float sample : samples)
+                for(double sample : samples)
                 {
                     shortBuffer.put((short) (sample * Short.MAX_VALUE));
                     shortBuffer.put((short) 0);
@@ -66,7 +66,7 @@ public class StereoAudioOutput extends AudioOutput
             }
             else
             {
-                for(float sample : samples)
+                for(double sample : samples)
                 {
                     shortBuffer.put((short) 0);
                     shortBuffer.put((short) (sample * Short.MAX_VALUE));

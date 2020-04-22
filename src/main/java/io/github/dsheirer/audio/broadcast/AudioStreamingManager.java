@@ -136,7 +136,7 @@ public class AudioStreamingManager implements Listener<AudioSegment>
                     Path path = getTemporaryRecordingPath();
                     long length = 0;
 
-                    for(float[] audioBuffer: audioSegment.getAudioBuffers())
+                    for(double[] audioBuffer: audioSegment.getAudioBuffers())
                     {
                         length += audioBuffer.length;
                     }

@@ -62,7 +62,7 @@ import org.apache.commons.math3.util.FastMath;
 public class ComplexDecibelConverter extends DFTResultsConverter
 {
 	/**
-	 * Converts the output of the JTransforms FloatFFT_1D.complexForward()
+	 * Converts the output of the JTransforms DoubleFFT_1D.complexForward()
 	 * calculation into the power spectrum in decibels, normalized to the
 	 * sample bit depth.
 	 */
@@ -71,14 +71,14 @@ public class ComplexDecibelConverter extends DFTResultsConverter
 	}
 	
 	@Override
-    public void receive( float[] results )
+    public void receive( double[] results )
     {
 		int halfResults = results.length / 2;
 		
-//		float dftBinSizeScalor = 1.0f / (float)Math.pow( halfResults, 2.0 );
-		float dftBinSizeScalor = 1.0f / (float)halfResults;
-		
-		float[] processed = new float[ halfResults ];
+//		double dftBinSizeScalor = 1.0d / (double)Math.pow( halfResults, 2.0 );
+		double dftBinSizeScalor = 1.0d / (double)halfResults;
+
+		double[] processed = new double[ halfResults ];
 
 		int middle = processed.length / 2;
 		
@@ -87,7 +87,7 @@ public class ComplexDecibelConverter extends DFTResultsConverter
 			//Calculate the magnitude squared (power) value from each bin's real 
 			//and imaginary value and scale it to the DFT bin size squared.
 			//Convert the scaled value to decibels.
-			float decibels = 10.0f * (float) FastMath.log10(
+			double decibels = 10.0d * FastMath.log10(
 				( ( results[ x ] * results[ x ] ) + 
 				  ( results[ x + 1 ] * results[ x + 1 ] ) ) * dftBinSizeScalor ); 
 

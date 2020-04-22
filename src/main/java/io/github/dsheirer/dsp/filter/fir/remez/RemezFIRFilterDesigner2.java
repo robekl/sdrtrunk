@@ -159,7 +159,7 @@ public class RemezFIRFilterDesigner2
      * @return filter impulse response
      * @throws FilterDesignException if the specified filter cannot be designed
      */
-    public float[] getImpulseResponse() throws FilterDesignException
+    public double[] getImpulseResponse() throws FilterDesignException
     {
         return convertToFloatArray(getImpulseResponseDoubles());
     }
@@ -631,13 +631,13 @@ public class RemezFIRFilterDesigner2
     /**
      * Coverts/casts the double array to a float array
      */
-    private static float[] convertToFloatArray(double[] samples)
+    private static double[] convertToFloatArray(double[] samples)
     {
-        float[] converted = new float[samples.length];
+        double[] converted = new double[samples.length];
 
         for(int x = 0; x < samples.length; x++)
         {
-            converted[x] = (float)samples[x];
+            converted[x] = samples[x];
         }
 
         return converted;

@@ -8,12 +8,12 @@ public class NoSmoothingFilter extends SmoothingFilter
 		super( null, 3 );
 	}
 
-	public float[] filter( float[] data )
+	public double[] filter( double[] data )
 	{
 		return data;
 	}
 
-	public static float[] getCoefficients( int points )
+	public static double[] getCoefficients( int points )
 	{
 		return null;
 	}

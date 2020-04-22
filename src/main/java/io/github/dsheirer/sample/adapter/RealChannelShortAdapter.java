@@ -15,7 +15,7 @@
  ******************************************************************************/
 package io.github.dsheirer.sample.adapter;
 
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.source.mixer.MixerChannel;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import java.nio.ByteOrder;
 public class RealChannelShortAdapter extends RealSampleAdapter
 {
     private final static Logger mLog = LoggerFactory.getLogger(RealChannelShortAdapter.class);
-    private ShortToFloatMap mMap = new ShortToFloatMap();
+    private ShortToDoubleMap mMap = new ShortToDoubleMap();
     private ByteOrder mByteOrder = ByteOrder.LITTLE_ENDIAN;
     private MixerChannel mMixerChannel;
     private ByteBuffer mByteBuffer;
@@ -46,10 +46,10 @@ public class RealChannelShortAdapter extends RealSampleAdapter
     }
 
     @Override
-    public ReusableFloatBuffer convert(byte[] samples)
+    public ReusableDoubleBuffer convert(byte[] samples)
     {
-        ReusableFloatBuffer reusableFloatBuffer = getBuffer(samples.length / 4);
-        float[] convertedSamples = reusableFloatBuffer.getSamples();
+        ReusableDoubleBuffer reusableDoubleBuffer = getBuffer(samples.length / 4);
+        double[] convertedSamples = reusableDoubleBuffer.getSamples();
 
         mByteBuffer = ByteBuffer.wrap(samples);
 
@@ -76,7 +76,7 @@ public class RealChannelShortAdapter extends RealSampleAdapter
             }
         }
 
-        return reusableFloatBuffer;
+        return reusableDoubleBuffer;
     }
 
     /**

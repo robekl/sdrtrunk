@@ -291,7 +291,7 @@ public class JFrequencyControl extends JPanel implements ISourceEventProcessor
             long lower = frequency % (long)(FastMath.pow(10, mPower + 1));
 
             //Set the value to int value of dividing by 10 to this power
-            long value = (long)(lower / (long)(FastMath.pow(10, mPower)));
+            long value = lower / (long)(FastMath.pow(10, mPower));
 
             set(value, fireChangeEvent);
         }

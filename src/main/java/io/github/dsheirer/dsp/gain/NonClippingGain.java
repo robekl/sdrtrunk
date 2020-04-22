@@ -2,8 +2,8 @@ package io.github.dsheirer.dsp.gain;
 
 public class NonClippingGain
 {
-	private float mGain;
-	private float mMaxValue;
+	private double mGain;
+	private double mMaxValue;
 	
 	/**
 	 * Applies a fixed gain value to the float samples.
@@ -11,7 +11,7 @@ public class NonClippingGain
 	 * @param gain value
 	 * @param maxValue max absolute value to prevent clipping ( 0.0 to 1.0 )
 	 */
-	public NonClippingGain( float gain, float maxValue )
+	public NonClippingGain( double gain, double maxValue )
 	{
 		mGain = gain;
 		mMaxValue = maxValue;
@@ -20,9 +20,9 @@ public class NonClippingGain
 	/**
 	 * Applies gain to the sample
 	 */
-	public float apply( float sample )
+	public double apply( double sample )
 	{
-		float adjusted = sample * mGain;
+		double adjusted = sample * mGain;
 
 		if( adjusted > mMaxValue )
 		{
@@ -39,7 +39,7 @@ public class NonClippingGain
 	/**
 	 * Applies gain to the sample array
 	 */
-	public float[] apply( float[] samples )
+	public double[] apply( double[] samples )
 	{
 		for( int x = 0; x < samples.length; x++ )
 		{

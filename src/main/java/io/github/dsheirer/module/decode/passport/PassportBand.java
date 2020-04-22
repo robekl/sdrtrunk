@@ -71,8 +71,8 @@ public enum PassportBand
     
     public int getChannel( long frequency )
     {
-    	return FastMath.round( (float)( frequency - mBase ) /
-    					   (float)CHANNEL_BANDWIDTH );
+    	return (int)FastMath.round( (double)( frequency - mBase ) /
+    					   (double)CHANNEL_BANDWIDTH );
     }
     
     public String getDescription()

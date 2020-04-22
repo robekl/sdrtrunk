@@ -26,8 +26,8 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
     private static final Complex ROTATE_FROM_MINUS_45 = Complex.fromAngle(1.0 * FastMath.PI / 4.0);
     private static final Complex ROTATE_FROM_MINUS_135 = Complex.fromAngle(3.0 * FastMath.PI / 4.0);
 
-    private float mPhaseError = 0.0f;
-    private float mTimingError = 0.0f;
+    private double mPhaseError = 0.0d;
+    private double mTimingError = 0.0d;
     private Dibit mSymbolDecision = Dibit.D00_PLUS_1;
     private Complex mPreviousSymbol = new Complex(0, 0);
     private Complex mEvaluationSymbol = new Complex(0, 0);
@@ -61,9 +61,9 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
     public void setSymbols(Complex middle, Complex current)
     {
         //Gardner timing error calculation
-        float errorInphase = (mPreviousSymbol.inphase() - current.inphase()) * middle.inphase();
-        float errorQuadrature = (mPreviousSymbol.quadrature() - current.quadrature()) * middle.quadrature();
-        mTimingError = normalize(errorInphase + errorQuadrature, .3f);
+        double errorInphase = (mPreviousSymbol.inphase() - current.inphase()) * middle.inphase();
+        double errorQuadrature = (mPreviousSymbol.quadrature() - current.quadrature()) * middle.quadrature();
+        mTimingError = normalize(errorInphase + errorQuadrature, .3d);
 
         //Store the current symbol to use in the next symbol calculation
         mPreviousSymbol.setValues(current);
@@ -71,9 +71,9 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
         //Phase error and symbol decision calculations ...
         mEvaluationSymbol.setValues(current);
 
-        if(mEvaluationSymbol.quadrature() > 0.0f)
+        if(mEvaluationSymbol.quadrature() > 0.0d)
         {
-            if(mEvaluationSymbol.inphase() > 0.0f)
+            if(mEvaluationSymbol.inphase() > 0.0d)
             {
                 mSymbolDecision = Dibit.D00_PLUS_1;
                 mEvaluationSymbol.multiply(ROTATE_FROM_PLUS_45);
@@ -87,7 +87,7 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
         }
         else
         {
-            if(mEvaluationSymbol.inphase() > 0.0f)
+            if(mEvaluationSymbol.inphase() > 0.0d)
             {
                 mSymbolDecision = Dibit.D10_MINUS_1;
                 mEvaluationSymbol.multiply(ROTATE_FROM_MINUS_45);
@@ -101,13 +101,13 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
 
         //Since we've rotated the error symbol back to 0 radians, the quadrature value closely approximates the
         //arctan of the error angle relative to 0 radians and this provides our error value
-        mPhaseError = normalize(-mEvaluationSymbol.quadrature(), 0.3f);
+        mPhaseError = normalize(-mEvaluationSymbol.quadrature(), 0.3d);
     }
 
     /**
      * Constrains value to the range of ( -maximum <> maximum )
      */
-    public static float clip(float value, float maximum)
+    public static double clip(double value, double maximum)
     {
         if(value > maximum)
         {
@@ -125,11 +125,11 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
      * Constrains timing error to +/- the maximum value and corrects any
      * floating point invalid numbers
      */
-    private float normalize(float error, float maximum)
+    private double normalize(double error, double maximum)
     {
-        if(Float.isNaN(error))
+        if(Double.isNaN(error))
         {
-            return 0.0f;
+            return 0.0d;
         }
         else
         {
@@ -144,7 +144,7 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
      * @return phase error in radians of distance from the reference symbol.
      */
     @Override
-    public float getPhaseError()
+    public double getPhaseError()
     {
         return mPhaseError;
     }
@@ -157,7 +157,7 @@ public class DQPSKGardnerSymbolEvaluator implements IPSKSymbolEvaluator<Dibit>
      * if the symbol was sampled early (-) or late (+) relative to the reference symbol.
      */
     @Override
-    public float getTimingError()
+    public double getTimingError()
     {
         return mTimingError;
     }

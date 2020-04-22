@@ -16,18 +16,18 @@
 package io.github.dsheirer.dsp.mixer;
 
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.sample.complex.Complex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
 public abstract class AbstractOscillator implements IOscillator
 {
     private final static Logger mLog = LoggerFactory.getLogger(AbstractOscillator.class);
 
-    private FloatBuffer mSampleBuffer;
+    private DoubleBuffer mSampleBuffer;
     private boolean mEnabled;
     private double mFrequency;
     private double mSampleRate;
@@ -99,12 +99,12 @@ public abstract class AbstractOscillator implements IOscillator
      * @param samples to mix with this oscillator
      */
     @Override
-    public float[] mixComplex(float[] samples)
+    public double[] mixComplex(double[] samples)
     {
         for(int x = 0; x < samples.length; x += 2)
         {
-            float i = Complex.multiplyInphase(samples[x], samples[x + 1], inphase(), quadrature());
-            float q = Complex.multiplyQuadrature(samples[x], samples[x + 1], inphase(), quadrature());
+            double i = Complex.multiplyInphase(samples[x], samples[x + 1], inphase(), quadrature());
+            double q = Complex.multiplyQuadrature(samples[x], samples[x + 1], inphase(), quadrature());
 
             samples[x] = i;
             samples[x + 1] = q;
@@ -121,9 +121,9 @@ public abstract class AbstractOscillator implements IOscillator
      * @return
      */
     @Override
-    public float[] generateReal(int sampleCount)
+    public double[] generateReal(int sampleCount)
     {
-        float[] samples = new float[sampleCount];
+        double[] samples = new double[sampleCount];
 
         for(int x = 0; x < sampleCount; x++)
         {
@@ -140,9 +140,9 @@ public abstract class AbstractOscillator implements IOscillator
      * @return
      */
     @Override
-    public float[] generateComplex(int sampleCount)
+    public double[] generateComplex(int sampleCount)
     {
-        float[] samples = new float[sampleCount * 2];
+        double[] samples = new double[sampleCount * 2];
 
         for(int x = 0; x < sampleCount * 2; x += 2)
         {
@@ -165,7 +165,7 @@ public abstract class AbstractOscillator implements IOscillator
 
         if(mSampleBuffer == null || mSampleBuffer.capacity() != sampleCount * 2)
         {
-            mSampleBuffer = FloatBuffer.allocate(sampleCount * 2);
+            mSampleBuffer = DoubleBuffer.allocate(sampleCount * 2);
         }
 
         mSampleBuffer.rewind();
@@ -182,11 +182,11 @@ public abstract class AbstractOscillator implements IOscillator
 
     /**
      * Generates enough real samples to fill the reusable buffer
-     * @param reusableFloatBuffer to fill with real samples
+     * @param reusableDoubleBuffer to fill with real samples
      */
     @Override
-    public void generateReal(ReusableFloatBuffer reusableFloatBuffer)
+    public void generateReal(ReusableDoubleBuffer reusableDoubleBuffer)
     {
-        reusableFloatBuffer.reloadFrom(generateReal(reusableFloatBuffer.getSampleCount()), System.currentTimeMillis());
+        reusableDoubleBuffer.reloadFrom(generateReal(reusableDoubleBuffer.getSampleCount()), System.currentTimeMillis());
     }
 }

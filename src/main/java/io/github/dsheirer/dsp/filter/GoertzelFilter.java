@@ -86,7 +86,7 @@ public class GoertzelFilter
      * @throws IllegalArgumentException if the sample array size is not equal
      * 		to the defined block size
      */
-    public int getPower( float[] samples ) throws IllegalArgumentException
+    public int getPower( double[] samples ) throws IllegalArgumentException
     {
     	// Verify size of samples array against block size
     	if ( samples.length != mBlockSize )
@@ -103,7 +103,7 @@ public class GoertzelFilter
     	double s_prev = 0.0D;
     	double s_prev2 = 0.0D;
 
-        for (float sample : samples) {
+        for (double sample : samples) {
             s = sample + (mCoefficient * s_prev) - s_prev2;
             s_prev2 = s_prev;
             s_prev = s;
@@ -122,11 +122,11 @@ public class GoertzelFilter
     /**
      * Sums all of the sample values to derive the bin 0 power
      */
-    private int getBinZeroPower( float[] samples )
+    private int getBinZeroPower( double[] samples )
     {
         int retVal = 0;
 
-        for (float sample : samples) {
+        for (double sample : samples) {
             retVal += sample;
         }
         

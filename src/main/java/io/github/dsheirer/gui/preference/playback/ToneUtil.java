@@ -27,7 +27,7 @@ import io.github.dsheirer.dsp.mixer.Oscillator;
 public class ToneUtil
 {
     //Maximum tone volume: 0.0 <> 1.0
-    private static final double MAX_TONE_VOLUME = 0.5f;
+    private static final double MAX_TONE_VOLUME = 0.5d;
 
     /**
      * Generates a tone using the specified parameters
@@ -36,11 +36,11 @@ public class ToneUtil
      * @param sampleCount number of 8 kHz samples to generate
      * @return buffer of audio
      */
-    public static float[] getTone(ToneFrequency toneFrequency, ToneVolume toneVolume, int sampleCount)
+    public static double[] getTone(ToneFrequency toneFrequency, ToneVolume toneVolume, int sampleCount)
     {
         Oscillator oscillator = new Oscillator(toneFrequency.getValue(), 8000.0);
 
-        float[] samples = oscillator.generateReal(sampleCount);
+        double[] samples = oscillator.generateReal(sampleCount);
 
         double gain = MAX_TONE_VOLUME * ((double)toneVolume.getValue() / 10.0);
 
@@ -54,12 +54,12 @@ public class ToneUtil
         {
             for(int x = 0; x < 10; x++)
             {
-                samples[x] *= (float)x / 10.0f;
+                samples[x] *= (double)x / 10.0d;
             }
 
             for(int x = 0; x < 10; x++)
             {
-                samples[samples.length - 1 - x] *= (float)x / 10.0f;
+                samples[samples.length - 1 - x] *= (double)x / 10.0d;
             }
         }
 

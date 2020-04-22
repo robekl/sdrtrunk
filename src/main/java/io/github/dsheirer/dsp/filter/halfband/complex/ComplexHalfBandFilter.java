@@ -27,16 +27,16 @@ public class ComplexHalfBandFilter
 
     private HalfBandFilter2 mIFilter;
     private HalfBandFilter2 mQFilter;
-    private float mResidualISample;
-    private float mResidualQSample;
+    private double mResidualISample;
+    private double mResidualQSample;
     private boolean mHasResidual;
     private int mOutputBufferLength;
-    private float[] mSamples;
+    private double[] mSamples;
     private int mSamplesPointer;
-    private float[] mFilteredSamples;
+    private double[] mFilteredSamples;
     private int mFilteredSamplesPointer;
 
-    public ComplexHalfBandFilter(float[] coefficients, float gain)
+    public ComplexHalfBandFilter(double[] coefficients, double gain)
     {
         mIFilter = new HalfBandFilter2(coefficients, gain);
         mQFilter = new HalfBandFilter2(coefficients, gain);
@@ -81,7 +81,7 @@ public class ComplexHalfBandFilter
     public static void main(String[] args)
     {
         Oscillator oscillator = new Oscillator(1, 16);
-        ComplexHalfBandFilter filter = new ComplexHalfBandFilter(Filters.HALF_BAND_FILTER_27T.getCoefficients(), 1.0f);
+        ComplexHalfBandFilter filter = new ComplexHalfBandFilter(Filters.HALF_BAND_FILTER_27T.getCoefficients(), 1.0d);
 
         ReusableComplexBufferQueue bufferQueue = new ReusableComplexBufferQueue("Test");
 

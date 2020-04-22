@@ -34,7 +34,7 @@ import io.github.dsheirer.sample.real.RealSampleListener;
  */
 public class C4FMSlicer implements RealSampleListener
 {
-	private static final float THRESHOLD = 2.0f;
+	private static final double THRESHOLD = 2.0d;
 
 	private Broadcaster<Dibit> mBroadcaster = new Broadcaster<Dibit>();
 	
@@ -49,7 +49,7 @@ public class C4FMSlicer implements RealSampleListener
 	 * (converts) the filtered sample value into a C4FMSymbol decision.
 	 */
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		if( sample > 0.0 )
 		{

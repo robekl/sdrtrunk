@@ -32,7 +32,7 @@ public class SquaringFilter implements RealSampleListener
 	}
 
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		if( mListener != null )
 		{

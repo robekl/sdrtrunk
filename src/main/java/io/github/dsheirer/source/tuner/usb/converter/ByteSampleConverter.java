@@ -16,25 +16,25 @@
 package io.github.dsheirer.source.tuner.usb.converter;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
 public class ByteSampleConverter extends NativeBufferConverter
 {
-    private final static float[] LOOKUP_VALUES;
+    private final static double[] LOOKUP_VALUES;
 
     //Creates a static lookup table that converts the 8-bit valued range from 0 - 255 into scaled float values
     //of -1.0 to 0 to 1.0
     static
     {
-        LOOKUP_VALUES = new float[256];
+        LOOKUP_VALUES = new double[256];
 
         for(int x = 0; x < 256; x++)
         {
-            LOOKUP_VALUES[x] = (float)(x - 127) / 128.0f;
+            LOOKUP_VALUES[x] = (x - 127) / 128.0d;
         }
     }
 
-    private FloatBuffer mFloatBuffer;
+    private DoubleBuffer mDoubleBuffer;
 
     /**
      * Converts native byte buffers containing 8-bit complex samples into complex float samples loaded into a tracked,
@@ -54,16 +54,16 @@ public class ByteSampleConverter extends NativeBufferConverter
      * @return float buffer loaded with converted samples
      */
     @Override
-    protected FloatBuffer convertSamples(ByteBuffer nativeBuffer, int length)
+    protected DoubleBuffer convertSamples(ByteBuffer nativeBuffer, int length)
     {
         nativeBuffer.rewind();
 
-        if(mFloatBuffer == null || mFloatBuffer.capacity() != nativeBuffer.capacity())
+        if(mDoubleBuffer == null || mDoubleBuffer.capacity() != nativeBuffer.capacity())
         {
-            mFloatBuffer = FloatBuffer.allocate(nativeBuffer.capacity());
+            mDoubleBuffer = DoubleBuffer.allocate(nativeBuffer.capacity());
         }
 
-        mFloatBuffer.rewind();
+        mDoubleBuffer.rewind();
 
         int count = 0;
 
@@ -72,9 +72,9 @@ public class ByteSampleConverter extends NativeBufferConverter
             byte sample = nativeBuffer.get();
             count++;
 
-            mFloatBuffer.put(LOOKUP_VALUES[(sample & 0xFF)]);
+            mDoubleBuffer.put(LOOKUP_VALUES[(sample & 0xFF)]);
         }
 
-        return mFloatBuffer;
+        return mDoubleBuffer;
     }
 }

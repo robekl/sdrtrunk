@@ -36,10 +36,10 @@ public class Complex implements Serializable
 
     private static final long serialVersionUID = 1L;
 
-    private float mLeft;
-    private float mRight;
+    private double mLeft;
+    private double mRight;
 
-    public Complex(float left, float right)
+    public Complex(double left, double right)
     {
         mLeft = left;
         mRight = right;
@@ -47,20 +47,20 @@ public class Complex implements Serializable
 
     public Complex()
     {
-        this(0.0f, 0.0f);
+        this(0.0d, 0.0d);
     }
 
-    public void setInphase(float inphase)
+    public void setInphase(double inphase)
     {
         mLeft = inphase;
     }
 
-    public void setQuadrature(float quadrature)
+    public void setQuadrature(double quadrature)
     {
         mRight = quadrature;
     }
 
-    public void setValues(float inphase, float quadrature)
+    public void setValues(double inphase, double quadrature)
     {
         mLeft = inphase;
         mRight = quadrature;
@@ -100,13 +100,13 @@ public class Complex implements Serializable
     /**
      * Multiplies this sample by the scalor value
      */
-    public void multiply(float scalor)
+    public void multiply(double scalor)
     {
         mLeft *= scalor;
         mRight *= scalor;
     }
 
-    public static Complex multiply(Complex sample, float scalor)
+    public static Complex multiply(Complex sample, double scalor)
     {
         return new Complex(sample.left() * scalor,
             sample.right() * scalor);
@@ -115,7 +115,7 @@ public class Complex implements Serializable
     /**
      * Calculates the inphase component of multiplying two complex numbers, A and B.
      */
-    public static float multiplyInphase(float inphaseA, float quadratureA, float inphaseB, float quadratureB)
+    public static double multiplyInphase(double inphaseA, double quadratureA, double inphaseB, double quadratureB)
     {
         return (inphaseA * inphaseB) - (quadratureA * quadratureB);
     }
@@ -123,7 +123,7 @@ public class Complex implements Serializable
     /**
      * Calculates the quadrature component of multiplying two complex numbers, A and B.
      */
-    public static float multiplyQuadrature(float inphaseA, float quadratureA, float inphaseB, float quadratureB)
+    public static double multiplyQuadrature(double inphaseA, double quadratureA, double inphaseB, double quadratureB)
     {
         return (quadratureA * inphaseB) + (inphaseA * quadratureB);
     }
@@ -133,9 +133,9 @@ public class Complex implements Serializable
      */
     public void multiply(Complex multiplier)
     {
-        float inphase = multiplyInphase(inphase(), quadrature(),
+        double inphase = multiplyInphase(inphase(), quadrature(),
             multiplier.inphase(), multiplier.quadrature());
-        float quadrature = multiplyQuadrature(inphase(), quadrature(),
+        double quadrature = multiplyQuadrature(inphase(), quadrature(),
             multiplier.inphase(), multiplier.quadrature());
 
         mLeft = inphase;
@@ -147,37 +147,37 @@ public class Complex implements Serializable
      */
     public static Complex multiply(Complex sample1, Complex sample2)
     {
-        float inphase = multiplyInphase(sample1.inphase(), sample1.quadrature(),
+        double inphase = multiplyInphase(sample1.inphase(), sample1.quadrature(),
             sample2.inphase(), sample2.quadrature());
-        float quadrature = multiplyQuadrature(sample1.inphase(), sample1.quadrature(),
+        double quadrature = multiplyQuadrature(sample1.inphase(), sample1.quadrature(),
             sample2.inphase(), sample2.quadrature());
 
         return new Complex(inphase, quadrature);
     }
 
     public static Complex multiply(Complex sample,
-                                   Float inphase, Float quadrature)
+                                   double inphase, double quadrature)
     {
-        float i = multiplyInphase(sample.inphase(), sample.quadrature(),
+        double i = multiplyInphase(sample.inphase(), sample.quadrature(),
             inphase, quadrature);
-        float q = multiplyQuadrature(sample.inphase(), sample.quadrature(),
+        double q = multiplyQuadrature(sample.inphase(), sample.quadrature(),
             inphase, quadrature);
 
         return new Complex(i, q);
     }
 
-    public static Complex multiply(Float inphase, Float quadrature, Complex sample)
+    public static Complex multiply(double inphase, double quadrature, Complex sample)
     {
-        float i = multiplyInphase(inphase, quadrature, sample.inphase(), sample.quadrature());
-        float q = multiplyQuadrature(inphase, quadrature, sample.inphase(), sample.quadrature());
+        double i = multiplyInphase(inphase, quadrature, sample.inphase(), sample.quadrature());
+        double q = multiplyQuadrature(inphase, quadrature, sample.inphase(), sample.quadrature());
 
         return new Complex(i, q);
     }
 
-    public static Complex multiply(float inphaseA, float quadratureA, float inphaseB, float quadratureB)
+    public static Complex multiply(double inphaseA, double quadratureA, double inphaseB, double quadratureB)
     {
-        float i = multiplyInphase(inphaseA, quadratureA, inphaseB, quadratureB);
-        float q = multiplyQuadrature(inphaseA, quadratureA, inphaseB, quadratureB);
+        double i = multiplyInphase(inphaseA, quadratureA, inphaseB, quadratureB);
+        double q = multiplyQuadrature(inphaseA, quadratureA, inphaseB, quadratureB);
 
         return new Complex(i, q);
     }
@@ -212,20 +212,20 @@ public class Complex implements Serializable
     /**
      * Magnitude of this sample
      */
-    public float magnitude()
+    public double magnitude()
     {
-        return (float)FastMath.sqrt(magnitudeSquared());
+        return FastMath.sqrt(magnitudeSquared());
     }
 
-    public static float magnitude(float inphase, float quadrature)
+    public static double magnitude(double inphase, double quadrature)
     {
-        return (float) FastMath.sqrt((inphase * inphase) + (quadrature * quadrature));
+        return FastMath.sqrt((inphase * inphase) + (quadrature * quadrature));
     }
 
     /**
      * Magnitude squared of this sample
      */
-    public float magnitudeSquared()
+    public double magnitudeSquared()
     {
         return norm();
     }
@@ -233,9 +233,9 @@ public class Complex implements Serializable
     /**
      * Norm of this sample = ( i * i ) + ( q * q )
      */
-    public float norm()
+    public double norm()
     {
-        return (float)((inphase() * inphase()) +
+        return ((inphase() * inphase()) +
             (quadrature() * quadrature()));
     }
 
@@ -244,11 +244,11 @@ public class Complex implements Serializable
      */
     public void normalize()
     {
-        float magnitude = magnitude();
+        double magnitude = magnitude();
 
         if(magnitude != 0)
         {
-            multiply((float)(1.0f / magnitude()));
+            multiply((1.0d / magnitude()));
         }
     }
 
@@ -259,7 +259,7 @@ public class Complex implements Serializable
      */
     public void fastNormalize()
     {
-        multiply((float)(1.9999f - magnitudeSquared()));
+        multiply((1.9999d - magnitudeSquared()));
     }
 
     /**
@@ -267,34 +267,34 @@ public class Complex implements Serializable
      */
     public void normalizeFast()
     {
-        float inphaseAbsolute = FastMath.abs(inphase());
-        float quadratureAbsolute = FastMath.abs(quadrature());
+        double inphaseAbsolute = FastMath.abs(inphase());
+        double quadratureAbsolute = FastMath.abs(quadrature());
 
-        float gain;
+        double gain;
 
         if(inphaseAbsolute > quadratureAbsolute)
         {
-            gain = 1.0f / (inphaseAbsolute + (0.4f * quadratureAbsolute));
+            gain = 1.0d / (inphaseAbsolute + (0.4d * quadratureAbsolute));
         }
         else
         {
-            gain = 1.0f / (quadratureAbsolute + (0.4f * inphaseAbsolute));
+            gain = 1.0d / (quadratureAbsolute + (0.4d * inphaseAbsolute));
         }
 
         multiply(gain);
     }
 
-    public float left()
+    public double left()
     {
         return mLeft;
     }
 
-    public float right()
+    public double right()
     {
         return mRight;
     }
 
-    public float inphase()
+    public double inphase()
     {
         return mLeft;
     }
@@ -302,12 +302,12 @@ public class Complex implements Serializable
     /**
      * Absolute value of in-phase component
      */
-    public float inPhaseAbsolute()
+    public double inPhaseAbsolute()
     {
         return FastMath.abs(mLeft);
     }
 
-    public float quadrature()
+    public double quadrature()
     {
         return mRight;
     }
@@ -315,22 +315,22 @@ public class Complex implements Serializable
     /**
      * Absolute value of quadrature component
      */
-    public float quadratureAbsolute()
+    public double quadratureAbsolute()
     {
         return FastMath.abs(mRight);
     }
 
-    public float x()
+    public double x()
     {
         return mLeft;
     }
 
-    public float y()
+    public double y()
     {
         return mRight;
     }
 
-    public float real()
+    public double real()
     {
         return mLeft;
     }
@@ -338,12 +338,12 @@ public class Complex implements Serializable
     /**
      * Absolute value of real component
      */
-    public float realAbsolute()
+    public double realAbsolute()
     {
         return FastMath.abs(mLeft);
     }
 
-    public float imaginary()
+    public double imaginary()
     {
         return mRight;
     }
@@ -351,7 +351,7 @@ public class Complex implements Serializable
     /**
      * Absolute value of imaginary component
      */
-    public float imaginaryAbsolute()
+    public double imaginaryAbsolute()
     {
         return FastMath.abs(mRight);
     }
@@ -359,7 +359,7 @@ public class Complex implements Serializable
     /**
      * Returns the greater absolute value between left and right values
      */
-    public float maximumAbsolute()
+    public double maximumAbsolute()
     {
         return FastMath.max(FastMath.abs(mLeft), FastMath.abs(mRight));
     }
@@ -373,7 +373,7 @@ public class Complex implements Serializable
      */
     public static Complex fromAngle(double angle)
     {
-        return new Complex((float)FastMath.cos(angle), (float)FastMath.sin(angle));
+        return new Complex(FastMath.cos(angle), FastMath.sin(angle));
     }
 
     /**
@@ -382,16 +382,16 @@ public class Complex implements Serializable
      */
     public void setAngle(double angle)
     {
-        setInphase((float)FastMath.cos(angle));
-        setQuadrature((float)FastMath.sin(angle));
+        setInphase(FastMath.cos(angle));
+        setQuadrature(FastMath.sin(angle));
     }
 
     /**
      * Angle of this sample in radians
      */
-    public float angle()
+    public double angle()
     {
-        return (float)FastMath.atan2(y(), x());
+        return FastMath.atan2(y(), x());
     }
 
     /**
@@ -409,7 +409,7 @@ public class Complex implements Serializable
     public double polarAngleDegrees()
     {
         double angle = FastMath.toDegrees(FastMath.atan2(y(), x()));
-        return (450.0 - angle) % 360.0;
+        return (450.0d - angle) % 360.0d;
     }
 
     /**
@@ -417,7 +417,7 @@ public class Complex implements Serializable
      *
      * @param value - maximum absolute value
      */
-    public void clip(float value)
+    public void clip(double value)
     {
         if(mLeft > value)
         {
@@ -441,31 +441,31 @@ public class Complex implements Serializable
     /**
      * Angle of this sample in degrees
      */
-    public float polarAngle()
+    public double polarAngle()
     {
-        return (float)FastMath.toDegrees(angle());
+        return FastMath.toDegrees(angle());
     }
 
     /**
      * Provides an approximate magnitude value for this sample.
      */
-    public float envelope()
+    public double envelope()
     {
         return envelope(mLeft, mRight);
     }
 
-    public static float envelope(float inphase, float quadrature)
+    public static double envelope(double inphase, double quadrature)
     {
-        float inphaseAbsolute = FastMath.abs(inphase);
-        float quadratureAbsolute = FastMath.abs(quadrature);
+        double inphaseAbsolute = FastMath.abs(inphase);
+        double quadratureAbsolute = FastMath.abs(quadrature);
 
         if(inphaseAbsolute > quadratureAbsolute)
         {
-            return inphaseAbsolute + (0.4f * quadratureAbsolute);
+            return inphaseAbsolute + (0.4d * quadratureAbsolute);
         }
         else
         {
-            return quadratureAbsolute + (0.4f * inphaseAbsolute);
+            return quadratureAbsolute + (0.4d * inphaseAbsolute);
         }
     }
 }

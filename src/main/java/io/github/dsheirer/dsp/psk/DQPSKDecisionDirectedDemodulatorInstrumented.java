@@ -85,7 +85,7 @@ public class DQPSKDecisionDirectedDemodulatorInstrumented extends DQPSKDecisionD
 
         if(mSamplesPerSymbolListener != null)
         {
-            mSamplesPerSymbolListener.receive((double)getInterpolatingSampleBuffer().getSamplingPoint());
+            mSamplesPerSymbolListener.receive(getInterpolatingSampleBuffer().getSamplingPoint());
         }
 
         //Send to an external constellation symbol listener when registered
@@ -96,7 +96,7 @@ public class DQPSKDecisionDirectedDemodulatorInstrumented extends DQPSKDecisionD
 
         if(mPLLErrorListener != null)
         {
-            mPLLErrorListener.receive((double)mSymbolEvaluator.getPhaseError());
+            mPLLErrorListener.receive(mSymbolEvaluator.getPhaseError());
         }
 
         if(mPLLFrequencyListener != null)

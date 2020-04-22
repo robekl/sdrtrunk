@@ -34,10 +34,10 @@ import org.apache.commons.math3.util.FastMath;
 public class ZeroCrossingErrorDetector
 {
     protected boolean[] mBuffer;
-    protected float mZeroCrossingIdeal;
-    protected float mZeroCrossingOne;
-    protected float mZeroCrossingTwo;
-    protected float mDetectedZeroCrossing;
+    protected double mZeroCrossingIdeal;
+    protected double mZeroCrossingOne;
+    protected double mZeroCrossingTwo;
+    protected double mDetectedZeroCrossing;
     private int mZeroCrossingCount;
 
     /**
@@ -45,7 +45,7 @@ public class ZeroCrossingErrorDetector
      *
      * @param samplesPerSymbol
      */
-    public ZeroCrossingErrorDetector(float samplesPerSymbol)
+    public ZeroCrossingErrorDetector(double samplesPerSymbol)
     {
         mBuffer = new boolean[(int)FastMath.ceil(samplesPerSymbol)];
 //        mZeroCrossingIdeal = mBuffer.length - 1.5f - (samplesPerSymbol / 2.0f);  //Preserve this for LTR
@@ -73,7 +73,7 @@ public class ZeroCrossingErrorDetector
      * zero crossing index.  An error value of zero is returned if the number of zero crossings is less than one or
      * greater than two.
      */
-    public float getError()
+    public double getError()
     {
         mZeroCrossingCount = 0;
 
@@ -84,17 +84,17 @@ public class ZeroCrossingErrorDetector
                 if(mZeroCrossingCount == 0)
                 {
                     mZeroCrossingCount++;
-                    mZeroCrossingOne = x + 0.5f;
+                    mZeroCrossingOne = x + 0.5d;
                 }
                 else if(mZeroCrossingCount == 1)
                 {
                     mZeroCrossingCount++;
-                    mZeroCrossingTwo = x + 0.5f;
+                    mZeroCrossingTwo = x + 0.5d;
                 }
                 else
                 {
                     //Max zero crossings exceeded - no error can be calculated - abort early
-                    return 0.0f;
+                    return 0.0d;
                 }
             }
         }
@@ -107,8 +107,8 @@ public class ZeroCrossingErrorDetector
         }
         else if(mZeroCrossingCount == 2)
         {
-            float errorDistanceOne = mZeroCrossingIdeal - mZeroCrossingOne;
-            float errorDistanceTwo = mZeroCrossingCount - mZeroCrossingTwo;
+            double errorDistanceOne = mZeroCrossingIdeal - mZeroCrossingOne;
+            double errorDistanceTwo = mZeroCrossingCount - mZeroCrossingTwo;
 
             if(FastMath.abs(errorDistanceOne) < FastMath.abs(errorDistanceTwo))
             {
@@ -122,6 +122,6 @@ public class ZeroCrossingErrorDetector
             return mZeroCrossingIdeal - mDetectedZeroCrossing;
         }
 
-        return 0.0f;
+        return 0.0d;
     }
 }

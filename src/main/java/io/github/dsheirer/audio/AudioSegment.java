@@ -70,7 +70,7 @@ public class AudioSegment implements Listener<IdentifierUpdateNotification>
     private ObservableSet<BroadcastChannel> mBroadcastChannels = FXCollections.observableSet(new HashSet<>());
     private MutableIdentifierCollection mIdentifierCollection = new MutableIdentifierCollection();
     private Broadcaster<IdentifierUpdateNotification> mIdentifierUpdateNotificationBroadcaster = new Broadcaster<>();
-    private List<float[]> mAudioBuffers = new CopyOnWriteArrayList();
+    private List<double[]> mAudioBuffers = new CopyOnWriteArrayList();
     private AtomicInteger mConsumerCount = new AtomicInteger();
     private AliasList mAliasList;
     private long mStartTimestamp = System.currentTimeMillis();
@@ -246,7 +246,7 @@ public class AudioSegment implements Listener<IdentifierUpdateNotification>
      *
      * @return list of audio buffers
      */
-    public List<float[]> getAudioBuffers()
+    public List<double[]> getAudioBuffers()
     {
         return Collections.unmodifiableList(mAudioBuffers);
     }
@@ -267,7 +267,7 @@ public class AudioSegment implements Listener<IdentifierUpdateNotification>
      * @return audio buffer
      * @throws IllegalArgumentException if requested index is not valid
      */
-    public float[] getAudioBuffer(int index)
+    public double[] getAudioBuffer(int index)
     {
         if(0 <= index && index < getAudioBufferCount())
         {
@@ -334,7 +334,7 @@ public class AudioSegment implements Listener<IdentifierUpdateNotification>
      *
      * @param audioBuffer to add to this segment
      */
-    public void addAudio(float[] audioBuffer)
+    public void addAudio(double[] audioBuffer)
     {
         if(audioBuffer == null)
         {

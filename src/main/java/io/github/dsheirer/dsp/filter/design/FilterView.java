@@ -24,7 +24,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.apache.commons.math3.util.FastMath;
-import org.jtransforms.fft.FloatFFT_1D;
+import org.jtransforms.fft.DoubleFFT_1D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +41,9 @@ public class FilterView extends BorderPane
     private NumberAxis mDFTXAxis;
     private NumberAxis mDFTYAxis;
     private static final int FFT_SIZE = 4096;
-    private FloatFFT_1D mFFT = new FloatFFT_1D(FFT_SIZE);
+    private DoubleFFT_1D mFFT = new DoubleFFT_1D(FFT_SIZE);
 
-    public FilterView(float[] taps)
+    public FilterView(double[] taps)
     {
         init();
 
@@ -51,7 +51,7 @@ public class FilterView extends BorderPane
         {
             setImpulseTaps(taps);
 
-            float[] dft = new float[FFT_SIZE];
+            double[] dft = new double[FFT_SIZE];
             System.arraycopy(taps, 0, dft, 0, taps.length);
 
             mFFT.realForward(dft);
@@ -105,18 +105,6 @@ public class FilterView extends BorderPane
 
     public void setImpulseTaps(double[] taps)
     {
-        float[] convertedTaps = new float[taps.length];
-
-        for(int x = 0; x < taps.length; x++)
-        {
-            convertedTaps[x] = (float)taps[x];
-        }
-
-        setImpulseTaps(convertedTaps);
-    }
-
-    public void setImpulseTaps(float[] taps)
-    {
         double smallest = 0.0;
         double largest = 0.0;
 
@@ -151,7 +139,7 @@ public class FilterView extends BorderPane
         list.add(series);
     }
 
-    public void setDFTTaps(float[] taps)
+    public void setDFTTaps(double[] taps)
     {
         double smallest = 0.0;
 
@@ -171,9 +159,9 @@ public class FilterView extends BorderPane
         list.add(series);
     }
 
-    public float[] convertDFTToDecibel(float[] dft, int tapLength)
+    public double[] convertDFTToDecibel(double[] dft, int tapLength)
     {
-        float[] decibels = new float[dft.length / 2];
+        double[] decibels = new double[dft.length / 2];
 
         int index = 0;
 
@@ -181,7 +169,7 @@ public class FilterView extends BorderPane
         {
             index = x * 2;
 
-            decibels[x] = 20.0f * (float)FastMath.log10(((dft[index] * dft[index]) +
+            decibels[x] = 20.0d * FastMath.log10(((dft[index] * dft[index]) +
                 (dft[index + 1] * dft[index + 1])));
         }
 

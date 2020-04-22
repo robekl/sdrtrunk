@@ -51,15 +51,15 @@ public class LowPhaseNoiseOscillator extends AbstractOscillator
     }
 
     @Override
-    public float quadrature()
+    public double quadrature()
     {
-        return (float)mQuadrature;
+        return mQuadrature;
     }
 
     @Override
-    public float inphase()
+    public double inphase()
     {
-        return (float)mInphase;
+        return mInphase;
     }
 
     /**
@@ -94,7 +94,7 @@ public class LowPhaseNoiseOscillator extends AbstractOscillator
 
         for(int x = 0; x < iterations; x++)
         {
-            float[] samples = oscillator.generateComplex(sampleCount);
+            double[] samples = oscillator.generateComplex(sampleCount);
         }
 
         long duration = System.nanoTime() - start;

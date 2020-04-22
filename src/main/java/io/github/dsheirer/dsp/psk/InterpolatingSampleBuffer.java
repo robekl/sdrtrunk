@@ -30,43 +30,43 @@ import org.slf4j.LoggerFactory;
 public class InterpolatingSampleBuffer
 {
     private final static Logger mLog = LoggerFactory.getLogger(InterpolatingSampleBuffer.class);
-    private static final float MAXIMUM_DEVIATION_SAMPLES_PER_SYMBOL = 0.02f; // +/- 2% deviation
+    private static final double MAXIMUM_DEVIATION_SAMPLES_PER_SYMBOL = 0.02d; // +/- 2% deviation
 
     private Complex mPrecedingSample = new Complex(0,0);
     private Complex mCurrentSample = new Complex(0,0);
     private Complex mMiddleSample = new Complex(0,0);
 
-    protected float[] mDelayLineInphase;
-    protected float[] mDelayLineQuadrature;
+    protected double[] mDelayLineInphase;
+    protected double[] mDelayLineQuadrature;
     protected int mDelayLinePointer = 0;
     private int mTwiceSamplesPerSymbol;
 
-    private float mSamplingPoint;
-    private float mSampleCounterGain = 0.5f;
-    private float mDetectedSamplesPerSymbol;
-    private float mDetectedSamplesPerSymbolGain = 0.1f * mSampleCounterGain * mSampleCounterGain;
-    private float mMaximumSamplesPerSymbol;
-    private float mMinimumSamplesPerSymbol;
+    private double mSamplingPoint;
+    private double mSampleCounterGain = 0.5d;
+    private double mDetectedSamplesPerSymbol;
+    private double mDetectedSamplesPerSymbolGain = 0.1d * mSampleCounterGain * mSampleCounterGain;
+    private double mMaximumSamplesPerSymbol;
+    private double mMinimumSamplesPerSymbol;
 
-    private RealInterpolator mInterpolator = new RealInterpolator(1.0f);
+    private RealInterpolator mInterpolator = new RealInterpolator(1.0d);
 
     /**
      * Buffer to store complex sample data and produce interpolated samples.
      * @param samplesPerSymbol
      * @param sampleCounterGain for the symbol timing error adjustments
      */
-    public InterpolatingSampleBuffer(float samplesPerSymbol, float sampleCounterGain)
+    public InterpolatingSampleBuffer(double samplesPerSymbol, double sampleCounterGain)
     {
         mSamplingPoint = samplesPerSymbol;
         mDetectedSamplesPerSymbol = samplesPerSymbol;
         mMaximumSamplesPerSymbol = samplesPerSymbol * (1.0f + MAXIMUM_DEVIATION_SAMPLES_PER_SYMBOL);
         mMinimumSamplesPerSymbol = samplesPerSymbol * (1.0f - MAXIMUM_DEVIATION_SAMPLES_PER_SYMBOL);
         mTwiceSamplesPerSymbol = (int) FastMath.floor(2.0 * samplesPerSymbol);
-        mDelayLineInphase = new float[2 * mTwiceSamplesPerSymbol];
-        mDelayLineQuadrature = new float[2 * mTwiceSamplesPerSymbol];
+        mDelayLineInphase = new double[2 * mTwiceSamplesPerSymbol];
+        mDelayLineQuadrature = new double[2 * mTwiceSamplesPerSymbol];
 
         mSampleCounterGain = sampleCounterGain;
-        mDetectedSamplesPerSymbolGain = 0.1f * mSampleCounterGain * mSampleCounterGain;
+        mDetectedSamplesPerSymbolGain = 0.1d * mSampleCounterGain * mSampleCounterGain;
     }
 
     /**
@@ -92,7 +92,7 @@ public class InterpolatingSampleBuffer
      * Updates the internal sample counter with additional samples to add to the symbol sample counter.
      * @param samplesToAdd to the sample counter
      */
-    public void increaseSampleCounter(float samplesToAdd)
+    public void increaseSampleCounter(double samplesToAdd)
     {
         mSamplingPoint += samplesToAdd;
     }
@@ -103,7 +103,7 @@ public class InterpolatingSampleBuffer
      *
      * @param symbolTimingError from a symbol timing error detector
      */
-    public void resetAndAdjust(float symbolTimingError)
+    public void resetAndAdjust(double symbolTimingError)
     {
         //Adjust detected samples per symbol based on timing error
         mDetectedSamplesPerSymbol = mDetectedSamplesPerSymbol + (symbolTimingError * mDetectedSamplesPerSymbolGain);
@@ -126,7 +126,7 @@ public class InterpolatingSampleBuffer
     /**
      * Current value of the detected samples per symbol
      */
-    public float getSamplingPoint()
+    public double getSamplingPoint()
     {
         return mSamplingPoint;
     }
@@ -170,7 +170,7 @@ public class InterpolatingSampleBuffer
      */
     public Complex getMiddleSample()
     {
-        float halfDetectedSamplesPerSymbol = mDetectedSamplesPerSymbol / 2.0f;
+        double halfDetectedSamplesPerSymbol = mDetectedSamplesPerSymbol / 2.0d;
 
         //Interpolated sample that is half a symbol away from (occurred before) the current sample.
         mMiddleSample.setValues(getInphase(halfDetectedSamplesPerSymbol),
@@ -183,9 +183,9 @@ public class InterpolatingSampleBuffer
      * @param interpolation into the buffer to calculate the interpolated sample
      * @return inphase value of the interpolated sample
      */
-    public float getInphase(float interpolation)
+    public double getInphase(double interpolation)
     {
-        if(interpolation < 1.0f)
+        if(interpolation < 1.0d)
         {
             return mInterpolator.filter(mDelayLineInphase, mDelayLinePointer, interpolation);
         }
@@ -201,9 +201,9 @@ public class InterpolatingSampleBuffer
      * @param interpolation into the buffer to calculate the interpolated sample
      * @return quadrature value of the interpolated sample
      */
-    public float getQuadrature(float interpolation)
+    public double getQuadrature(double interpolation)
     {
-        if(interpolation < 1.0f)
+        if(interpolation < 1.0d)
         {
             return mInterpolator.filter(mDelayLineQuadrature, mDelayLinePointer, interpolation);
         }

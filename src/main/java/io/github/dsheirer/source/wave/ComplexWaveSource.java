@@ -269,7 +269,7 @@ public class ComplexWaveSource extends ComplexSource implements IControllableFil
                     buffer = Arrays.copyOf(buffer, samplesRead);
                 }
 
-                float[] samples = ConversionUtils.convertFromSigned16BitSamples(buffer);
+                double[] samples = ConversionUtils.convertFromSigned16BitSamples(buffer);
 
                 ReusableComplexBuffer reusableBuffer = mReusableComplexBufferQueue.getBuffer(samples.length);
                 System.arraycopy(samples, 0, reusableBuffer.getSamples(), 0, samples.length);
@@ -311,7 +311,7 @@ public class ComplexWaveSource extends ComplexSource implements IControllableFil
 
     private void broadcast(int byteLocation)
     {
-        int frameLocation = (int)(byteLocation / mBytesPerFrame);
+        int frameLocation = byteLocation / mBytesPerFrame;
 
         if(mFrameLocationListener != null)
         {

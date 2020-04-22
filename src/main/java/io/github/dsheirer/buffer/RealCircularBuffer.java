@@ -26,12 +26,12 @@ package io.github.dsheirer.buffer;
  */
 public class RealCircularBuffer
 {
-    float[] mBuffer;
+    double[] mBuffer;
     int mBufferPointer = 0;
 
     public RealCircularBuffer(int size)
     {
-        mBuffer = new float[size];
+        mBuffer = new double[size];
     }
 
     public int getSize()
@@ -39,7 +39,7 @@ public class RealCircularBuffer
         return mBuffer.length;
     }
 
-    public float[] getBuffer()
+    public double[] getBuffer()
     {
         return mBuffer;
     }
@@ -51,9 +51,9 @@ public class RealCircularBuffer
      * @param newValue
      * @return
      */
-    public float putAndGet(float newValue)
+    public double putAndGet(double newValue)
     {
-        float oldestSample = mBuffer[mBufferPointer];
+        double oldestSample = mBuffer[mBufferPointer];
 
         put(newValue);
 
@@ -63,7 +63,7 @@ public class RealCircularBuffer
     /**
      * Adds the new value to this buffer.
      */
-    public void put(float newValue)
+    public void put(double newValue)
     {
         mBuffer[mBufferPointer] = newValue;
 
@@ -82,7 +82,7 @@ public class RealCircularBuffer
      * @return value at indexed position
      */
 
-    public float get(int index)
+    public double get(int index)
     {
         if(index < mBuffer.length)
         {
@@ -108,9 +108,9 @@ public class RealCircularBuffer
      *
      * @return array of samples
      */
-    public float[] get()
+    public double[] get()
     {
-        float[] samples = new float[mBuffer.length];
+        double[] samples = new double[mBuffer.length];
 
         System.arraycopy(mBuffer, mBufferPointer, samples, 0, mBuffer.length - mBufferPointer);
 

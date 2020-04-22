@@ -17,12 +17,12 @@ public abstract class SmoothingFilter
 		GAUSSIAN;
 	}
 
-	private Map<Integer,float[]> mCoefficientMap;
-	private float[] mCoefficients;
-	private float[] mNewCoefficients;
+	private Map<Integer,double[]> mCoefficientMap;
+	private double[] mCoefficients;
+	private double[] mNewCoefficients;
 	private boolean mNewCoefficientsAvailable;
 	
-	public SmoothingFilter( Map<Integer,float[]> coefficients, int index )
+	public SmoothingFilter( Map<Integer,double[]> coefficients, int index )
 	{
 		mCoefficientMap = coefficients;
 		
@@ -61,7 +61,7 @@ public abstract class SmoothingFilter
 		}
 	}
 	
-	public float[] filter( float[] data )
+	public double[] filter( double[] data )
 	{
 		if( mNewCoefficientsAvailable )
 		{
@@ -70,19 +70,19 @@ public abstract class SmoothingFilter
 		}
 
 		int middle = mCoefficients.length / 2;
-		
-		float[] filtered = new float[ data.length ];
+
+		double[] filtered = new double[ data.length ];
 
 		int toCopy = middle;
 		
 		System.arraycopy( data, 0, filtered, 0, toCopy );
 		System.arraycopy( data, data.length - toCopy, filtered, filtered.length - toCopy, toCopy );
-		
-		float accumulator;
+
+		double accumulator;
 		
 		for( int x = 0; x < data.length - mCoefficients.length + 1; x++ )
 		{
-			accumulator = 0.0f;
+			accumulator = 0.0d;
 			
 			for( int y = 0; y < mCoefficients.length; y++ )
 			{

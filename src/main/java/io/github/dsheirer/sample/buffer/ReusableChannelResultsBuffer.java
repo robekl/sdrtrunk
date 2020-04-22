@@ -26,8 +26,8 @@ public class ReusableChannelResultsBuffer extends AbstractReusableBuffer
     private final static Logger mLog = LoggerFactory.getLogger(ReusableChannelResultsBuffer.class);
     private ReusableComplexBufferQueue mReusableComplexBufferQueue =
         new ReusableComplexBufferQueue("ReusableChannelResultsBuffer");
-    private LinkedList<float[]> mEmptyBuffers = new LinkedList<>();
-    private LinkedList<float[]> mFilledBuffers = new LinkedList<>();
+    private LinkedList<double[]> mEmptyBuffers = new LinkedList<>();
+    private LinkedList<double[]> mFilledBuffers = new LinkedList<>();
     private Integer mLength;
 
     /**
@@ -60,13 +60,13 @@ public class ReusableChannelResultsBuffer extends AbstractReusableBuffer
      * @param length of the requested array
      * @return a float array of the requested length that may contain stale data from previous use.
      */
-    public float[] getEmptyBuffer(int length)
+    public double[] getEmptyBuffer(int length)
     {
-        float[] emptyBuffer = mEmptyBuffers.poll();
+        double[] emptyBuffer = mEmptyBuffers.poll();
 
         if(emptyBuffer == null || emptyBuffer.length != length)
         {
-            emptyBuffer = new float[length];
+            emptyBuffer = new double[length];
         }
 
         return emptyBuffer;
@@ -79,7 +79,7 @@ public class ReusableChannelResultsBuffer extends AbstractReusableBuffer
      *
      * @param channelResults to add back to this buffer
      */
-    public void addChannelResults(float[] channelResults)
+    public void addChannelResults(double[] channelResults)
     {
         if(mLength == null)
         {
@@ -96,7 +96,7 @@ public class ReusableChannelResultsBuffer extends AbstractReusableBuffer
     /**
      * Channel results array contained in this buffer
      */
-    public List<float[]> getChannelResults()
+    public List<double[]> getChannelResults()
     {
         return mFilledBuffers;
     }
@@ -124,13 +124,13 @@ public class ReusableChannelResultsBuffer extends AbstractReusableBuffer
 
         ReusableComplexBuffer channelBuffer = mReusableComplexBufferQueue.getBuffer(mFilledBuffers.size() * 2);
 
-        float[] samples = channelBuffer.getSamples();
+        double[] samples = channelBuffer.getSamples();
 
         int pointer = 0;
 
         int qChannelIndex = iChannelIndex + 1;
 
-        for(float[] channelResults: mFilledBuffers)
+        for(double[] channelResults: mFilledBuffers)
         {
             try
             {

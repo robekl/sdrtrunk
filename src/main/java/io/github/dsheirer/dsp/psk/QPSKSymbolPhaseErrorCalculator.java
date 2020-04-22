@@ -23,12 +23,12 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class QPSKSymbolPhaseErrorCalculator implements ISymbolPhaseErrorCalculator
 {
-    private float mPhaseError;
+    private double mPhaseError;
 
     @Override
-    public float getPhaseError(Complex symbol)
+    public double getPhaseError(Complex symbol)
     {
-        mPhaseError = 0.0f;
+        mPhaseError = 0.0d;
 
         if(FastMath.abs(symbol.inphase()) > FastMath.abs(symbol.quadrature()))
         {

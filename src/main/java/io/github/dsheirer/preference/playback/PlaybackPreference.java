@@ -297,7 +297,7 @@ public class PlaybackPreference extends Preference
     /**
      * Buffer with samples for the audio segment start tone
      */
-    public float[] getStartTone()
+    public double[] getStartTone()
     {
         if(getUseAudioSegmentStartTone())
         {
@@ -310,7 +310,7 @@ public class PlaybackPreference extends Preference
     /**
      * Buffer with samples for the audio segment preempt tone
      */
-    public float[] getPreemptTone()
+    public double[] getPreemptTone()
     {
         if(getUseAudioSegmentPreemptTone())
         {
@@ -323,7 +323,7 @@ public class PlaybackPreference extends Preference
     /**
      * Buffer with samples for the audio segment drop tone
      */
-    public float[] getDropTone()
+    public double[] getDropTone()
     {
         if(getUseAudioSegmentDropTone())
         {
@@ -336,7 +336,7 @@ public class PlaybackPreference extends Preference
     /**
      * Test tone to use for testing the currently selected mixer output
      */
-    public float[] getMixerTestTone()
+    public double[] getMixerTestTone()
     {
         return ToneUtil.getTone(ToneFrequency.F1200, ToneVolume.V10, 800);
     }

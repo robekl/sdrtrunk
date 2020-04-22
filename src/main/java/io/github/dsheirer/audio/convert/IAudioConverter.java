@@ -25,7 +25,7 @@ public interface IAudioConverter
     /**
      * Converts the PCM audio packets to converted audio format.  May produce partial audio frame data.
      */
-    public byte[] convert(List<float[]> audioBuffers);
+    public byte[] convert(List<double[]> audioBuffers);
 
     /**
      * Finalizes audio conversion by fully converting any partial frames left in the buffer and returning the

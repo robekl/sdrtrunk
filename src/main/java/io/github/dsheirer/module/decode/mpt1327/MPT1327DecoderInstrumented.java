@@ -21,7 +21,7 @@ package io.github.dsheirer.module.decode.mpt1327;
 
 import io.github.dsheirer.dsp.afsk.AFSK1200DecoderInstrumented;
 import io.github.dsheirer.gui.instrument.chart.IInstrumentedAFSK1200Decoder;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -48,9 +48,9 @@ public class MPT1327DecoderInstrumented extends MPT1327Decoder implements IInstr
     }
 
     @Override
-    public void receive(ReusableFloatBuffer reusableFloatBuffer)
+    public void receive(ReusableDoubleBuffer reusableDoubleBuffer)
     {
-        super.receive(reusableFloatBuffer);
+        super.receive(reusableDoubleBuffer);
 
         bufferCount.setValue(bufferCount.intValue() + 1);
     }

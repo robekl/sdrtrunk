@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class RectangularSmoothingFilter extends SmoothingFilter
 {
-	private static Map<Integer,float[]> mMap = new HashMap<>();
+	private static Map<Integer,double[]> mMap = new HashMap<>();
 
 	static
 	{
@@ -32,11 +32,11 @@ public class RectangularSmoothingFilter extends SmoothingFilter
 		super( mMap, 3 );
 	}
 	
-	public static float[] getCoefficients( int points )
+	public static double[] getCoefficients( int points )
 	{
-		float[] coefficients = new float[ points ];
+		double[] coefficients = new double[ points ];
 		
-		Arrays.fill( coefficients, 1.0f / (float)points );
+		Arrays.fill( coefficients, 1.0d / (double)points );
 		
 		return coefficients;
 	}

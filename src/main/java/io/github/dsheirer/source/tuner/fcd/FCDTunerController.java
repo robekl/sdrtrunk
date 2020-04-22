@@ -232,9 +232,9 @@ public abstract class FCDTunerController extends TunerController
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.append(String.format("%04X", (int)(mDeviceDescriptor.idVendor() & 0xFFFF)));
+            sb.append(String.format("%04X", mDeviceDescriptor.idVendor() & 0xFFFF));
             sb.append(":");
-            sb.append(String.format("%04X", (int)(mDeviceDescriptor.idProduct() & 0xFFFF)));
+            sb.append(String.format("%04X", mDeviceDescriptor.idProduct() & 0xFFFF));
 
             return sb.toString();
         }
@@ -324,7 +324,7 @@ public abstract class FCDTunerController extends TunerController
 
             buffer.order(ByteOrder.LITTLE_ENDIAN);
 
-            return (int)(buffer.getInt(2) & 0xFFFFFFFF);
+            return buffer.getInt(2) & 0xFFFFFFFF;
         }
         catch(Exception e)
         {
@@ -432,7 +432,7 @@ public abstract class FCDTunerController extends TunerController
 
         for(int x = 0; x < 64; x++)
         {
-            sb.append(String.format("%02X", (int)(buffer.get(x) & 0xFF)));
+            sb.append(String.format("%02X", buffer.get(x) & 0xFF));
             sb.append(" ");
         }
 

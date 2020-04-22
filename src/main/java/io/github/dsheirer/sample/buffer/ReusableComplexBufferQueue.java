@@ -51,7 +51,7 @@ public class ReusableComplexBufferQueue extends AbstractReusableBufferQueue<Reus
 
         if(buffer == null)
         {
-            buffer = new ReusableComplexBuffer(this, new float[size]);
+            buffer = new ReusableComplexBuffer(this, new double[size]);
             buffer.setDebugName("Owner:" + getDebugName());
             incrementBufferCount();
         }

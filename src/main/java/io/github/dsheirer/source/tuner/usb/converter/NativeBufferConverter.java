@@ -19,7 +19,7 @@ import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBufferQueue;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
 public abstract class NativeBufferConverter
 {
@@ -43,12 +43,12 @@ public abstract class NativeBufferConverter
      */
     public ReusableComplexBuffer convert(ByteBuffer byteBuffer, int length)
     {
-        FloatBuffer floatBuffer = convertSamples(byteBuffer, length);
+        DoubleBuffer DoubleBuffer = convertSamples(byteBuffer, length);
 
-        ReusableComplexBuffer reusableComplexBuffer = mReusableComplexBufferQueue.getBuffer(floatBuffer.capacity());
+        ReusableComplexBuffer reusableComplexBuffer = mReusableComplexBufferQueue.getBuffer(DoubleBuffer.capacity());
 
         //The reusable buffer will rewind the float buffer to the beginning
-        reusableComplexBuffer.reloadFrom(floatBuffer, System.currentTimeMillis());
+        reusableComplexBuffer.reloadFrom(DoubleBuffer, System.currentTimeMillis());
 
         return reusableComplexBuffer;
     }
@@ -60,5 +60,5 @@ public abstract class NativeBufferConverter
      * @return a buffer with complex float samples.  This float buffer will not be modified, therefore sub-class
      * implementations can reuse the float buffer.
      */
-    protected abstract FloatBuffer convertSamples(ByteBuffer buffer, int length);
+    protected abstract DoubleBuffer convertSamples(ByteBuffer buffer, int length);
 }

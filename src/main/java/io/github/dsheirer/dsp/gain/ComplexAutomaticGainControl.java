@@ -155,7 +155,7 @@ public class ComplexAutomaticGainControl implements Listener<Complex>,
 		
 		if( mAGCEnabled.get() )
 		{
-			float max = currentSample.maximumAbsolute();
+			double max = currentSample.maximumAbsolute();
 
 			double currentMagnitude = FastMath.log10( max + MIN_CONSTANT ) -
 							   FastMath.log10( MAX_AMPLITUDE );
@@ -210,7 +210,7 @@ public class ComplexAutomaticGainControl implements Listener<Complex>,
 			
 		}
 
-		delayedSample.multiply( (float)gain );
+		delayedSample.multiply( gain );
 		
 		if( mListener != null )
 		{

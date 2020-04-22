@@ -66,10 +66,10 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
     private Color mColorSpectrumLine;
 
     //Defines the panel inset along the bottom for frequency display
-    private float mSpectrumInset = 20.0f;
+    private double mSpectrumInset = 20.0d;
 
     //Current DFT output bins in dB
-    private float[] mDisplayFFTBins = new float[1];
+    private double[] mDisplayFFTBins = new double[1];
 
     //Averaging across multiple DFT result sets
     private int mAveraging = 4;
@@ -78,7 +78,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
     private SmoothingFilter mSmoothingFilter = new NoSmoothingFilter();
 
     //Reference dB value set according to the source sample size
-    private float mDBScale;
+    private double mDBScale;
 
     private int mZoom = 0;
     private int mZoomWindowOffset = 0;
@@ -118,13 +118,13 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
      * DFTResultsListener interface for receiving the processed data
      * to display
      */
-    public void receive(float[] currentFFTBins)
+    public void receive(double[] currentFFTBins)
     {
         //Prevent arrays of NaN values from being rendered.  The first few
         //DFT result sets on startup will contain NaN values
-        if(Float.isInfinite(currentFFTBins[0]) || Float.isNaN(currentFFTBins[0]))
+        if(Double.isInfinite(currentFFTBins[0]) || Double.isNaN(currentFFTBins[0]))
         {
-            currentFFTBins = new float[currentFFTBins.length];
+            currentFFTBins = new double[currentFFTBins.length];
         }
 
         //Construct and/or resize our DFT results variables
@@ -135,12 +135,12 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
         }
 
         //Apply smoothing across the bins of the DFT results
-        float[] smoothedBins = mSmoothingFilter.filter(currentFFTBins);
+        double[] smoothedBins = mSmoothingFilter.filter(currentFFTBins);
 
         //Apply averaging over multiple DFT output frames
         if(mAveraging > 1)
         {
-            float gain = 1.0f / (float)mAveraging;
+            double gain = 1.0d / (double)mAveraging;
 
             for(int x = 0; x < mDisplayFFTBins.length; x++)
             {
@@ -185,7 +185,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
 
         //Define the gradient
         GradientPaint gradient = new GradientPaint(0,
-            (getSize().height - mSpectrumInset) / 2,
+                (float)(getSize().height - mSpectrumInset) / 2,
             mColorSpectrumGradientTop,
             0,
             getSize().height,
@@ -202,22 +202,22 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
         //Draw to the lower left
         spectrumShape.lineTo(0, size.getHeight() - mSpectrumInset);
 
-        float[] bins = getBins();
+        double[] bins = getBins();
 
         //If we have FFT data to display ...
         if(bins != null)
         {
-            float insideHeight = size.height - mSpectrumInset;
+            double insideHeight = size.height - mSpectrumInset;
 
-            float scalor = insideHeight / -mDBScale;
+            double scalor = insideHeight / -mDBScale;
 
     		/* Calculate based on bin size - 1, since bin 0 is rendered at zero
              * and the last bin is rendered at the width */
-            float binSize = (float)size.width / ((float)(bins.length));
+            double binSize = (double)size.width / ((double)(bins.length));
 
             for(int x = 0; x < bins.length; x++)
             {
-                float height;
+                double height;
 
                 height = bins[x] * scalor;
 
@@ -231,7 +231,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
                     height = 0;
                 }
 
-                float xAxis = (float)x * binSize;
+                double xAxis = (double)x * binSize;
 
                 spectrumShape.lineTo(xAxis, height);
             }
@@ -258,7 +258,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
         graphics.setPaint(mColorSpectrumLine);
 
         //Draw the bottom line under the spectrum
-        graphics.draw(new Line2D.Float(0,
+        graphics.draw(new Line2D.Double(0,
             size.height - mSpectrumInset,
             size.width,
             size.height - mSpectrumInset));
@@ -304,7 +304,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
     {
         Validate.isTrue(2.0 <= sampleSize && sampleSize <= 64.0);
 
-        mDBScale = (float)(20.0 * FastMath.log10(FastMath.pow(2.0, sampleSize - 1)));
+        mDBScale = (20.0 * FastMath.log10(FastMath.pow(2.0, sampleSize - 1)));
     }
 
     /**
@@ -395,7 +395,7 @@ public class SpectrumPanel extends JPanel implements DFTResultsListener, Setting
      * Returns the DFT result bins, or a zoomed and offset version of the bins
      * when the display is zoomed.
      */
-    private float[] getBins()
+    private double[] getBins()
     {
         if(mZoom == 0)
         {

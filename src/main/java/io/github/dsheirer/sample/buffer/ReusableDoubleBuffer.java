@@ -17,11 +17,11 @@ package io.github.dsheirer.sample.buffer;
 
 import org.apache.commons.lang3.Validate;
 
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
-public class ReusableFloatBuffer extends AbstractReusableBuffer
+public class ReusableDoubleBuffer extends AbstractReusableBuffer
 {
-    private float[] mSamples;
+    private double[] mSamples;
 
     /**
      * Creates a reusable, timestamped complex buffer using the specified time in milliseconds.
@@ -34,7 +34,7 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
      * @param samples of data
      * @param timestamp in millis for the buffer
      */
-    ReusableFloatBuffer(IReusableBufferDisposedListener bufferDisposedListener, float[] samples, long timestamp)
+    ReusableDoubleBuffer(IReusableBufferDisposedListener bufferDisposedListener, double[] samples, long timestamp)
     {
         super(bufferDisposedListener, timestamp);
         mSamples = samples;
@@ -45,7 +45,7 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
     /**
      * Samples for this buffer
      */
-    public float[] getSamples()
+    public double[] getSamples()
     {
         return mSamples;
     }
@@ -53,10 +53,10 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
     /**
      * Creates a copy of the samples from this buffer
      */
-    public float[] getSamplesCopy()
+    public double[] getSamplesCopy()
     {
-        float[] samples = getSamples();
-        float[] copy = new float[samples.length];
+        double[] samples = getSamples();
+        double[] copy = new double[samples.length];
         System.arraycopy(samples, 0, copy, 0, samples.length);
         return copy;
     }
@@ -79,7 +79,7 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
      * @param bufferDisposedListener to be notified when all consumers are finished using the buffer
      * @param samples of data
      */
-    public ReusableFloatBuffer(IReusableBufferDisposedListener bufferDisposedListener, float[] samples)
+    public ReusableDoubleBuffer(IReusableBufferDisposedListener bufferDisposedListener, double[] samples)
     {
         this(bufferDisposedListener, samples, System.currentTimeMillis());
     }
@@ -92,7 +92,7 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
      * @param samples to copy into this buffer
      * @param timestamp for the samples in millis
      */
-    public void reloadFrom(float[] samples, long timestamp)
+    public void reloadFrom(double[] samples, long timestamp)
     {
         if(mUserCount.get() > 0)
         {
@@ -113,14 +113,14 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
      * Reloads this buffer by filling this buffer from the float buffer (ie copying the buffer contents).  Internal
      * buffer length will be automatically resized to accommodate the float buffer's capacity/size.
      *
-     * @param floatBuffer to copy into this buffer
+     * @param doubleBuffer to copy into this buffer
      * @param timestamp for the samples in millis
      */
-    public void reloadFrom(FloatBuffer floatBuffer, long timestamp)
+    public void reloadFrom(DoubleBuffer doubleBuffer, long timestamp)
     {
-        resize(floatBuffer.capacity());
-        floatBuffer.rewind();
-        floatBuffer.get(mSamples);
+        resize(doubleBuffer.capacity());
+        doubleBuffer.rewind();
+        doubleBuffer.get(mSamples);
 
         mTimestamp = timestamp;
     }
@@ -133,7 +133,7 @@ public class ReusableFloatBuffer extends AbstractReusableBuffer
     {
         if(mSamples.length != size)
         {
-            mSamples = new float[size];
+            mSamples = new double[size];
         }
     }
 

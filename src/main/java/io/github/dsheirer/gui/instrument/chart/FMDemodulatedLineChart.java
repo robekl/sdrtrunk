@@ -75,7 +75,7 @@ public class FMDemodulatedLineChart extends LineChart implements Listener<Reusab
     @Override
     public void receive(ReusableComplexBuffer complexBuffer)
     {
-        float[] samples = complexBuffer.getSamples();
+        double[] samples = complexBuffer.getSamples();
 
         Complex sample;
 

@@ -15,7 +15,7 @@
  ******************************************************************************/
 package io.github.dsheirer.sample.buffer;
 
-public class ReusableComplexBuffer extends ReusableFloatBuffer
+public class ReusableComplexBuffer extends ReusableDoubleBuffer
 {
     /**
      * Creates a reusable, timestamped complex buffer using the specified time in milliseconds.
@@ -28,7 +28,7 @@ public class ReusableComplexBuffer extends ReusableFloatBuffer
      * @param samples of data
      * @param timestamp in millis for the buffer
      */
-    ReusableComplexBuffer(IReusableBufferDisposedListener disposalListener, float[] samples, long timestamp)
+    ReusableComplexBuffer(IReusableBufferDisposedListener disposalListener, double[] samples, long timestamp)
     {
         super(disposalListener, samples, timestamp);
     }
@@ -43,7 +43,7 @@ public class ReusableComplexBuffer extends ReusableFloatBuffer
      * @param disposalListener to be notified when all consumers are finished using the buffer
      * @param samples of data
      */
-    protected ReusableComplexBuffer(IReusableBufferDisposedListener disposalListener, float[] samples)
+    protected ReusableComplexBuffer(IReusableBufferDisposedListener disposalListener, double[] samples)
     {
         this(disposalListener, samples, System.currentTimeMillis());
     }
@@ -62,7 +62,7 @@ public class ReusableComplexBuffer extends ReusableFloatBuffer
      */
     public void applyGain(double gain)
     {
-        float[] samples = getSamples();
+        double[] samples = getSamples();
 
         for(int x = 0; x < samples.length; x++)
         {

@@ -98,14 +98,14 @@ public class ZeroCrossingErrorDetectorChart extends LineChart
         @Override
         public void changed(ObservableValue observable, Object oldValue, Object newValue)
         {
-            float error = mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getError();
+            double error = mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getError();
 
             boolean[] samples = mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getBuffer();
 
             for(int x = 0; x < samples.length; x++)
             {
                 Data<Number,Number> sample = mPreviousSamples.get(x);
-                sample.setYValue(samples[x] ? -0.4f : -0.6f);
+                sample.setYValue(samples[x] ? -0.4d : -0.6d);
             }
 
             Data<Number,Number> ideal1 = mIdeal.get(0);
@@ -113,12 +113,12 @@ public class ZeroCrossingErrorDetectorChart extends LineChart
             Data<Number,Number> ideal2 = mIdeal.get(1);
             ideal2.setXValue(mLTRNetDecoderInstrumented.getLTRDecoder().getErrorDetector().getZeroCrossingIdeal());
 
-            if(error == 0.0f)
+            if(error == 0.0d)
             {
                 Data<Number,Number> detected1 = mDetected.get(0);
-                detected1.setXValue(0.0f);
+                detected1.setXValue(0.0d);
                 Data<Number,Number> detected2 = mDetected.get(1);
-                detected2.setXValue(0.0f);
+                detected2.setXValue(0.0d);
             }
             else
             {

@@ -28,7 +28,7 @@ import java.nio.ByteOrder;
 public class ComplexShortAdapter extends ComplexSampleAdapter
 {
     private final static Logger mLog = LoggerFactory.getLogger(ComplexShortAdapter.class);
-    private ShortToFloatMap mMap = new ShortToFloatMap();
+    private ShortToDoubleMap mMap = new ShortToDoubleMap();
     private ByteOrder mByteOrder = ByteOrder.LITTLE_ENDIAN;
     private ByteBuffer mByteBuffer;
 
@@ -46,7 +46,7 @@ public class ComplexShortAdapter extends ComplexSampleAdapter
     public ReusableComplexBuffer convert(byte[] samples)
     {
         ReusableComplexBuffer reusableBuffer = getBuffer(samples.length / 2);
-        float[] convertedSamples = reusableBuffer.getSamples();
+        double[] convertedSamples = reusableBuffer.getSamples();
 
         int pointer = 0;
 

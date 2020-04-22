@@ -32,7 +32,7 @@ import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.SampleType;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.settings.ColorSetting.ColorSettingName;
 import io.github.dsheirer.settings.ColorSettingMenuItem;
 import io.github.dsheirer.settings.Setting;
@@ -64,7 +64,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChannelSpectrumPanel extends JPanel implements ChannelEventListener,
-    Listener<ReusableFloatBuffer>, SettingChangeListener, SpectralDisplayAdjuster
+    Listener<ReusableDoubleBuffer>, SettingChangeListener, SpectralDisplayAdjuster
 {
     private static final long serialVersionUID = 1L;
 
@@ -80,7 +80,7 @@ public class ChannelSpectrumPanel extends JPanel implements ChannelEventListener
     private int mSampleBufferSize = 2400;
 
     private HalfBandFilter mDecimatingFilter = new HalfBandFilter(
-        Filters.FIR_HALF_BAND_31T_ONE_EIGHTH_FCO.getCoefficients(), 1.0f, true);
+        Filters.FIR_HALF_BAND_31T_ONE_EIGHTH_FCO.getCoefficients(), 1.0d, true);
 
     private AtomicBoolean mEnabled = new AtomicBoolean();
 
@@ -130,7 +130,7 @@ public class ChannelSpectrumPanel extends JPanel implements ChannelEventListener
 
     public void setFrameRate(int framesPerSecond)
     {
-        mSampleBufferSize = (int)(48000 / framesPerSecond);
+        mSampleBufferSize = 48000 / framesPerSecond;
 
         mDFTProcessor.setFrameRate(framesPerSecond);
     }
@@ -271,9 +271,9 @@ public class ChannelSpectrumPanel extends JPanel implements ChannelEventListener
     }
 
     @Override
-    public void receive(ReusableFloatBuffer buffer)
+    public void receive(ReusableDoubleBuffer buffer)
     {
-        ReusableFloatBuffer decimated = mDecimatingFilter.filter(buffer);
+        ReusableDoubleBuffer decimated = mDecimatingFilter.filter(buffer);
 
         //Hack: we're placing real samples in a complex buffer that the DFT
         //processor is expecting.

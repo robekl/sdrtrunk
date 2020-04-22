@@ -69,7 +69,7 @@ public class SampleXYChart extends PolarChart<XYChartItem> implements Listener<R
     @Override
     public void receive(ReusableComplexBuffer buffer)
     {
-        float[] samples = buffer.getSamples();
+        double[] samples = buffer.getSamples();
 
         for(int x = 0; x < samples.length; x += 2)
         {

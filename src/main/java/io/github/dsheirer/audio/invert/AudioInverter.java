@@ -38,7 +38,7 @@ public class AudioInverter implements RealSampleListener
 		mSineWaveGenerator = new Oscillator( inversionFrequency, sampleRate );
 		
 		mPostInversionLowPassFilter = new FloatFIRFilter( 
-				Filters.FIRLP_55TAP_48000FS_3000FC.getCoefficients(), 1.04f );
+				Filters.FIRLP_55TAP_48000FS_3000FC.getCoefficients(), 1.04d );
 
 		mPostInversionLowPassFilter.setListener( new FilteredSampleProcessor() );
 	}
@@ -54,7 +54,7 @@ public class AudioInverter implements RealSampleListener
     }
 
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		//Multiply the sample by the folding frequency and then send it to
 		//the low pass filter
@@ -74,7 +74,7 @@ public class AudioInverter implements RealSampleListener
 	class FilteredSampleProcessor implements RealSampleListener
 	{
 		@Override
-        public void receive( float sample )
+        public void receive( double sample )
         {
 			if( mListener != null )
 			{

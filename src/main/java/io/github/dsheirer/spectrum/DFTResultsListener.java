@@ -22,5 +22,5 @@ package io.github.dsheirer.spectrum;
  */
 public interface DFTResultsListener
 {
-	public void receive( float[] results );
+	public void receive( double[] results );
 }

@@ -964,7 +964,7 @@ public class FIRFilterSpecification
         double t4 = a5 * ddp;
 
         double cinf = dds * (t1 + t2 + a3) + t3 + t4 + a6;
-        double ginf = -14.6f * (double)FastMath.log10(passBandRippleDb / stopBandRippleDb) - 16.9;
+        double ginf = -14.6d * FastMath.log10(passBandRippleDb / stopBandRippleDb) - 16.9;
         double n = cinf / df + ginf * df + 1.0;
 
         return (int)FastMath.ceil(n);

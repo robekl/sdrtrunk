@@ -19,7 +19,7 @@ package io.github.dsheirer.dsp.fm;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.sample.complex.Complex;
 import org.apache.commons.math3.util.FastMath;
 
@@ -29,23 +29,23 @@ import org.apache.commons.math3.util.FastMath;
 public class FMDemodulator
 {
     private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("FMDemodulator");
-    private float mPreviousI = 0.0f;
-    private float mPreviousQ = 0.0f;
-    protected float mGain;
+    private double mPreviousI = 0.0d;
+    private double mPreviousQ = 0.0d;
+    protected double mGain;
 
     /**
      * Creates an FM demodulator instance with a default gain of 1.0.
      */
     public FMDemodulator()
     {
-        this(1.0f);
+        this(1.0d);
     }
 
     /**
      * Creates an FM demodulator instance and applies the gain value to each demodulated output sample.
      * @param gain to apply to demodulated samples.
      */
-    public FMDemodulator(float gain)
+    public FMDemodulator(double gain)
     {
         mGain = gain;
     }
@@ -59,7 +59,7 @@ public class FMDemodulator
      * @param currentQ of the sample
      * @return demodulated sample
      */
-    public float demodulate(float currentI, float currentQ)
+    public double demodulate(double currentI, double currentQ)
     {
         /**
          * Multiply the current sample against the complex conjugate of the
@@ -70,7 +70,7 @@ public class FMDemodulator
         double inphase = (currentI * mPreviousI) - (currentQ * -mPreviousQ);
         double quadrature = (currentQ * mPreviousI) + (currentI * -mPreviousQ);
 
-        double angle = 0.0f;
+        double angle = 0.0d;
 
         //Check for divide by zero
         if(inphase != 0)
@@ -82,7 +82,7 @@ public class FMDemodulator
              * serves as the instantaneous amplitude of the demodulated signal
              */
             double denominator = 1.0d / inphase;
-            angle = FastMath.atan((double)quadrature * denominator);
+            angle = FastMath.atan(quadrature * denominator);
         }
 
         /**
@@ -91,7 +91,7 @@ public class FMDemodulator
         mPreviousI = currentI;
         mPreviousQ = currentQ;
 
-        return (float)(angle * mGain);
+        return (angle * mGain);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FMDemodulator
         double inphase = (current.inphase() * previous.inphase()) - (current.quadrature() * -previous.quadrature());
         double quadrature = (current.quadrature() * previous.inphase()) + (current.inphase() * -previous.quadrature());
 
-        double angle = 0.0f;
+        double angle = 0.0d;
 
         //Check for divide by zero
         if(inphase != 0)
@@ -117,7 +117,7 @@ public class FMDemodulator
              * serves as the instantaneous amplitude of the demodulated signal
              */
             double denominator = 1.0d / inphase;
-            angle = FastMath.atan((double)quadrature * denominator);
+            angle = FastMath.atan(quadrature * denominator);
         }
 
         return angle;
@@ -130,12 +130,12 @@ public class FMDemodulator
      * @param basebandSampleBuffer containing samples to demodulate
      * @return demodulated sample buffer.
      */
-    public ReusableFloatBuffer demodulate(ReusableComplexBuffer basebandSampleBuffer)
+    public ReusableDoubleBuffer demodulate(ReusableComplexBuffer basebandSampleBuffer)
     {
-        ReusableFloatBuffer demodulatedBuffer = mReusableBufferQueue.getBuffer(basebandSampleBuffer.getSampleCount());
+        ReusableDoubleBuffer demodulatedBuffer = mReusableBufferQueue.getBuffer(basebandSampleBuffer.getSampleCount());
 
-        float[] basebandSamples = basebandSampleBuffer.getSamples();
-        float[] demodulatedSamples = demodulatedBuffer.getSamples();
+        double[] basebandSamples = basebandSampleBuffer.getSamples();
+        double[] demodulatedSamples = demodulatedBuffer.getSamples();
 
         for(int x = 0; x < basebandSamples.length; x += 2)
         {
@@ -157,14 +157,14 @@ public class FMDemodulator
      */
     public void reset()
     {
-        mPreviousI = 0.0f;
-        mPreviousQ = 0.0f;
+        mPreviousI = 0.0d;
+        mPreviousQ = 0.0d;
     }
 
     /**
      * Sets the gain to the specified level.
      */
-    public void setGain(float gain)
+    public void setGain(double gain)
     {
         mGain = gain;
     }

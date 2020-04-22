@@ -24,5 +24,5 @@ public interface ISymbolPhaseErrorCalculator
      * @param symbol to calculate error
      * @return error value
      */
-    float getPhaseError(Complex symbol);
+    double getPhaseError(Complex symbol);
 }

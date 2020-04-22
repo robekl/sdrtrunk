@@ -23,7 +23,7 @@ import io.github.dsheirer.dsp.filter.channelizer.SampleTimestampManager;
 import io.github.dsheirer.sample.Listener;
 import org.apache.commons.lang3.Validate;
 
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
 /**
  * Assembles complex float samples into a ComplexBuffer containing an array of floats.  Monitors incoming sample count
@@ -34,7 +34,7 @@ public class ReusableComplexBufferAssembler
 //    private final static Logger mLog = LoggerFactory.getLogger(ReusableComplexBufferAssembler.class);
     private ReusableComplexBufferQueue mReusableComplexBufferQueue = new ReusableComplexBufferQueue("ReusableComplexBufferAssembler");
     private SampleTimestampManager mTimestampManager;
-    private FloatBuffer mBuffer;
+    private DoubleBuffer mBuffer;
     private int mBufferSize;
     private long mCurrentBufferTimestamp;
     private Listener<ReusableComplexBuffer> mListener;
@@ -43,7 +43,7 @@ public class ReusableComplexBufferAssembler
     {
         Validate.isTrue(bufferSize % 2 == 0);
         mBufferSize = bufferSize;
-        mBuffer = FloatBuffer.allocate(mBufferSize);
+        mBuffer = DoubleBuffer.allocate(mBufferSize);
         mTimestampManager = new SampleTimestampManager(sampleRate);
     }
 
@@ -75,7 +75,7 @@ public class ReusableComplexBufferAssembler
      * @param inphase sample to assemble
      * @param quadrature sample to assemble
      */
-    public void receive(float inphase, float quadrature)
+    public void receive(double inphase, double quadrature)
     {
         if(mBuffer.remaining() >= 2)
         {
@@ -97,7 +97,7 @@ public class ReusableComplexBufferAssembler
      *
      * @param samples to assemble
      */
-    public void receive(float[] samples)
+    public void receive(double[] samples)
     {
         if(mBuffer.remaining() >= samples.length)
         {

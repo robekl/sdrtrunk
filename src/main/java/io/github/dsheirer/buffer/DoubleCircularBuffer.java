@@ -50,6 +50,10 @@ public class DoubleCircularBuffer
         Arrays.fill(mBuffer, initialFillValue);
     }
 
+    public double[] getBuffer() {
+        return mBuffer;
+    }
+
     /**
      * Creates a circular double buffer of the specified size and all entries filled with an initial value of zero.
      * @param size of the buffer

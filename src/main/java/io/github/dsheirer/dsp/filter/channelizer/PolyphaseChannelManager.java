@@ -83,7 +83,7 @@ public class PolyphaseChannelManager implements ISourceEventProcessor
     private ChannelSourceEventListener mChannelSourceEventListener = new ChannelSourceEventListener();
     private BufferSourceEventMonitor mBufferSourceEventMonitor = new BufferSourceEventMonitor();
     private ContinuousBufferProcessor<ReusableComplexBuffer> mBufferProcessor;
-    private Map<Integer,float[]> mOutputProcessorFilters = new HashMap<>();
+    private Map<Integer,double[]> mOutputProcessorFilters = new HashMap<>();
 
     /**
      * Creates a polyphase channel manager instance.
@@ -214,7 +214,7 @@ public class PolyphaseChannelManager implements ISourceEventProcessor
             case 2:
                 try
                 {
-                    float[] filter = getOutputProcessorFilter(2);
+                    double[] filter = getOutputProcessorFilter(2);
                     return new TwoChannelOutputProcessor(mChannelCalculator.getChannelSampleRate(), indexes, filter,
                         mChannelCalculator.getChannelCount());
                 }
@@ -426,7 +426,7 @@ public class PolyphaseChannelManager implements ISourceEventProcessor
                 {
                     try
                     {
-                        float[] filter = getOutputProcessorFilter(indexes.size());
+                        double[] filter = getOutputProcessorFilter(indexes.size());
                         channelSource.getPolyphaseChannelOutputProcessor().setSynthesisFilter(filter);
                     }
                     catch(FilterDesignException fde)
@@ -497,9 +497,9 @@ public class PolyphaseChannelManager implements ISourceEventProcessor
      * @return filter
      * @throws FilterDesignException if the filter cannot be designed to specification (-6 dB band edge)
      */
-    private float[] getOutputProcessorFilter(int channels) throws FilterDesignException
+    private double[] getOutputProcessorFilter(int channels) throws FilterDesignException
     {
-        float[] taps = mOutputProcessorFilters.get(channels);
+        double[] taps = mOutputProcessorFilters.get(channels);
 
         if(taps == null)
         {

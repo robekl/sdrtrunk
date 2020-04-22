@@ -81,7 +81,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
         2767, 2777, 2789, 2791, 2797, 2801
     };
 
-    private static Map<Integer,float[]> sLowPassFilters = new HashMap();
+    private static Map<Integer,double[]> sLowPassFilters = new HashMap();
     private static Map<Integer,List<Integer>> sPrimeFactors = new HashMap();
 
     private List<DecimatingStage> mDecimatingStages = new ArrayList<DecimatingStage>();
@@ -223,7 +223,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
     {
         if(mFirstDecimatingStage != null)
         {
-            float[] samples = buffer.getSamples();
+            double[] samples = buffer.getSamples();
 
             for(int x = 0; x < samples.length; x += 2)
             {
@@ -291,7 +291,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
         }
 
         @Override
-        public void receive(float i, float q)
+        public void receive(double i, double q)
         {
             mFirstStage.receive(i, q);
         }
@@ -310,16 +310,16 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
     {
         protected ComplexSampleListener mListener;
 
-        private float[] mISamples;
-        private float[] mQSamples;
+        private double[] mISamples;
+        private double[] mQSamples;
 
-        protected float mISum;
-        protected float mQSum;
+        protected double mISum;
+        protected double mQSum;
 
         private int mSamplePointer = 0;
         private int mSize;
 
-        protected float mGain;
+        protected double mGain;
 
         protected Stage()
         {
@@ -329,11 +329,11 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
         {
             mSize = size - 1;
 
-            mISamples = new float[mSize];
-            mQSamples = new float[mSize];
+            mISamples = new double[mSize];
+            mQSamples = new double[mSize];
 
-            float baseGain = 1.0f / (float)size;
-            mGain = baseGain * (1.0f / (1.0f - baseGain));
+            double baseGain = 1.0d / (double)size;
+            mGain = baseGain * (1.0d / (1.0d - baseGain));
         }
 
         public void dispose()
@@ -341,7 +341,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
             mListener = null;
         }
 
-        public void receive(float i, float q)
+        public void receive(double i, double q)
         {
             /* Subtract the oldest sample and add in the newest sample */
             mISum = mISum - mISamples[mSamplePointer] + i;
@@ -377,10 +377,10 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
     {
         public TwoStage()
         {
-            mGain = 0.5f;
+            mGain = 0.5d;
         }
 
-        public void receive(float i, float q)
+        public void receive(double i, double q)
         {
             if(mListener != null)
             {
@@ -409,8 +409,8 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
             mBufferAssembler = new ReusableComplexBufferAssembler(2400, outputSampleRate);
 
             //This may throw an exception if we can't design a filter for the sample rate and pass/stop frequencies
-            float[] filterCoefficients = getLowPassFilter(outputSampleRate, passFrequency, stopFrequency);
-            mLowPassFilter = new ComplexFIRFilter2(filterCoefficients, 1.0f);
+            double[] filterCoefficients = getLowPassFilter(outputSampleRate, passFrequency, stopFrequency);
+            mLowPassFilter = new ComplexFIRFilter2(filterCoefficients, 1.0d);
 
             mBufferAssembler.setListener(new Listener<ReusableComplexBuffer>()
             {
@@ -441,7 +441,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
          * Interface for receiving CIC decimated output samples
          */
         @Override
-        public void receive(float inphase, float quadrature)
+        public void receive(double inphase, double quadrature)
         {
             mBufferAssembler.receive(inphase, quadrature);
         }
@@ -478,7 +478,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
          * @return a newly designed filter or a previously designed (cached) filter
          * @throws FilterDesignException
          */
-        private float[] getLowPassFilter(double sampleRate, double passFrequency, double stopFrequency) throws FilterDesignException
+        private double[] getLowPassFilter(double sampleRate, double passFrequency, double stopFrequency) throws FilterDesignException
         {
             //Use existing filter if we've already designed one
             if(sLowPassFilters.containsKey((int)sampleRate))
@@ -500,7 +500,7 @@ public class ComplexPrimeCICDecimate implements Listener<ReusableComplexBuffer>
             RemezFIRFilterDesigner designer = new RemezFIRFilterDesigner(specification);
 
             //This will throw an exception if the filter cannot be designed
-            float[] taps = designer.getImpulseResponse();
+            double[] taps = designer.getImpulseResponse();
 
             sLowPassFilters.put((int)sampleRate, taps);
 

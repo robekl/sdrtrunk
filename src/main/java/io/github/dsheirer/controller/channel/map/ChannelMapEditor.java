@@ -56,7 +56,7 @@ public class ChannelMapEditor extends DocumentListenerEditor<ChannelMap>
 	{
 		if( hasItem() )
 		{
-			return (ChannelMap)getItem();
+			return getItem();
 		}
 		
 		return null;

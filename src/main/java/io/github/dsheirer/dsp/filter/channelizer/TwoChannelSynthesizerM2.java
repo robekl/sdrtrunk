@@ -18,7 +18,7 @@ package io.github.dsheirer.dsp.filter.channelizer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBufferQueue;
 import org.apache.commons.math3.util.FastMath;
-import org.jtransforms.fft.FloatFFT_1D;
+import org.jtransforms.fft.DoubleFFT_1D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,13 +47,13 @@ public class TwoChannelSynthesizerM2
     private final static Logger mLog = LoggerFactory.getLogger(TwoChannelSynthesizerM2.class);
 
     private ReusableComplexBufferQueue mReusableComplexBufferQueue = new ReusableComplexBufferQueue("Two Channel Synthesizer M2");
-    private float[] mSerpentineDataBuffer;
-    private float[] mIQInterleavedFilter;
-    private float[] mFilterVectorProduct;
-    private float[] mIFFTBuffer = new float[4];
-    private float mIAccumulator;
-    private float mQAccumulator;
-    private FloatFFT_1D mFFT = new FloatFFT_1D(2);
+    private double[] mSerpentineDataBuffer;
+    private double[] mIQInterleavedFilter;
+    private double[] mFilterVectorProduct;
+    private double[] mIFFTBuffer = new double[4];
+    private double mIAccumulator;
+    private double mQAccumulator;
+    private DoubleFFT_1D mFFT = new DoubleFFT_1D(2);
     private boolean mTopBlockFlag = true;
 
     /**
@@ -61,7 +61,7 @@ public class TwoChannelSynthesizerM2
      * reconstruction filters (-6db at band edge).  Output sample rate is the same as the input sample rate of one of
      * the channels.
      */
-    public TwoChannelSynthesizerM2(float[] filter)
+    public TwoChannelSynthesizerM2(double[] filter)
     {
         init(filter);
     }
@@ -71,13 +71,13 @@ public class TwoChannelSynthesizerM2
      *
      * @param filter to use for polyphase synthesis of two channels.
      */
-    private void init(float[] filter)
+    private void init(double[] filter)
     {
         int tapsPerChannel = (int) FastMath.ceil(filter.length / 2);
 
         mIQInterleavedFilter = getInterleavedFilter(filter, tapsPerChannel);
-        mSerpentineDataBuffer = new float[mIQInterleavedFilter.length];
-        mFilterVectorProduct = new float[mIQInterleavedFilter.length];
+        mSerpentineDataBuffer = new double[mIQInterleavedFilter.length];
+        mFilterVectorProduct = new double[mIQInterleavedFilter.length];
     }
 
     /**
@@ -95,12 +95,12 @@ public class TwoChannelSynthesizerM2
             throw new IllegalArgumentException("Channel 1 and 2 array length must be equal");
         }
 
-        float[] channel1 = channelBuffer1.getSamples();
-        float[] channel2 = channelBuffer2.getSamples();
+        double[] channel1 = channelBuffer1.getSamples();
+        double[] channel2 = channelBuffer2.getSamples();
 
         ReusableComplexBuffer synthesizedComplexBuffer = mReusableComplexBufferQueue.getBuffer(channel1.length);
 
-        float[] output = synthesizedComplexBuffer.getSamples();
+        double[] output = synthesizedComplexBuffer.getSamples();
 
         for(int x = 0; x < channel1.length; x += 2)
         {
@@ -139,8 +139,8 @@ public class TwoChannelSynthesizerM2
             }
 
             //Accumulate output I/Q samples from vector product
-            mIAccumulator = 0.0f;
-            mQAccumulator = 0.0f;
+            mIAccumulator = 0.0d;
+            mQAccumulator = 0.0d;
 
             for(int y = 0; y < mFilterVectorProduct.length; y += 2)
             {
@@ -171,11 +171,11 @@ public class TwoChannelSynthesizerM2
      * @param tapsPerChannel count
      * @return
      */
-    private static float[] getInterleavedFilter(float[] coefficients, int tapsPerChannel)
+    private static double[] getInterleavedFilter(double[] coefficients, int tapsPerChannel)
     {
         int channelCount = 2;
 
-        float[] filter = new float[channelCount * tapsPerChannel * 2];
+        double[] filter = new double[channelCount * tapsPerChannel * 2];
 
         int coefficientPointer = 0;
         int filterPointer = 0;

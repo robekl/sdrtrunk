@@ -46,7 +46,7 @@ public class DecodeSpeechResponse extends AmbeResponse
         return Arrays.copyOfRange(getMessage(), PAYLOAD_START_INDEX + 1, getMessage().length);
     }
 
-    public float[] getSamples()
+    public double[] getSamples()
     {
         return ConversionUtils.convertFromSigned16BitSamples(getPayload());
     }

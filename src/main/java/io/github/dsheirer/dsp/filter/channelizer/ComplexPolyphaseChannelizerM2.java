@@ -25,7 +25,7 @@ import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.buffer.ReusableChannelResultsBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
 import org.apache.commons.math3.util.FastMath;
-import org.jtransforms.fft.FloatFFT_1D;
+import org.jtransforms.fft.DoubleFFT_1D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,11 +69,11 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
 
     //Sized at 152 buffers a second where max = 5 seconds and reset = 2 seconds worth of buffers
     private IFFTProcessor mIFFTProcessor = new IFFTProcessor((5 * 152), (2 * 152));
-    private FloatFFT_1D mFFT;
-    private float[] mInlineSamples;
-    private float[] mInlineFilter;
-    private float[] mInlineInterimOutput;
-    private float[] mFilterAccumulator;
+    private DoubleFFT_1D mFFT;
+    private double[] mInlineSamples;
+    private double[] mInlineFilter;
+    private double[] mInlineInterimOutput;
+    private double[] mFilterAccumulator;
     private boolean mTopBlockIndicator = true;
     private int[] mTopBlockMap;
     private int[] mMiddleBlockMap;
@@ -92,7 +92,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
      * @param channelCount - number of filters/channels to output.  Since this filter bank performs 2x oversampling for
      * each channel output, this number must be even (divisible by 2).
      */
-    public ComplexPolyphaseChannelizerM2(float[] taps, int sampleRate, int channelCount)
+    public ComplexPolyphaseChannelizerM2(double[] taps, int sampleRate, int channelCount)
     {
         super(sampleRate, channelCount);
 
@@ -119,7 +119,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
 
         mTapsPerChannel = tapsPerChannel;
 
-        float[] filterTaps = FilterFactory.getSincM2Channelizer(getChannelSampleRate(), getChannelCount(),
+        double[] filterTaps = FilterFactory.getSincM2Channelizer(getChannelSampleRate(), getChannelCount(),
             mTapsPerChannel, false);
 
         init(filterTaps);
@@ -173,7 +173,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
         try
         {
             super.setRates(sampleRate, channelCount);
-            float[] filterTaps = FilterFactory.getSincM2Channelizer(getChannelSampleRate(), getChannelCount(),
+            double[] filterTaps = FilterFactory.getSincM2Channelizer(getChannelSampleRate(), getChannelCount(),
                 mTapsPerChannel, false);
 
             init(filterTaps);
@@ -194,7 +194,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
         ReusableChannelResultsBuffer channelResultsBuffer = getChannelResultsBuffer();
         channelResultsBuffer.setTimestamp(reusableComplexBuffer.getTimestamp());
 
-        float[] samples = reusableComplexBuffer.getSamples();
+        double[] samples = reusableComplexBuffer.getSamples();
 
         int samplesPointer = 0;
         int samplesToCopy;
@@ -299,9 +299,9 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
      * @param channelCount number of channels where each channel is an I/Q pair
      * @return filter rearranged for inline sample buffer processing
      */
-    private static float[] getAlignedFilter(float[] coefficients, int channelCount, int tapsPerChannel)
+    private static double[] getAlignedFilter(double[] coefficients, int channelCount, int tapsPerChannel)
     {
-        float[] filter = new float[channelCount * tapsPerChannel * 2];
+        double[] filter = new double[channelCount * tapsPerChannel * 2];
         int blockSize = channelCount;
 
         int coefficientPointer = 0;
@@ -321,7 +321,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
             {
                 int index1 = x + y;
                 int index2 = x + (blockSize - y - 1);
-                float temp = filter[index2];
+                double temp = filter[index2];
                 filter[index2] = filter[index1];
                 filter[index1] = temp;
             }
@@ -343,7 +343,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
             mInlineInterimOutput[x] = mInlineSamples[x] * mInlineFilter[x];
         }
 
-        Arrays.fill(mFilterAccumulator, 0.0f);
+        Arrays.fill(mFilterAccumulator, 0.0d);
 
         int tapOffset = 0;
 
@@ -358,7 +358,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
             }
         }
 
-        float[] processed = channelResultsBuffer.getEmptyBuffer(getSubChannelCount());
+        double[] processed = channelResultsBuffer.getEmptyBuffer(getSubChannelCount());
 
         if(mTopBlockIndicator)
         {
@@ -385,18 +385,18 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
      *
      * @param coefficients of the prototype filter for this channelizer
      */
-    private void init(float[] coefficients)
+    private void init(double[] coefficients)
     {
-        mFFT = new FloatFFT_1D(getChannelCount());
+        mFFT = new DoubleFFT_1D(getChannelCount());
         int channelCount = getChannelCount();
         int bufferLength = getSubChannelCount() * mTapsPerChannel;
         mSamplesPerBlock = getChannelCount(); //Same as subChannelCount / 2
         mTopBlockMap = getTopBlockMap(channelCount);
         mMiddleBlockMap = getMiddleBlockMap(channelCount);
         mInlineFilter = getAlignedFilter(coefficients, channelCount, mTapsPerChannel);
-        mInlineSamples = new float[bufferLength];
-        mInlineInterimOutput = new float[bufferLength];
-        mFilterAccumulator = new float[getSubChannelCount()];
+        mInlineSamples = new double[bufferLength];
+        mInlineInterimOutput = new double[bufferLength];
+        mFilterAccumulator = new double[getSubChannelCount()];
     }
 
     /**
@@ -421,7 +421,7 @@ public class ComplexPolyphaseChannelizerM2 extends AbstractComplexPolyphaseChann
                 {
                     for(ReusableChannelResultsBuffer buffer: buffers)
                     {
-                        for(float[] channelResults: buffer.getChannelResults())
+                        for(double[] channelResults: buffer.getChannelResults())
                         {
                             //Rotate each of the channels to the correct phase using the IFFT
                             mFFT.complexInverse(channelResults, true);

@@ -23,12 +23,12 @@ import io.github.dsheirer.sample.buffer.ReusableComplexBufferQueue;
 
 public class IQCorrectionFilter
 {
-    private float mRatio = 0.00001f;
-    private float mAverageInphase = 0.0f;
-    private float mAverageQuadrature = 0.0f;
+    private double mRatio = 0.00001d;
+    private double mAverageInphase = 0.0d;
+    private double mAverageQuadrature = 0.0d;
     private ReusableComplexBufferQueue mReusableComplexBufferQueue = new ReusableComplexBufferQueue("IQCorrectionFilter");
 
-    public IQCorrectionFilter(float ratio)
+    public IQCorrectionFilter(double ratio)
     {
         mRatio = ratio;
     }
@@ -39,10 +39,10 @@ public class IQCorrectionFilter
 
     public ReusableComplexBuffer filter(ReusableComplexBuffer buffer)
     {
-        float[] samples = buffer.getSamples();
+        double[] samples = buffer.getSamples();
 
         ReusableComplexBuffer filtered = mReusableComplexBufferQueue.getBuffer(samples.length);
-        float[] filteredSamples = filtered.getSamples();
+        double[] filteredSamples = filtered.getSamples();
 
         for(int x = 0; x < samples.length; x += 2)
         {

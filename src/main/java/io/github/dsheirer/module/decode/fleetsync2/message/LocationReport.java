@@ -199,14 +199,14 @@ public class LocationReport extends Fleetsync2Message
         if(degreesMinutes != 0)
         {
             //Degrees - divide value by 100 and retain the whole number value (ie degrees)
-            retVal += (double)(degreesMinutes / 100);
+            retVal += degreesMinutes / 100;
 
             //Minutes - modulus by 100 to get the whole minutes value
             int wholeMinutes = degreesMinutes % 100;
 
             if(wholeMinutes != 0)
             {
-                retVal += (double)(wholeMinutes / 60.0D);
+                retVal += wholeMinutes / 60.0D;
             }
         }
 
@@ -215,7 +215,7 @@ public class LocationReport extends Fleetsync2Message
             //Fractional Minutes - divide by 10,000 to get the decimal place correct
             //then divide by 60 (minutes) to get the decimal value
             //10,000 * 60 = 600,000
-            retVal += (double)(decimalDegrees / 600000.0D);
+            retVal += decimalDegrees / 600000.0D;
         }
 
         //Adjust the value +/- for the hemisphere

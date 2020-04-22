@@ -62,7 +62,7 @@ import io.github.dsheirer.sample.buffer.IReusableComplexBufferListener;
 import io.github.dsheirer.sample.buffer.ReusableBufferBroadcaster;
 import io.github.dsheirer.sample.buffer.ReusableByteBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.source.ComplexSource;
 import io.github.dsheirer.source.ISourceEventListener;
 import io.github.dsheirer.source.ISourceEventProvider;
@@ -101,7 +101,7 @@ public class ProcessingChain implements Listener<ChannelEvent>
 {
     private final static Logger mLog = LoggerFactory.getLogger(ProcessingChain.class);
 
-    private ReusableBufferBroadcaster<ReusableFloatBuffer> mDemodulatedAudioBufferBroadcaster = new ReusableBufferBroadcaster();
+    private ReusableBufferBroadcaster<ReusableDoubleBuffer> mDemodulatedAudioBufferBroadcaster = new ReusableBufferBroadcaster();
     private ReusableBufferBroadcaster<ReusableComplexBuffer> mBasebandComplexBufferBroadcaster = new ReusableBufferBroadcaster();
     private ReusableBufferBroadcaster<ReusableByteBuffer> mDemodulatedBitstreamBufferBroadcaster = new ReusableBufferBroadcaster();
     private Broadcaster<AudioSegment> mAudioSegmentBroadcaster = new AudioSegmentBroadcaster<>();
@@ -848,7 +848,7 @@ public class ProcessingChain implements Listener<ChannelEvent>
     /**
      * Adds listener to receive demodulated audio buffers from an modules that produce demodulated audio.
      */
-    public void addDemodulatedAudioListener(Listener<ReusableFloatBuffer> listener)
+    public void addDemodulatedAudioListener(Listener<ReusableDoubleBuffer> listener)
     {
         mDemodulatedAudioBufferBroadcaster.addListener(listener);
     }
@@ -856,7 +856,7 @@ public class ProcessingChain implements Listener<ChannelEvent>
     /**
      * Removes the listener from receiving demodulated audio buffers.
      */
-    public void removeDemodulatedAudioListener(Listener<ReusableFloatBuffer> listener)
+    public void removeDemodulatedAudioListener(Listener<ReusableDoubleBuffer> listener)
     {
         mDemodulatedAudioBufferBroadcaster.removeListener(listener);
     }

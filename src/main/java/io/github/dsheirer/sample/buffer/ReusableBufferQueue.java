@@ -21,7 +21,7 @@ package io.github.dsheirer.sample.buffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReusableBufferQueue extends AbstractReusableBufferQueue<ReusableFloatBuffer>
+public class ReusableBufferQueue extends AbstractReusableBufferQueue<ReusableDoubleBuffer>
 {
     private final static Logger mLog = LoggerFactory.getLogger(ReusableBufferQueue.class);
 
@@ -38,13 +38,13 @@ public class ReusableBufferQueue extends AbstractReusableBufferQueue<ReusableFlo
      * @param size of the samples that will be loaded into the buffer
      * @return a reusable buffer
      */
-    public ReusableFloatBuffer getBuffer(int size)
+    public ReusableDoubleBuffer getBuffer(int size)
     {
-        ReusableFloatBuffer buffer = getRecycledBuffer();
+        ReusableDoubleBuffer buffer = getRecycledBuffer();
 
         if(buffer == null)
         {
-            buffer = new ReusableFloatBuffer(this, new float[size]);
+            buffer = new ReusableDoubleBuffer(this, new double[size]);
             buffer.setDebugName("Owner:" + getDebugName());
             incrementBufferCount();
         }
@@ -61,13 +61,13 @@ public class ReusableBufferQueue extends AbstractReusableBufferQueue<ReusableFlo
      * @param timestamp to set
      * @return loaded buffer with user count set to one
      */
-    public ReusableFloatBuffer getBuffer(float[] samples, long timestamp)
+    public ReusableDoubleBuffer getBuffer(double[] samples, long timestamp)
     {
-        ReusableFloatBuffer buffer = getRecycledBuffer();
+        ReusableDoubleBuffer buffer = getRecycledBuffer();
 
         if(buffer == null)
         {
-            buffer = new ReusableFloatBuffer(this, new float[samples.length]);
+            buffer = new ReusableDoubleBuffer(this, new double[samples.length]);
             buffer.setDebugName("Owner:" + getDebugName());
             incrementBufferCount();
         }

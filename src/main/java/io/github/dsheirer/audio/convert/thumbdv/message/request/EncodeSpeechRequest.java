@@ -38,17 +38,17 @@ public class EncodeSpeechRequest extends AmbeRequest
         mSamples = samples;
     }
 
-    public EncodeSpeechRequest(float[] samples)
+    public EncodeSpeechRequest(double[] samples)
     {
         mSamples = new short[samples.length];
 
         for(int x = 0; x < samples.length; x++)
         {
-            if(samples[x] > 1.0f)
+            if(samples[x] > 1.0d)
             {
                 mSamples[x] = Short.MAX_VALUE;
             }
-            else if(samples[x] < -1.0f)
+            else if(samples[x] < -1.0d)
             {
                 mSamples[x] = Short.MIN_VALUE;
             }

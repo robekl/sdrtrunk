@@ -68,7 +68,7 @@ public interface IPolyphaseChannelOutputProcessor
      * Updates the synthesis filter taps for this output processor
      * @param filter
      */
-    void setSynthesisFilter(float[] filter);
+    void setSynthesisFilter(double[] filter);
 
     /**
      * Sets the listener to receive buffer overflow notifications

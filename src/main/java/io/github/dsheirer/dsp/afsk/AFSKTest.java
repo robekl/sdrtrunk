@@ -15,7 +15,7 @@
  ******************************************************************************/
 package io.github.dsheirer.dsp.afsk;
 
-import io.github.dsheirer.buffer.FloatAveragingBuffer;
+import io.github.dsheirer.buffer.DoubleAveragingBuffer;
 import io.github.dsheirer.dsp.mixer.IOscillator;
 import io.github.dsheirer.dsp.mixer.Oscillator;
 import io.github.dsheirer.sample.complex.Complex;
@@ -43,9 +43,9 @@ public class AFSKTest
         }
     }
 
-    public static float[] generateAFSK1200(boolean[] symbols, int samplesPerSymbol, float gain)
+    public static double[] generateAFSK1200(boolean[] symbols, int samplesPerSymbol, double gain)
     {
-        float[] samples = new float[symbols.length * samplesPerSymbol];
+        double[] samples = new double[symbols.length * samplesPerSymbol];
 
         Oscillator oscillator = new Oscillator(1200.0, (double)samplesPerSymbol * 1200);
 
@@ -69,16 +69,16 @@ public class AFSKTest
     {
         int sampleSize = 6;
 
-        FloatAveragingBuffer avg1200 = new FloatAveragingBuffer(sampleSize);
-        FloatAveragingBuffer avg1800 = new FloatAveragingBuffer(sampleSize);
+        DoubleAveragingBuffer avg1200 = new DoubleAveragingBuffer(sampleSize);
+        DoubleAveragingBuffer avg1800 = new DoubleAveragingBuffer(sampleSize);
 
         IOscillator oscillator1200 = new Oscillator(1200.0, 7200.0);
         IOscillator oscillator1800 = new Oscillator(1800.0, 7200.0);
         oscillator1200.generateReal(1);
         oscillator1800.generateReal(1);
 
-        float[] reference1200 = oscillator1200.generateReal(sampleSize);
-        float[] reference1800 = oscillator1800.generateReal(sampleSize);
+        double[] reference1200 = oscillator1200.generateReal(sampleSize);
+        double[] reference1800 = oscillator1800.generateReal(sampleSize);
 
         boolean[] symbols = new boolean[]{true,false,true,false,true,false,true,false,true,true,true,false,true,false,
             false,false,true,false,false,false,false,true,false,true,true,true,true,false,true,true,false,true,false,
@@ -91,19 +91,19 @@ public class AFSKTest
             true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,
             false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
 
-        float[] samples = generateAFSK1200(symbols, 6, 0.5f);
+        double[] samples = generateAFSK1200(symbols, 6, 0.5d);
 
         mLog.debug("Length:" + samples.length);
 
         int offset = 0;
 
-        float correlation1200 = 0.0f;
-        float correlation1800 = 0.0f;
+        double correlation1200 = 0.0d;
+        double correlation1800 = 0.0d;
 
         while(offset + sampleSize < samples.length)
         {
-            correlation1200 = 0.0f;
-            correlation1800 = 0.0f;
+            correlation1200 = 0.0d;
+            correlation1800 = 0.0d;
 
             for(int x = 0; x < sampleSize; x++)
             {

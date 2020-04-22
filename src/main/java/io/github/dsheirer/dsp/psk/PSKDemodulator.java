@@ -82,7 +82,7 @@ public abstract class PSKDemodulator<T> implements ComplexSampleListener
      */
     public void receive(ReusableComplexBuffer reusableComplexBuffer)
     {
-        float[] samples = reusableComplexBuffer.getSamples();
+        double[] samples = reusableComplexBuffer.getSamples();
 
         for(int x = 0; x < samples.length; x += 2)
         {
@@ -98,7 +98,7 @@ public abstract class PSKDemodulator<T> implements ComplexSampleListener
      * @param quadrature value for the sample
      */
     @Override
-    public void receive(float inphase, float quadrature)
+    public void receive(double inphase, double quadrature)
     {
         //Update current sample with values
         mReceivedSample.setValues(inphase, quadrature);
@@ -121,7 +121,7 @@ public abstract class PSKDemodulator<T> implements ComplexSampleListener
     /**
      * Constrains value to the range of ( -maximum <> maximum )
      */
-    public static float clip(float value, float maximum)
+    public static double clip(double value, double maximum)
     {
         if(value > maximum)
         {

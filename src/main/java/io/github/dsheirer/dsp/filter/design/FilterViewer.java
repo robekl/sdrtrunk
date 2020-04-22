@@ -59,7 +59,7 @@ public class FilterViewer extends Application
     /**
      * Provides the filter to visualize.  Modify this method to visualize your filter design.
      */
-    private float[] getFilter()
+    private double[] getFilter()
     {
 //        FIRFilterSpecification specification = FIRFilterSpecification.lowPassBuilder()
 //            .sampleRate(8000)
@@ -93,7 +93,7 @@ public class FilterViewer extends Application
             .stopBandRipple(0.01)
             .build();
 
-        float[] taps = null;
+        double[] taps = null;
 
 //        try
 //        {

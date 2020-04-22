@@ -29,7 +29,7 @@ import io.github.dsheirer.dsp.filter.fir.real.RealFIRFilter2;
 import io.github.dsheirer.dsp.filter.fir.remez.RemezFIRFilterDesigner;
 import io.github.dsheirer.dsp.symbol.ISyncDetectListener;
 import io.github.dsheirer.sample.Listener;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,17 +49,17 @@ import org.slf4j.LoggerFactory;
  * adjustment may not fully compensate for mis-tuned signals and may result in missed decodes of idle bursts.  However,
  * the DC filter will track a mis-tuned signal to baseband quickly upon a continuous transmission.
  */
-public class LTRDecoder implements Listener<ReusableFloatBuffer>, ISyncDetectListener, ISyncStateListener
+public class LTRDecoder implements Listener<ReusableDoubleBuffer>, ISyncDetectListener, ISyncStateListener
 {
     private final static Logger mLog = LoggerFactory.getLogger(LTRDecoder.class);
 
-    public static final float SAMPLES_PER_SYMBOL = 8000.0f / 300.0f;
+    public static final double SAMPLES_PER_SYMBOL = 8000.0d / 300.0d;
 
-    protected static final float COARSE_TIMING_GAIN = 1.0f / 3.0f;
-    protected static final float MEDIUM_TIMING_GAIN = 1.0f / 4.0f;
-    protected static final float FINE_TIMING_GAIN = 1.0f / 5.0f;
+    protected static final double COARSE_TIMING_GAIN = 1.0d / 3.0d;
+    protected static final double MEDIUM_TIMING_GAIN = 1.0d / 4.0d;
+    protected static final double FINE_TIMING_GAIN = 1.0d / 5.0d;
 
-    private static float[] sLowPassFilterCoefficients;
+    private static double[] sLowPassFilterCoefficients;
 
     static
     {
@@ -90,7 +90,7 @@ public class LTRDecoder implements Listener<ReusableFloatBuffer>, ISyncDetectLis
         }
     }
 
-    protected float mSymbolTimingGain = COARSE_TIMING_GAIN;
+    protected double mSymbolTimingGain = COARSE_TIMING_GAIN;
     protected SampleBuffer mSampleBuffer;
     protected ZeroCrossingErrorDetector mTimingErrorDetector = new ZeroCrossingErrorDetector(SAMPLES_PER_SYMBOL);
     protected SynchronizationMonitor mSynchronizationMonitor;
@@ -154,12 +154,12 @@ public class LTRDecoder implements Listener<ReusableFloatBuffer>, ISyncDetectLis
      * @param buffer containing 8.0 kHz unfiltered FM demodulated audio samples with sub-audible LTR signalling.
      */
     @Override
-    public void receive(ReusableFloatBuffer buffer)
+    public void receive(ReusableDoubleBuffer buffer)
     {
-        ReusableFloatBuffer dcFiltered = mDCFilter.filter(buffer);
-        ReusableFloatBuffer lowPassFiltered = mLowPassFilter.filter(dcFiltered);
+        ReusableDoubleBuffer dcFiltered = mDCFilter.filter(buffer);
+        ReusableDoubleBuffer lowPassFiltered = mLowPassFilter.filter(dcFiltered);
 
-        for(float sample : lowPassFiltered.getSamples())
+        for(double sample : lowPassFiltered.getSamples())
         {
             mSampleDecision = sample > 0.0;
 

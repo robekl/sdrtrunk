@@ -17,7 +17,7 @@ package io.github.dsheirer.gui.instrument.chart;
 
 import io.github.dsheirer.buffer.RealCircularBuffer;
 import io.github.dsheirer.sample.Listener;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
@@ -27,11 +27,11 @@ import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RealSampleLineChart extends LineChart implements Listener<ReusableFloatBuffer>
+public class RealSampleLineChart extends LineChart implements Listener<ReusableDoubleBuffer>
 {
     private final static Logger mLog = LoggerFactory.getLogger(RealSampleLineChart.class);
-    private ObservableList<Data<Integer,Float>> mSamples = FXCollections.observableArrayList();
-    private Series<Integer,Float> mSampleSeries = new Series<>("Samples", mSamples);
+    private ObservableList<Data<Integer,Double>> mSamples = FXCollections.observableArrayList();
+    private Series<Integer,Double> mSampleSeries = new Series<>("Samples", mSamples);
     private RealCircularBuffer mRealCircularBuffer;
 
     public RealSampleLineChart(int length, double tickUnit)
@@ -39,7 +39,7 @@ public class RealSampleLineChart extends LineChart implements Listener<ReusableF
         super(new NumberAxis("Samples", 0, length, tickUnit),
             new NumberAxis("Value", -1.0, 1.0, 0.25));
 
-        ObservableList<Series<Integer,Float>> observableList = FXCollections.observableArrayList(mSampleSeries);
+        ObservableList<Series<Integer,Double>> observableList = FXCollections.observableArrayList(mSampleSeries);
 
         setData(observableList);
 
@@ -52,7 +52,7 @@ public class RealSampleLineChart extends LineChart implements Listener<ReusableF
 
         for(int x = 0; x < length; x++)
         {
-            Data<Integer,Float> sample = new Data<>(x, 0.0f);
+            Data<Integer,Double> sample = new Data<>(x, 0.0d);
             mSamples.add(sample);
         }
 
@@ -65,18 +65,18 @@ public class RealSampleLineChart extends LineChart implements Listener<ReusableF
     }
 
     @Override
-    public void receive(ReusableFloatBuffer buffer)
+    public void receive(ReusableDoubleBuffer buffer)
     {
-        for(float sample: buffer.getSamples())
+        for(double sample: buffer.getSamples())
         {
             mRealCircularBuffer.put(sample);
         }
 
-        float[] bufferSamples = mRealCircularBuffer.get();
+        double[] bufferSamples = mRealCircularBuffer.get();
 
         for(int x = 0; x < bufferSamples.length; x++)
         {
-            Data<Integer,Float> sample = mSamples.get(x);
+            Data<Integer,Double> sample = mSamples.get(x);
             sample.setYValue(bufferSamples[x]);
         }
 

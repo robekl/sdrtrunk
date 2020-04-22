@@ -115,7 +115,7 @@ public class CRCPassport
         //Apply the message checksum to derive the residual
         calculated ^= getChecksum(msg);
 
-        switch((byte)calculated)
+        switch(calculated)
         {
             case sFILL_00:
                 crc = CRC.PASSED;
@@ -173,7 +173,7 @@ public class CRCPassport
      */
     public static CorrectedBinaryMessage correct(CorrectedBinaryMessage msg)
     {
-        int residual = (int)(0xFF & getResidual(msg));
+        int residual = 0xFF & getResidual(msg);
 
         switch(residual)
         {

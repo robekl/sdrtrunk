@@ -25,11 +25,11 @@ import io.github.dsheirer.sample.real.RealSampleListener;
  */
 public class DCRemovalFilterLyons implements RealSampleListener
 {
-	private float mAlpha;
-	private float mPrevious;
+	private double mAlpha;
+	private double mPrevious;
 	private RealSampleListener mListener;
 	
-	public DCRemovalFilterLyons( float alpha )
+	public DCRemovalFilterLyons( double alpha )
 	{
 		mAlpha = alpha;
 	}
@@ -40,7 +40,7 @@ public class DCRemovalFilterLyons implements RealSampleListener
 	}
 
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		send( sample + ( mPrevious * mAlpha ) - mPrevious );
 		
@@ -50,7 +50,7 @@ public class DCRemovalFilterLyons implements RealSampleListener
 	/**
 	 * Sends the filtered sample to the listener
 	 */
-	private void send( float sample )
+	private void send( double sample )
 	{
 		if( mListener != null )
 		{

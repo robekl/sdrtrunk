@@ -29,9 +29,9 @@ public class FS4DownConverter
     {
     }
 
-    public float[] mixComplex(float[] samples)
+    public double[] mixComplex(double[] samples)
     {
-        float real;
+        double real;
 
         for(int x = 0; x < samples.length; x += 2)
         {

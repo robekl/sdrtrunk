@@ -32,21 +32,21 @@ public class SampleBuffer
     private int mPositiveSampleDecisionCount;
     protected int mSymbolStart;
     protected int mSymbolEnd;
-    protected float mSamplesPerSymbol;
-    protected float mMidSymbolSamplingPoint;
-    protected float mSymbolTimingGain;
+    protected double mSamplesPerSymbol;
+    protected double mMidSymbolSamplingPoint;
+    protected double mSymbolTimingGain;
 
     /**
      * Buffer to store complex sample data and produce interpolated samples.
      * @param samplesPerSymbol
      */
-    public SampleBuffer(float samplesPerSymbol, float symbolTimingGain)
+    public SampleBuffer(double samplesPerSymbol, double symbolTimingGain)
     {
         mSamplesPerSymbol = samplesPerSymbol;
         mSymbolTimingGain = symbolTimingGain;
 
-        mIntegerSamplesPerSymbol = (int)(samplesPerSymbol + 0.5f);
-        mHalfIntegerSamplesPerSymbol = (int)(samplesPerSymbol / 2.0f + 0.5f);
+        mIntegerSamplesPerSymbol = (int)(samplesPerSymbol + 0.5d);
+        mHalfIntegerSamplesPerSymbol = (int)(samplesPerSymbol / 2.0d + 0.5d);
         mMidSymbolSamplingPoint = samplesPerSymbol + mHalfIntegerSamplesPerSymbol;
         mTwiceSamplesPerSymbol = (int) FastMath.floor(2.0 * samplesPerSymbol);
         mDelayLine = new boolean[2 * mTwiceSamplesPerSymbol];
@@ -78,12 +78,12 @@ public class SampleBuffer
      *
      * @param symbolTimingError from a symbol timing error detector
      */
-    public void resetAndAdjust(float symbolTimingError)
+    public void resetAndAdjust(double symbolTimingError)
     {
         mMidSymbolSamplingPoint += (mSamplesPerSymbol + (symbolTimingError * mSymbolTimingGain));
     }
 
-    public void setTimingGain(float gain)
+    public void setTimingGain(double gain)
     {
         mSymbolTimingGain = gain;
     }
@@ -93,7 +93,7 @@ public class SampleBuffer
      */
     public boolean hasSymbol()
     {
-        return mMidSymbolSamplingPoint < 1.0f;
+        return mMidSymbolSamplingPoint < 1.0d;
     }
 
     /**

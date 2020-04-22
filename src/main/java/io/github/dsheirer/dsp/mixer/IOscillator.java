@@ -16,7 +16,7 @@
 package io.github.dsheirer.dsp.mixer;
 
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 
 /**
  * Oscillator interface.
@@ -59,14 +59,14 @@ public interface IOscillator
      * you invoke rotate() after each time you invoke this method.
      * @return current quadrature value of the oscillator.
      */
-    float quadrature();
+    double quadrature();
 
     /**
      * Current inphase/real value of the oscillator.  Note: if you are using this value iteratively, make sure you
      * invoke rotate() after each time you invoke this method.
      * @return current inphase value of the oscillator.
      */
-    float inphase();
+    double inphase();
 
 
     /**
@@ -79,7 +79,7 @@ public interface IOscillator
      * @param sampleCount number of samples to generate and length of the resulting float array.
      * @return generated samples
      */
-    float[] generateReal(int sampleCount);
+    double[] generateReal(int sampleCount);
 
 
     /**
@@ -87,7 +87,7 @@ public interface IOscillator
      * @param sampleCount number of samples to generate.
      * @return generated complex samples with an array length of 2 * N
      */
-    float[] generateComplex(int sampleCount);
+    double[] generateComplex(int sampleCount);
 
 
     /**
@@ -102,14 +102,14 @@ public interface IOscillator
      * Generates real samples and fills the reusable buffer using the current system time in millis for
      * the update timestamp.
      *
-     * @param reusableFloatBuffer to fill with complex samples
+     * @param reusableDoubleBuffer to fill with complex samples
      */
-    void generateReal(ReusableFloatBuffer reusableFloatBuffer);
+    void generateReal(ReusableDoubleBuffer reusableDoubleBuffer);
 
     /**
      * Mixes (heterodynes) the complex sample array using the current settings of this oscillator.
      * @param complexSamples to mix to a new frequency
      * @return mixed/heterdyned samples
      */
-    float[] mixComplex(float[] complexSamples);
+    double[] mixComplex(double[] complexSamples);
 }

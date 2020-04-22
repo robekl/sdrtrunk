@@ -31,7 +31,7 @@ import io.github.dsheirer.dsp.filter.fir.real.RealFIRFilter2;
 import io.github.dsheirer.dsp.filter.fir.remez.RemezFIRFilterDesigner;
 import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.buffer.IReusableBufferListener;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +42,10 @@ import org.slf4j.LoggerFactory;
  * Incorporates audio squelch state listener to control if audio packets are broadcast or ignored.
  */
 public class AudioModule extends AbstractAudioModule implements ISquelchStateListener, IReusableBufferListener,
-    Listener<ReusableFloatBuffer>
+    Listener<ReusableDoubleBuffer>
 {
     private static final Logger mLog = LoggerFactory.getLogger(AudioModule.class);
-    private static float[] sHighPassFilterCoefficients;
+    private static double[] sHighPassFilterCoefficients;
 
     static
     {
@@ -116,22 +116,22 @@ public class AudioModule extends AbstractAudioModule implements ISquelchStateLis
     }
 
     @Override
-    public void receive(ReusableFloatBuffer reusableFloatBuffer)
+    public void receive(ReusableDoubleBuffer reusableDoubleBuffer)
     {
         if(mSquelchState == SquelchState.UNSQUELCH)
         {
-            ReusableFloatBuffer buffer = mHighPassFilter.filter(reusableFloatBuffer);
+            ReusableDoubleBuffer buffer = mHighPassFilter.filter(reusableDoubleBuffer);
             addAudio(buffer.getSamples());
             buffer.decrementUserCount();
         }
         else
         {
-            reusableFloatBuffer.decrementUserCount();
+            reusableDoubleBuffer.decrementUserCount();
         }
     }
 
     @Override
-    public Listener<ReusableFloatBuffer> getReusableBufferListener()
+    public Listener<ReusableDoubleBuffer> getReusableBufferListener()
     {
         //Redirect received reusable buffers to the receive(buffer) method
         return this;

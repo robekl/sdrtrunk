@@ -25,7 +25,7 @@ public class AFSKSampleBufferInstrumented extends AFSKSampleBuffer
      * @param samplesPerSymbol
      * @param symbolTimingGain
      */
-    public AFSKSampleBufferInstrumented(int samplesPerSymbol, float symbolTimingGain)
+    public AFSKSampleBufferInstrumented(int samplesPerSymbol, double symbolTimingGain)
     {
         super(samplesPerSymbol, symbolTimingGain);
     }
@@ -56,12 +56,12 @@ public class AFSKSampleBufferInstrumented extends AFSKSampleBuffer
      * Current symbol timing gain value
      * @return
      */
-    public float getSymbolTimingGain()
+    public double getSymbolTimingGain()
     {
         return mSymbolTimingGain;
     }
 
-    public float getSamplesPerSymbol()
+    public double getSamplesPerSymbol()
     {
         return mSamplesPerSymbol;
     }

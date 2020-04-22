@@ -17,28 +17,28 @@
  ******************************************************************************/
 package io.github.dsheirer.buffer;
 
-public class FloatAveragingBuffer
+public class DoubleAveragingBuffer
 {
-	private float[] mBuffer;
-	private float mAverage = 0.0f;
+	private double[] mBuffer;
+	private double mAverage = 0.0d;
 	private int mBufferSize;
 	private int mBufferPointer;
 	
-	public FloatAveragingBuffer( int size )
+	public DoubleAveragingBuffer(int size )
 	{
 		mBufferSize = size;
-		mBuffer = new float[ size ];
+		mBuffer = new double[ size ];
 	}
 	
-	public float get( float newValue )
+	public double get( double newValue )
 	{
-		float oldValue = mBuffer[ mBufferPointer ];
+		double oldValue = mBuffer[ mBufferPointer ];
 
-		if( Float.isInfinite( newValue ) || Float.isNaN( newValue ) )
+		if( Double.isInfinite( newValue ) || Double.isNaN( newValue ) )
 		{
 			mAverage = mAverage - ( oldValue / mBufferSize );
 
-			mBuffer[ mBufferPointer++ ] = 0.0f;
+			mBuffer[ mBufferPointer++ ] = 0.0d;
 		}
 		else
 		{

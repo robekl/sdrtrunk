@@ -5,10 +5,10 @@ import io.github.dsheirer.sample.complex.Complex;
 
 public class ComplexGain implements Listener<Complex>
 {
-    private float mGain;
+    private double mGain;
     private Listener<Complex> mListener;
 
-    public ComplexGain(float gain)
+    public ComplexGain(double gain)
     {
         mGain = gain;
     }

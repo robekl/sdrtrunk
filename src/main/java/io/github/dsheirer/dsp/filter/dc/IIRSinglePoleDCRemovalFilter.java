@@ -16,16 +16,16 @@
 package io.github.dsheirer.dsp.filter.dc;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.sample.real.RealSampleListener;
 
 public class IIRSinglePoleDCRemovalFilter implements RealSampleListener
 {
     private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("IIR DC Filter");
-    private float mAlpha;
-    private float mPreviousInput = 0.0f;
-    private float mPreviousOutput = 0.0f;
-    private float mCurrentOutput = 0.0f;
+    private double mAlpha;
+    private double mPreviousInput = 0.0d;
+    private double mPreviousOutput = 0.0d;
+    private double mCurrentOutput = 0.0d;
 
     private RealSampleListener mListener;
 
@@ -48,7 +48,7 @@ public class IIRSinglePoleDCRemovalFilter implements RealSampleListener
      * @param sample to filter
      * @return filtered output sample
      */
-    public float filter(float sample)
+    public double filter(double sample)
     {
         mCurrentOutput = (sample - mPreviousInput) + (mAlpha * mPreviousOutput);
 
@@ -67,11 +67,11 @@ public class IIRSinglePoleDCRemovalFilter implements RealSampleListener
      * @param inputBuffer to filter
      * @return filtered samples in a new (ie reused) output buffer
      */
-    public ReusableFloatBuffer filter(ReusableFloatBuffer inputBuffer)
+    public ReusableDoubleBuffer filter(ReusableDoubleBuffer inputBuffer)
     {
-        ReusableFloatBuffer outputBuffer = mReusableBufferQueue.getBuffer(inputBuffer.getSampleCount());
-        float[] inputSamples = inputBuffer.getSamples();
-        float[] outputSamples = outputBuffer.getSamples();
+        ReusableDoubleBuffer outputBuffer = mReusableBufferQueue.getBuffer(inputBuffer.getSampleCount());
+        double[] inputSamples = inputBuffer.getSamples();
+        double[] outputSamples = outputBuffer.getSamples();
 
         for(int x = 0; x < inputSamples.length; x++)
         {
@@ -87,7 +87,7 @@ public class IIRSinglePoleDCRemovalFilter implements RealSampleListener
      * Implements the RealSampleListener interface for single sample streams.
      */
     @Override
-    public void receive(float sample)
+    public void receive(double sample)
     {
         if(mListener != null)
         {

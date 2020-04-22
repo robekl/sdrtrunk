@@ -58,13 +58,13 @@ import java.util.Map;
 public class P25P2DecoderHDQPSK extends P25P2Decoder implements IdentifierUpdateListener
 {
     private final static Logger mLog = LoggerFactory.getLogger(P25P2DecoderHDQPSK.class);
-    protected static final float SYMBOL_TIMING_GAIN = 0.1f;
+    protected static final double SYMBOL_TIMING_GAIN = 0.1d;
     protected InterpolatingSampleBuffer mInterpolatingSampleBuffer;
     protected DQPSKGardnerDemodulator mQPSKDemodulator;
     protected CostasLoop mCostasLoop;
     protected P25P2MessageFramer mMessageFramer;
     private ComplexFeedForwardGainControl mAGC = new ComplexFeedForwardGainControl(32);
-    private Map<Double,float[]> mBasebandFilters = new HashMap<>();
+    private Map<Double,double[]> mBasebandFilters = new HashMap<>();
     private ComplexFIRFilter2 mBasebandFilter;
     private DecodeConfigP25Phase2 mDecodeConfigP25Phase2;
     private FrequencyCorrectionSyncMonitor mFrequencyCorrectionSyncMonitor;
@@ -142,10 +142,10 @@ public class P25P2DecoderHDQPSK extends P25P2Decoder implements IdentifierUpdate
     /**
      * Constructs a baseband filter for this decoder using the current sample rate
      */
-    private float[] getBasebandFilter()
+    private double[] getBasebandFilter()
     {
         //Attempt to reuse a cached (ie already-designed) filter if available
-        float[] filter = mBasebandFilters.get(getSampleRate());
+        double[] filter = mBasebandFilters.get(getSampleRate());
 
         if(filter == null)
         {

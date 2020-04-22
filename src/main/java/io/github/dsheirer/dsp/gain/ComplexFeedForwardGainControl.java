@@ -15,7 +15,7 @@
  ******************************************************************************/
 package io.github.dsheirer.dsp.gain;
 
-import io.github.dsheirer.buffer.FloatCircularBuffer;
+import io.github.dsheirer.buffer.DoubleCircularBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
 import io.github.dsheirer.sample.buffer.ReusableComplexBufferQueue;
 import io.github.dsheirer.sample.complex.Complex;
@@ -23,15 +23,15 @@ import io.github.dsheirer.sample.complex.ComplexSampleListener;
 
 public class ComplexFeedForwardGainControl implements ComplexSampleListener
 {
-    public static final float OBJECTIVE_ENVELOPE = 1.0f;
-    public static final float MINIMUM_ENVELOPE = 0.0001f;
+    public static final double OBJECTIVE_ENVELOPE = 1.0d;
+    public static final double MINIMUM_ENVELOPE = 0.0001d;
 
     private ComplexSampleListener mListener;
-    private FloatCircularBuffer mEnvelopeHistory;
+    private DoubleCircularBuffer mEnvelopeHistory;
     private ReusableComplexBufferQueue mReusableComplexBufferQueue = new ReusableComplexBufferQueue("ComplexFeedForwardGainControl");
 
-    private float mMaxEnvelope = 0.0f;
-    private float mGain = 1.0f;
+    private double mMaxEnvelope = 0.0d;
+    private double mGain = 1.0d;
 
     /**
      * Dynamic gain control for incoming sample stream to amplify or attenuate
@@ -46,7 +46,7 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
      */
     public ComplexFeedForwardGainControl(int window)
     {
-        mEnvelopeHistory = new FloatCircularBuffer(window);
+        mEnvelopeHistory = new DoubleCircularBuffer(window);
     }
 
     public void dispose()
@@ -55,7 +55,7 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
     }
 
     @Override
-    public void receive(float inphase, float quadrature)
+    public void receive(double inphase, double quadrature)
     {
         process(inphase, quadrature);
 
@@ -66,9 +66,9 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
         }
     }
 
-    private void process(float inphase, float quadrature)
+    private void process(double inphase, double quadrature)
     {
-        float envelope = Complex.envelope(inphase, quadrature);
+        double envelope = Complex.envelope(inphase, quadrature);
 
         if(envelope > mMaxEnvelope)
         {
@@ -78,7 +78,7 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
         }
 
         /* Replace oldest envelope value with current envelope value */
-        float oldestEnvelope = mEnvelopeHistory.get(envelope);
+        double oldestEnvelope = mEnvelopeHistory.get(envelope);
 
         /* If the oldest envelope value was the max envelope value, then we
          * have to rediscover the max value from the envelope history */
@@ -86,7 +86,7 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
         {
             mMaxEnvelope = MINIMUM_ENVELOPE;
 
-            for(float value : mEnvelopeHistory.getBuffer())
+            for(double value : mEnvelopeHistory.getBuffer())
             {
                 if(value > mMaxEnvelope)
                 {
@@ -108,10 +108,10 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
         mListener = listener;
     }
 
-    public float[] filter(float[] complesSamples)
+    public double[] filter(double[] complesSamples)
     {
         mMaxEnvelope = MINIMUM_ENVELOPE;
-        float currentEnvelope;
+        double currentEnvelope;
 
         for(int x = 0; x < complesSamples.length; x += 2)
         {
@@ -125,7 +125,7 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
 
         adjustGain();
 
-        float[] processed = new float[complesSamples.length];
+        double[] processed = new double[complesSamples.length];
 
         for(int x = 0; x < complesSamples.length; x += 2)
         {
@@ -143,16 +143,16 @@ public class ComplexFeedForwardGainControl implements ComplexSampleListener
      */
     public ReusableComplexBuffer filter(ReusableComplexBuffer buffer)
     {
-        float[] samples = buffer.getSamples();
+        double[] samples = buffer.getSamples();
 
         ReusableComplexBuffer filteredBuffer = mReusableComplexBufferQueue.getBuffer(samples.length);
         filteredBuffer.setTimestamp(buffer.getTimestamp());
 
-        float[] filtered = filteredBuffer.getSamples();
+        double[] filtered = filteredBuffer.getSamples();
 
         mMaxEnvelope = MINIMUM_ENVELOPE;
 
-        float currentEnvelope;
+        double currentEnvelope;
 
         for(int x = 0; x < samples.length; x += 2)
         {

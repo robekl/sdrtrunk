@@ -43,7 +43,7 @@ public class MonoAudioOutput extends AudioOutput
     /**
      * Converts the audio packet data into mono audio frames.
      */
-    protected ByteBuffer convert(float[] samples)
+    protected ByteBuffer convert(double[] samples)
     {
         ByteBuffer buffer = null;
 
@@ -54,7 +54,7 @@ public class MonoAudioOutput extends AudioOutput
 
             ShortBuffer shortBuffer = buffer.asShortBuffer();
 
-            for(float sample : samples)
+            for(double sample : samples)
             {
                 shortBuffer.put((short) (sample * Short.MAX_VALUE));
             }

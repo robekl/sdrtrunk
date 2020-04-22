@@ -34,7 +34,7 @@ public class InterpolatingSampleBufferInstrumented extends InterpolatingSampleBu
     private ComplexSampleListener mSampleListener;
     private int mBufferLength;
 
-    public InterpolatingSampleBufferInstrumented(float samplesPerSymbol, float symbolTimingGain)
+    public InterpolatingSampleBufferInstrumented(double samplesPerSymbol, double symbolTimingGain)
     {
         super(samplesPerSymbol, symbolTimingGain);
         mBufferLength = (int) FastMath.ceil(samplesPerSymbol);

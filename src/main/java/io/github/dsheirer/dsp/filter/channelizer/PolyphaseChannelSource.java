@@ -45,7 +45,7 @@ public class PolyphaseChannelSource extends TunerChannelSource
     private IPolyphaseChannelOutputProcessor mReplacementPolyphaseChannelOutputProcessor;
     private long mReplacementFrequency;
     private ComplexFIRFilter2 mLowPassFilter;
-    private static Map<Integer,float[]> sLowPassFilters = new HashMap();
+    private static Map<Integer,double[]> sLowPassFilters = new HashMap();
 
     private double mChannelSampleRate;
     private long mIndexCenterFrequency;
@@ -73,9 +73,9 @@ public class PolyphaseChannelSource extends TunerChannelSource
         mChannelSampleRate = channelSampleRate;
         mReusableComplexBufferAssembler = new ReusableComplexBufferAssembler(2500, mChannelSampleRate);
 
-        float[] filterCoefficients = getLowPassFilter(channelSampleRate, channelSpecification.getPassFrequency(),
+        double[] filterCoefficients = getLowPassFilter(channelSampleRate, channelSpecification.getPassFrequency(),
             channelSpecification.getStopFrequency());
-        mLowPassFilter = new ComplexFIRFilter2(filterCoefficients, 1.0f);
+        mLowPassFilter = new ComplexFIRFilter2(filterCoefficients, 1.0d);
 
         setFrequency(centerFrequency);
     }
@@ -283,7 +283,7 @@ public class PolyphaseChannelSource extends TunerChannelSource
      * @return a newly designed filter or a previously designed (cached) filter
      * @throws FilterDesignException
      */
-    private float[] getLowPassFilter(double sampleRate, double passFrequency, double stopFrequency) throws FilterDesignException
+    private double[] getLowPassFilter(double sampleRate, double passFrequency, double stopFrequency) throws FilterDesignException
     {
         //Use existing filter if we've already designed one
         if(sLowPassFilters.containsKey((int)sampleRate))
@@ -305,7 +305,7 @@ public class PolyphaseChannelSource extends TunerChannelSource
         RemezFIRFilterDesigner designer = new RemezFIRFilterDesigner(specification);
 
         //This will throw an exception if the filter cannot be designed
-        float[] taps = designer.getImpulseResponse();
+        double[] taps = designer.getImpulseResponse();
 
         sLowPassFilters.put((int)sampleRate, taps);
 

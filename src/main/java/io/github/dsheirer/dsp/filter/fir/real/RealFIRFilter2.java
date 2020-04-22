@@ -17,7 +17,7 @@ package io.github.dsheirer.dsp.filter.fir.real;
 
 import io.github.dsheirer.dsp.filter.fir.FIRFilter;
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 
 /**
  * Finite Impulse Response (FIR) filter for filtering individual float samples or float sample arrays.
@@ -29,10 +29,10 @@ public class RealFIRFilter2 extends FIRFilter
 {
     private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("RealFIRFilter2");
 
-    private float[] mData;
-    private float[] mCoefficients;
-    private float mGain;
-    private float mAccumulator;
+    private double[] mData;
+    private double[] mCoefficients;
+    private double mGain;
+    private double mAccumulator;
 
     /**
      * Float sample FIR filter base class.
@@ -40,11 +40,11 @@ public class RealFIRFilter2 extends FIRFilter
      * @param coefficients - filter coefficients in normal order.
      * @param gain value to apply to the filtered output.  Use 1.0f for no gain
      */
-    public RealFIRFilter2(float[] coefficients, float gain)
+    public RealFIRFilter2(double[] coefficients, double gain)
     {
         mGain = gain;
         mCoefficients = coefficients;
-        mData = new float[coefficients.length];
+        mData = new double[coefficients.length];
     }
 
     /**
@@ -52,9 +52,9 @@ public class RealFIRFilter2 extends FIRFilter
      *
      * @param coefficients - filter coefficients in normal order.
      */
-    public RealFIRFilter2(float[] coefficients)
+    public RealFIRFilter2(double[] coefficients)
     {
-        this(coefficients, 1.0f);
+        this(coefficients, 1.0d);
     }
 
     /**
@@ -74,13 +74,13 @@ public class RealFIRFilter2 extends FIRFilter
      * @param sample to load
      * @return filtered value
      */
-    public float filter(float sample)
+    public double filter(double sample)
     {
         //Use array copy to leverage SIMD intrinsics
         System.arraycopy(mData, 0, mData, 1, mData.length - 1);
         mData[0] = sample;
 
-        mAccumulator = 0.0f;
+        mAccumulator = 0.0d;
 
         //Use vector dot product to leverage SIMD intrinsics
         for(int x = 0; x < mCoefficients.length; x++)
@@ -97,7 +97,7 @@ public class RealFIRFilter2 extends FIRFilter
     /**
      * Current filtered output value for the filter after the filter() method has been invoked.
      */
-    public float currentValue()
+    public double currentValue()
     {
         return mAccumulator;
     }
@@ -113,12 +113,12 @@ public class RealFIRFilter2 extends FIRFilter
      * @param unfilteredBuffer containing a sample array to be filtered
      * @return a new reusable buffer with the filtered samples.
      */
-    public ReusableFloatBuffer filter(ReusableFloatBuffer unfilteredBuffer)
+    public ReusableDoubleBuffer filter(ReusableDoubleBuffer unfilteredBuffer)
     {
-        float[] unfilteredSamples = unfilteredBuffer.getSamples();
+        double[] unfilteredSamples = unfilteredBuffer.getSamples();
 
-        ReusableFloatBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredSamples.length);
-        float[] filteredSamples = filteredBuffer.getSamples();
+        ReusableDoubleBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredSamples.length);
+        double[] filteredSamples = filteredBuffer.getSamples();
 
         for(int x = 0; x < unfilteredSamples.length; x++)
         {

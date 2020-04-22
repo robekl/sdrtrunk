@@ -31,14 +31,14 @@ public class SymbolDecisionData
     public static final Complex DIFFERENTIAL_OFFSET = Complex.fromAngle(FastMath.PI / 4.0d);
 
     private ComplexCircularBuffer mBuffer;
-    private float mSamplingPoint;
-    private float mSamplesPerSymbol;
+    private double mSamplingPoint;
+    private double mSamplesPerSymbol;
 
     /**
      * Circular buffer for capturing two symbols worth of sample data for use in instrumentation.
      * @param samplesPerSymbol to size the buffer
      */
-    public SymbolDecisionData(float samplesPerSymbol)
+    public SymbolDecisionData(double samplesPerSymbol)
     {
         mSamplesPerSymbol = samplesPerSymbol;
         mBuffer = new ComplexCircularBuffer(8);
@@ -47,7 +47,7 @@ public class SymbolDecisionData
     /**
      * Stores the complex sample in the buffer
      */
-    public void receive(float inphase, float quadrature)
+    public void receive(double inphase, double quadrature)
     {
         mBuffer.put(new Complex(inphase, quadrature));
     }
@@ -63,7 +63,7 @@ public class SymbolDecisionData
     /**
      * Sets the fractional sampling point for the current symbol to use in interpolating the current symbol.
      */
-    public void setSamplingPoint(float samplingPoint)
+    public void setSamplingPoint(double samplingPoint)
     {
         mSamplingPoint = samplingPoint;
     }
@@ -71,7 +71,7 @@ public class SymbolDecisionData
     /**
      * Fractional sampling point
      */
-    public float getSamplingPoint()
+    public double getSamplingPoint()
     {
         return mSamplingPoint;
     }

@@ -111,7 +111,7 @@ public abstract class AbstractAudioModule extends Module implements IAudioSegmen
         }
     }
 
-    protected void addAudio(float[] audioBuffer)
+    protected void addAudio(double[] audioBuffer)
     {
         AudioSegment audioSegment = getAudioSegment();
 

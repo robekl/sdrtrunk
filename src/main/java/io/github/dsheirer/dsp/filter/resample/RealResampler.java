@@ -15,25 +15,21 @@
  ******************************************************************************/
 package io.github.dsheirer.dsp.filter.resample;
 
-import com.laszlosystems.libresample4j.Resampler;
 import com.laszlosystems.libresample4j.SampleBuffers;
 import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
 public class RealResampler
 {
     protected static final Logger mLog = LoggerFactory.getLogger(RealResampler.class);
 
-    private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("RealResampler");
     private Resampler mResampler;
-    private Listener<ReusableFloatBuffer> mResampledListener;
-    private BufferManager mBufferManager;
+    private Listener<ReusableDoubleBuffer> mResampledListener;
+    private Resampler.BufferManager mBufferManager;
     private double mResampleFactor;
 
     /**
@@ -45,104 +41,29 @@ public class RealResampler
     {
         mResampleFactor = outputRate / inputRate;
         mResampler = new Resampler(true, mResampleFactor, mResampleFactor);
-        mBufferManager = new BufferManager(inputBufferSize, outputBufferSize);
+        mBufferManager = new Resampler.BufferManager(inputBufferSize, outputBufferSize);
     }
 
     /**
      * Primary input method to the resampler
-     * @param reusableFloatBuffer to resample
+     * @param reusableDoubleBuffer to resample
      */
-    public void resample(ReusableFloatBuffer reusableFloatBuffer)
+    public void resample(ReusableDoubleBuffer reusableDoubleBuffer)
     {
-        mBufferManager.load(reusableFloatBuffer);
+        mBufferManager.load(reusableDoubleBuffer);
         mResampler.process(mResampleFactor, mBufferManager, false);
     }
+
 
     /**
      * Registers the listener to receive the resampled buffer output
      * @param resampledBufferListener to receive buffers
      */
-    public void setListener(Listener<ReusableFloatBuffer> resampledBufferListener)
+    public void setListener(Listener<ReusableDoubleBuffer> resampledBufferListener)
     {
         mResampledListener = resampledBufferListener;
+        mBufferManager.setResampledBufferListener(resampledBufferListener);
     }
 
-    /**
-     * Buffer manager for input and output buffers used during the resampling process.  The manager will
-     * auto-resize the input and output buffers to meet the size of the incoming sample buffers.
-     */
-    public class BufferManager implements SampleBuffers
-    {
-        private int mOutputBufferSize;
-        private FloatBuffer mInputBuffer;
-        private FloatBuffer mOutputBuffer;
 
-        public BufferManager(int inputBufferSize, int outputBufferSize)
-        {
-            mOutputBufferSize = outputBufferSize;
-
-            //The size of the underlying byte buffer in bytes is 4 times the requested input buffer size in floats
-            mInputBuffer = ByteBuffer.allocate(inputBufferSize * 4).asFloatBuffer();
-            mOutputBuffer = ByteBuffer.allocate(inputBufferSize * 4).asFloatBuffer();
-        }
-
-        /**
-         * Queues the buffer sample for resampling
-         */
-        public void load(ReusableFloatBuffer reusableFloatBuffer)
-        {
-            mInputBuffer.put(reusableFloatBuffer.getSamples());
-            reusableFloatBuffer.decrementUserCount();
-        }
-
-        @Override
-        public int getInputBufferLength()
-        {
-            return mInputBuffer.position();
-        }
-
-        @Override
-        public int getOutputBufferLength()
-        {
-            return mOutputBuffer.remaining();
-        }
-
-        /**
-         * Provides input to the resampler
-         */
-        @Override
-        public void produceInput(float[] samples, int offset, int length)
-        {
-            mInputBuffer.flip();
-            mInputBuffer.get(samples, offset, length);
-            mInputBuffer.compact();
-        }
-
-        /**
-         * Receives output from the resampler and dispatches output buffers periodically.
-         */
-        @Override
-        public void consumeOutput(float[] samples, int offset, int length)
-        {
-            mOutputBuffer.put(samples, offset, length);
-
-            while(mOutputBuffer.position() > mOutputBufferSize)
-            {
-                ReusableFloatBuffer outputBuffer = mReusableBufferQueue.getBuffer(mOutputBufferSize);
-
-                mOutputBuffer.flip();
-                mOutputBuffer.get(outputBuffer.getSamples());
-                mOutputBuffer.compact();
-
-                if(mResampledListener != null)
-                {
-                    mResampledListener.receive(outputBuffer);
-                }
-                else
-                {
-                    outputBuffer.decrementUserCount();
-                }
-            }
-        }
-    }
 }

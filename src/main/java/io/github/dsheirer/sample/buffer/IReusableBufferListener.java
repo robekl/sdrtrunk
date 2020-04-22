@@ -19,5 +19,5 @@ import io.github.dsheirer.sample.Listener;
 
 public interface IReusableBufferListener
 {
-	Listener<ReusableFloatBuffer> getReusableBufferListener();
+	Listener<ReusableDoubleBuffer> getReusableBufferListener();
 }

@@ -79,7 +79,7 @@ public class DQPSKDecisionDirectedDemodulator extends PSKDemodulator<Dibit>
         getInterpolatingSampleBuffer().resetAndAdjust(mSymbolEvaluator.getTimingError());
 
         //Update the costas loop (PLL) with any measured phase error
-        getPLL().adjust(clip(mSymbolEvaluator.getPhaseError(), 0.5f));
+        getPLL().adjust(clip(mSymbolEvaluator.getPhaseError(), 0.5d));
 
         //Store current samples/symbols to use for the next symbol period
         mPreviousPrecedingSample.setValues(mPrecedingSample);

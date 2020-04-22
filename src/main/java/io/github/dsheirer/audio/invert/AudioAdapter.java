@@ -63,9 +63,9 @@ public class AudioAdapter
 		}
 	}
 	
-    public float get( float sample )
+    public double get( double sample )
     {
-    	float retVal;
+		double retVal;
     	
 		switch( mAudioType )
 		{
@@ -73,7 +73,7 @@ public class AudioAdapter
 				retVal = mAudioHighPassFilter.get( sample );
 				break;
 			case MUTE:
-				retVal = 0.0f;
+				retVal = 0.0d;
 				break;
 			case INV2632:
 			case INV2718:
@@ -87,7 +87,7 @@ public class AudioAdapter
 			case INV3729:
 			case INV4096:
 			default:
-				retVal = (float)( mPostInversionFilter.get( 
+				retVal = ( mPostInversionFilter.get(
 						mAudioHighPassFilter.get( sample ) * 
 						mSineWaveGenerator.inphase() ) );
 				

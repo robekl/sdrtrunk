@@ -82,7 +82,7 @@ public class DQPSKGardnerDemodulatorInstrumented extends DQPSKGardnerDemodulator
 
         if(mSamplesPerSymbolListener != null)
         {
-            mSamplesPerSymbolListener.receive((double)getInterpolatingSampleBuffer().getSamplingPoint());
+            mSamplesPerSymbolListener.receive(getInterpolatingSampleBuffer().getSamplingPoint());
         }
 
         //Send to an external constellation symbol listener when registered
@@ -93,7 +93,7 @@ public class DQPSKGardnerDemodulatorInstrumented extends DQPSKGardnerDemodulator
 
         if(mPLLErrorListener != null)
         {
-            mPLLErrorListener.receive((double)mSymbolEvaluator.getPhaseError());
+            mPLLErrorListener.receive(mSymbolEvaluator.getPhaseError());
         }
 
         if(mPLLFrequencyListener != null)

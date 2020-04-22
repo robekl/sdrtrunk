@@ -87,7 +87,7 @@ public class ChannelizerViewer extends JFrame
         mTestTuner = new TestTuner(new UserPreferences());
 
 //        mChannelCount = (int)(mTestTuner.getTunerController().getUsableBandwidth() / CHANNEL_BANDWIDTH);
-        mChannelCount = (int)(mTestTuner.getTunerController().getBandwidth() / CHANNEL_BANDWIDTH);
+        mChannelCount = mTestTuner.getTunerController().getBandwidth() / CHANNEL_BANDWIDTH;
         mChannelsPerRow = channelsPerRow;
 
         init();

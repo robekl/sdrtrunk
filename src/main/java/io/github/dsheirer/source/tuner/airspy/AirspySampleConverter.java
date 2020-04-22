@@ -21,17 +21,17 @@ import io.github.dsheirer.source.tuner.usb.converter.NativeBufferConverter;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 
 public class AirspySampleConverter extends NativeBufferConverter
 {
-    private static final float SCALE_SIGNED_12_BIT_TO_FLOAT = 1.0f / 2048.0f;
+    private static final double SCALE_SIGNED_12_BIT_TO_FLOAT = 1.0d / 2048.0d;
 
-    private DCRemovalFilter mDCFilter = new DCRemovalFilter(0.01f);
+    private DCRemovalFilter mDCFilter = new DCRemovalFilter(0.01d);
     private HilbertTransform mHilbertTransform = new HilbertTransform();
     private boolean mSamplePacking = false;
-    private FloatBuffer mFloatBuffer;
-    private float[] mConvertedSamples;
+    private DoubleBuffer mDoubleBuffer;
+    private double[] mConvertedSamples;
 
     /**
      * Adapter to translate byte buffers received from the airspy tuner into
@@ -42,19 +42,19 @@ public class AirspySampleConverter extends NativeBufferConverter
     }
 
     @Override
-    protected FloatBuffer convertSamples(ByteBuffer buffer, int length)
+    protected DoubleBuffer convertSamples(ByteBuffer buffer, int length)
     {
-        float[] samples = convert(buffer);
+        double[] samples = convert(buffer);
 
-        if(mFloatBuffer == null || mFloatBuffer.capacity() != samples.length)
+        if(mDoubleBuffer == null || mDoubleBuffer.capacity() != samples.length)
         {
-            mFloatBuffer = FloatBuffer.allocate(samples.length);
+            mDoubleBuffer = java.nio.DoubleBuffer.allocate(samples.length);
         }
 
-        mFloatBuffer.rewind();
-        mFloatBuffer.put(samples);
+        mDoubleBuffer.rewind();
+        mDoubleBuffer.put(samples);
 
-        return mFloatBuffer;
+        return mDoubleBuffer;
     }
 
     /**
@@ -68,7 +68,7 @@ public class AirspySampleConverter extends NativeBufferConverter
         mSamplePacking = enabled;
     }
 
-    private float[] convert(ByteBuffer samples)
+    private double[] convert(ByteBuffer samples)
     {
         if(mSamplePacking)
         {
@@ -96,7 +96,7 @@ public class AirspySampleConverter extends NativeBufferConverter
 
         if(mConvertedSamples == null || mConvertedSamples.length != buffer.capacity() / 2)
         {
-            mConvertedSamples = new float[buffer.capacity() / 2];
+            mConvertedSamples = new double[buffer.capacity() / 2];
         }
 
         int pointer = 0;
@@ -124,7 +124,7 @@ public class AirspySampleConverter extends NativeBufferConverter
 
         if(mConvertedSamples == null || mConvertedSamples.length != sampleCount)
         {
-            mConvertedSamples = new float[sampleCount];
+            mConvertedSamples = new double[sampleCount];
         }
 
         int pointer = 0;
@@ -153,8 +153,8 @@ public class AirspySampleConverter extends NativeBufferConverter
      * Converts unsigned 12-bit values to signed 12-bit values and then scales
      * the signed value to a signed float value in range: -1.0 : +1.0
      */
-    public static float scale(int value)
+    public static double scale(int value)
     {
-        return (float) ((value & 0xFFF) - 2048) * SCALE_SIGNED_12_BIT_TO_FLOAT;
+        return ((value & 0xFFF) - 2048) * SCALE_SIGNED_12_BIT_TO_FLOAT;
     }
 }

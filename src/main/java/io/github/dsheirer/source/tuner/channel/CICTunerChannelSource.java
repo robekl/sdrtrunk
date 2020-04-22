@@ -223,10 +223,10 @@ public class CICTunerChannelSource extends TunerChannelSource implements Listene
 
         for(ReusableComplexBuffer complexBuffer : mSampleBuffers)
         {
-            float[] samples = complexBuffer.getSamples();
+            double[] samples = complexBuffer.getSamples();
 
             ReusableComplexBuffer translatedComplexBuffer = mReusableComplexBufferQueue.getBuffer(samples.length);
-            float[] translatedSamples = translatedComplexBuffer.getSamples();
+            double[] translatedSamples = translatedComplexBuffer.getSamples();
 
             /* Perform frequency translation */
             for(int x = 0; x < samples.length; x += 2)

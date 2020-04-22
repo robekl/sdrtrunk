@@ -21,7 +21,7 @@ import org.apache.commons.math3.util.FastMath;
 public class Oscillator extends AbstractOscillator
 {
     private Complex mAnglePerSample;
-    private Complex mCurrentAngle = new Complex(0.0f, -1.0f);
+    private Complex mCurrentAngle = new Complex(0.0d, -1.0d);
 
     /**
      * Oscillator that produces complex or float samples corresponding to a sine wave oscillating at the specified
@@ -46,13 +46,13 @@ public class Oscillator extends AbstractOscillator
     }
 
     @Override
-    public float inphase()
+    public double inphase()
     {
         return mCurrentAngle.inphase();
     }
 
     @Override
-    public float quadrature()
+    public double quadrature()
     {
         return mCurrentAngle.quadrature();
     }
@@ -63,7 +63,7 @@ public class Oscillator extends AbstractOscillator
     @Override
     protected void update()
     {
-        float anglePerSample = (float)(2.0d * FastMath.PI * getFrequency() / getSampleRate());
+        double anglePerSample = (2.0d * FastMath.PI * getFrequency() / getSampleRate());
         mAnglePerSample = Complex.fromAngle(anglePerSample);
     }
 }

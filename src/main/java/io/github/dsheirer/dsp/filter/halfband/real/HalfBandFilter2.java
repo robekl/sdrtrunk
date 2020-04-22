@@ -23,14 +23,14 @@ package io.github.dsheirer.dsp.filter.halfband.real;
  */
 public class HalfBandFilter2
 {
-    private static final float CENTER_COEFFICIENT = 0.5f;
-    private float[] mCoefficients;
-    private float[] mEvenSamples;
-    private float[] mOddSamples;
+    private static final double CENTER_COEFFICIENT = 0.5d;
+    private double[] mCoefficients;
+    private double[] mEvenSamples;
+    private double[] mOddSamples;
     private int mCenterSampleIndex;
-    private float mAccumulator;
+    private double mAccumulator;
     private int mPointer;
-    private float mGain;
+    private double mGain;
 
     /**
      * Creates a half band filter with inherent decimation by two.
@@ -39,7 +39,7 @@ public class HalfBandFilter2
      * zero valued except for the middle odd index coefficient which should be valued 0.5
      * @param gain value to apply to the output
      */
-    public HalfBandFilter2(float[] coefficients, float gain)
+    public HalfBandFilter2(double[] coefficients, double gain)
     {
         if(coefficients.length % 2 == 0)
         {
@@ -50,8 +50,8 @@ public class HalfBandFilter2
 
         int half = coefficients.length / 2 + 1;
 
-        mCoefficients = new float[half];
-        mEvenSamples = new float[half];
+        mCoefficients = new double[half];
+        mEvenSamples = new double[half];
 
         //Use only the even coefficients since the odd coefficients are all zero-valued
         for(int x = 0; x < coefficients.length; x += 2)
@@ -60,11 +60,11 @@ public class HalfBandFilter2
         }
 
         //Setup the odd samples array as a simple delay line, half the size of the even samples array
-        mOddSamples = new float[half / 2];
+        mOddSamples = new double[half / 2];
         mCenterSampleIndex = mOddSamples.length - 1;
     }
 
-    public float filter(float sample1, float sample2)
+    public double filter(double sample1, double sample2)
     {
         //Structured for SIMD array copy optimization when supported by host CPU
         System.arraycopy(mEvenSamples, 0, mEvenSamples, 1, mEvenSamples.length - 1);
@@ -73,7 +73,7 @@ public class HalfBandFilter2
         mEvenSamples[0] = sample1;
         mOddSamples[0] = sample2;
 
-        mAccumulator = 0.0f;
+        mAccumulator = 0.0d;
 
         //Structured for SIMD dot.product optimization when supported by host CPU
         for(mPointer = 0; mPointer < mEvenSamples.length; mPointer++)

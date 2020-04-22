@@ -404,8 +404,8 @@ public class SpectralDisplayPanel extends JPanel implements Listener<ReusableCom
         mDFTConverter = new ComplexDecibelConverter();
         mDFTProcessor.addConverter(mDFTConverter);
 
-        mDFTConverter.addListener((DFTResultsListener)mSpectrumPanel);
-        mDFTConverter.addListener((DFTResultsListener)mWaterfallPanel);
+        mDFTConverter.addListener(mSpectrumPanel);
+        mDFTConverter.addListener(mWaterfallPanel);
     }
 
     /**

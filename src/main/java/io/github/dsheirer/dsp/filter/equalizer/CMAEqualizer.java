@@ -13,7 +13,7 @@ public class CMAEqualizer implements Listener<Complex>
 	
 	private float mModulus;
 	private float mMu;
-	private Complex mError = new Complex( 0.0f, 0.0f );
+	private Complex mError = new Complex( 0.0d, 0.0d );
 	
 	private Complex[] mTaps = new Complex[ TAP_COUNT ];
 	private Complex[] mBuffer = new Complex[ TAP_COUNT ];
@@ -30,12 +30,12 @@ public class CMAEqualizer implements Listener<Complex>
 		/* Set first tap to 1,0 and all other taps to 0,0 as a starting point.
 		 * This means that the output is solely determined by the last sample
 		 * entering the filter, initially. */
-		mTaps[ 0 ] = new Complex( 1.0f, 0.0f );
+		mTaps[ 0 ] = new Complex( 1.0d, 0.0d );
 		
 		for( int x = 1; x < TAP_COUNT; x++ )
 		{
-			mTaps[ x ] = new Complex( 0.0f, 0.0f );
-			mBuffer[ x ] = new Complex( 0.0f, 0.0f );
+			mTaps[ x ] = new Complex( 0.0d, 0.0d );
+			mBuffer[ x ] = new Complex( 0.0d, 0.0d );
 		}
 	}
 	
@@ -47,7 +47,7 @@ public class CMAEqualizer implements Listener<Complex>
 		mError = Complex.multiply( sample, sample.norm() - mModulus );
 
 		/* Ensure we don't exceed unity */
-		mError.clip( 1.0f );
+		mError.clip( 1.0d );
 
 		for( int x = 0; x < TAP_COUNT; x++ )
 		{
@@ -82,7 +82,7 @@ public class CMAEqualizer implements Listener<Complex>
 	
 	private Complex filter()
 	{
-		Complex sum = new Complex( 0.0f, 0.0f );
+		Complex sum = new Complex( 0.0d, 0.0d );
 		
 		for( int x = 0; x < TAP_COUNT; x++ )
 		{

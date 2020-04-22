@@ -22,7 +22,7 @@ public class AFSKSampleBuffer
 {
     private final static Logger mLog = LoggerFactory.getLogger(AFSKSampleBuffer.class);
 
-    private final static float SYMBOL_SAMPLE_THRESHOLD = 1.0f;
+    private final static double SYMBOL_SAMPLE_THRESHOLD = 1.0d;
     protected boolean[] mDelayLine;
     protected int mDelayLinePointer = 0;
 
@@ -32,14 +32,14 @@ public class AFSKSampleBuffer
     protected int mSymbolStart;
     protected int mSymbolEnd;
     protected int mSamplesPerSymbol;
-    protected float mSymbolSamplingPoint;
-    protected float mSymbolTimingGain;
+    protected double mSymbolSamplingPoint;
+    protected double mSymbolTimingGain;
 
     /**
      * Buffer to store complex sample data and produce interpolated samples.
      * @param samplesPerSymbol
      */
-    public AFSKSampleBuffer(int samplesPerSymbol, float symbolTimingGain)
+    public AFSKSampleBuffer(int samplesPerSymbol, double symbolTimingGain)
     {
         mSamplesPerSymbol = samplesPerSymbol;
         mSymbolTimingGain = symbolTimingGain;
@@ -81,7 +81,7 @@ public class AFSKSampleBuffer
         mSymbolSamplingPoint += (mSamplesPerSymbol + (symbolTimingError * mSymbolTimingGain));
     }
 
-    public void setTimingGain(float gain)
+    public void setTimingGain(double gain)
     {
         mSymbolTimingGain = gain;
     }

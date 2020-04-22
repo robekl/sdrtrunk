@@ -37,7 +37,7 @@ public class ComplexCircularBuffer
     {
         mBuffer = new Complex[size];
 
-        Arrays.fill(mBuffer, new Complex(1.0f, 1.0f));
+        Arrays.fill(mBuffer, new Complex(1.0d, 1.0d));
     }
 
     public int length()

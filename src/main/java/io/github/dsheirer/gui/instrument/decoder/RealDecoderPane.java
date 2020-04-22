@@ -19,10 +19,10 @@ import io.github.dsheirer.module.decode.DecoderType;
 import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.SampleType;
 import io.github.dsheirer.sample.buffer.ReusableBufferBroadcaster;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import javafx.scene.text.Text;
 
-public class RealDecoderPane extends AbstractDecoderPane<ReusableFloatBuffer>
+public class RealDecoderPane extends AbstractDecoderPane<ReusableDoubleBuffer>
 {
     private ReusableBufferBroadcaster mBufferBroadcaster = new ReusableBufferBroadcaster();
     private DecoderType mDecoderType;
@@ -47,17 +47,17 @@ public class RealDecoderPane extends AbstractDecoderPane<ReusableFloatBuffer>
     }
 
     @Override
-    public void receive(ReusableFloatBuffer reusableFloatBuffer)
+    public void receive(ReusableDoubleBuffer reusableDoubleBuffer)
     {
-        mBufferBroadcaster.broadcast(reusableFloatBuffer);
+        mBufferBroadcaster.broadcast(reusableDoubleBuffer);
     }
 
-    public void addListener(Listener<ReusableFloatBuffer> listener)
+    public void addListener(Listener<ReusableDoubleBuffer> listener)
     {
         mBufferBroadcaster.addListener(listener);
     }
 
-    public void removeListener(Listener<ReusableFloatBuffer> listener)
+    public void removeListener(Listener<ReusableDoubleBuffer> listener)
     {
         mBufferBroadcaster.removeListener(listener);
     }

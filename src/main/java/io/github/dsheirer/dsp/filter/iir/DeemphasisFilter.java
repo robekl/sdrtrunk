@@ -19,25 +19,25 @@ import org.apache.commons.math3.util.FastMath;
 
 public class DeemphasisFilter
 {
-	private static final float MAX_SAMPLE_VALUE = 0.95f;
-	private float mAlpha;
-	private float mGain;
-	private float mPrevious = 0.0f;
+	private static final double MAX_SAMPLE_VALUE = 0.95d;
+	private double mAlpha;
+	private double mGain;
+	private double mPrevious = 0.0d;
 	
-	public DeemphasisFilter( float sampleRate, float cutoff, float gain )
+	public DeemphasisFilter( double sampleRate, double cutoff, double gain )
 	{
-		mAlpha = (float)FastMath.exp( -2.0 * FastMath.PI * cutoff * ( 1.0 / sampleRate ) );
+		mAlpha = FastMath.exp( -2.0 * FastMath.PI * cutoff * ( 1.0 / sampleRate ) );
 		mGain = gain;
 	}
 	
-	public float filter( float sample )
+	public double filter( double sample )
 	{
 		mPrevious = sample + ( mAlpha * mPrevious );
 		
 		return declip( mPrevious * mGain );
 	}
 	
-	private float declip( float value )
+	private double declip( double value )
 	{
 		if( value > MAX_SAMPLE_VALUE )
 		{
@@ -46,7 +46,7 @@ public class DeemphasisFilter
 		else return FastMath.max(value, -MAX_SAMPLE_VALUE);
 	}
 	
-	public float[] filter( float[] samples )
+	public double[] filter( double[] samples )
 	{
 		for( int x = 0; x < samples.length; x++ )
 		{

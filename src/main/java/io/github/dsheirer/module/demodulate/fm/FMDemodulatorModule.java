@@ -27,7 +27,7 @@ import io.github.dsheirer.sample.Listener;
 import io.github.dsheirer.sample.buffer.IReusableBufferProvider;
 import io.github.dsheirer.sample.buffer.IReusableComplexBufferListener;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import io.github.dsheirer.source.ISourceEventListener;
 import io.github.dsheirer.source.SourceEvent;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class FMDemodulatorModule extends Module implements ISourceEventListener,
     private FMDemodulator mDemodulator = new FMDemodulator();
     private RealResampler mResampler;
     private SourceEventProcessor mSourceEventProcessor = new SourceEventProcessor();
-    private Listener<ReusableFloatBuffer> mResampledReusableBufferListener;
+    private Listener<ReusableDoubleBuffer> mResampledReusableBufferListener;
     private double mChannelBandwidth;
     private double mOutputSampleRate;
 
@@ -106,7 +106,7 @@ public class FMDemodulatorModule extends Module implements ISourceEventListener,
     }
 
     @Override
-    public void setBufferListener(Listener<ReusableFloatBuffer> listener)
+    public void setBufferListener(Listener<ReusableDoubleBuffer> listener)
     {
         mResampledReusableBufferListener = listener;
     }
@@ -128,7 +128,7 @@ public class FMDemodulatorModule extends Module implements ISourceEventListener,
         }
 
         ReusableComplexBuffer basebandFilteredBuffer = mIQFilter.filter(reusableComplexBuffer);
-        ReusableFloatBuffer demodulatedBuffer = mDemodulator.demodulate(basebandFilteredBuffer);
+        ReusableDoubleBuffer demodulatedBuffer = mDemodulator.demodulate(basebandFilteredBuffer);
 
         if(mResampler != null)
         {
@@ -169,7 +169,7 @@ public class FMDemodulatorModule extends Module implements ISourceEventListener,
                 int passBandStop = (int)cutoff - 500;
                 int stopBandStart = (int)cutoff + 500;
 
-                float[] filterTaps = null;
+                double[] filterTaps = null;
 
                 FIRFilterSpecification specification = FIRFilterSpecification.lowPassBuilder()
                     .sampleRate(sampleRate)
@@ -204,18 +204,18 @@ public class FMDemodulatorModule extends Module implements ISourceEventListener,
 
                 mResampler = new RealResampler(sampleRate, mOutputSampleRate, 2000, 1000);
 
-                mResampler.setListener(new Listener<ReusableFloatBuffer>()
+                mResampler.setListener(new Listener<ReusableDoubleBuffer>()
                 {
                     @Override
-                    public void receive(ReusableFloatBuffer reusableFloatBuffer)
+                    public void receive(ReusableDoubleBuffer reusableDoubleBuffer)
                     {
                         if(mResampledReusableBufferListener != null)
                         {
-                            mResampledReusableBufferListener.receive(reusableFloatBuffer);
+                            mResampledReusableBufferListener.receive(reusableDoubleBuffer);
                         }
                         else
                         {
-                            reusableFloatBuffer.decrementUserCount();
+                            reusableDoubleBuffer.decrementUserCount();
                         }
                     }
                 });

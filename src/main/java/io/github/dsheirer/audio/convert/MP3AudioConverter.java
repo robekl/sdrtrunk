@@ -54,7 +54,7 @@ public class MP3AudioConverter implements IAudioConverter
     }
 
     @Override
-    public byte[] convert(List<float[]> audioPackets)
+    public byte[] convert(List<double[]> audioPackets)
     {
         mMP3Stream.reset();
 
@@ -84,7 +84,7 @@ public class MP3AudioConverter implements IAudioConverter
         }
     }
 
-    public byte[] convertAudio(List<float[]> audioBuffers)
+    public byte[] convertAudio(List<double[]> audioBuffers)
     {
         mMP3Stream.reset();
 

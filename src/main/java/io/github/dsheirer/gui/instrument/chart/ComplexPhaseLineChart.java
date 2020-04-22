@@ -39,7 +39,7 @@ public class ComplexPhaseLineChart extends LineChart implements Listener<Reusabl
     private static final Complex ANGLE_OFFSET_45_DEGREES = Complex.fromAngle(FastMath.PI / 4.0);
     private ComplexCircularBuffer mComplexCircularBuffer;
     private ComplexGain mComplexGain = new ComplexGain(600.0f);
-    private ObservableList<Data<Integer,Float>> mPhaseValues = FXCollections.observableArrayList();
+    private ObservableList<Data<Integer,Double>> mPhaseValues = FXCollections.observableArrayList();
     private IntegerProperty mLengthProperty = new SimpleIntegerProperty(40);
 
     public ComplexPhaseLineChart(int length)
@@ -47,8 +47,8 @@ public class ComplexPhaseLineChart extends LineChart implements Listener<Reusabl
         super(new NumberAxis("Time", 1, length - 10, 2),
             new NumberAxis("Phase", -FastMath.PI, FastMath.PI, FastMath.PI / 2.0));
 
-        Series<Integer,Float> phaseSeries = new Series<>("Phase", mPhaseValues);
-        ObservableList<Series<Integer,Float>> observableList = FXCollections.observableArrayList(phaseSeries);
+        Series<Integer,Double> phaseSeries = new Series<>("Phase", mPhaseValues);
+        ObservableList<Series<Integer,Double>> observableList = FXCollections.observableArrayList(phaseSeries);
 
         setData(observableList);
         init(length);
@@ -84,7 +84,7 @@ public class ComplexPhaseLineChart extends LineChart implements Listener<Reusabl
     @Override
     public void receive(ReusableComplexBuffer complexBuffer)
     {
-        float[] samples = complexBuffer.getSamples();
+        double[] samples = complexBuffer.getSamples();
 
         Complex sample;
 

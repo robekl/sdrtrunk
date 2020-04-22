@@ -26,12 +26,12 @@ public class P25NetworkCallsign
 
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append( getLetter( (int)( n1 / 1600 ) ) );
-		sb.append( getLetter( (int)( ( n1 / 40 ) % 40 ) ) );
-		sb.append( getLetter( (int)( n1 % 40 ) ) );
-		sb.append( getLetter( (int)( n2 / 1600 ) ) );
-		sb.append( getLetter( (int)( ( n2 / 40 ) % 40 ) ) );
-		sb.append( getLetter( (int)( n2 % 40 ) ) );
+		sb.append( getLetter(n1 / 1600) );
+		sb.append( getLetter(( n1 / 40 ) % 40) );
+		sb.append( getLetter(n1 % 40) );
+		sb.append( getLetter(n2 / 1600) );
+		sb.append( getLetter(( n2 / 40 ) % 40) );
+		sb.append( getLetter(n2 % 40) );
 
 		return sb.toString();
 	}

@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.FloatBuffer;
+import java.nio.DoubleBuffer;
 import java.util.LinkedList;
 
 public class OverflowableBufferStream extends OverflowableTransferQueue<ReusableComplexBuffer>
@@ -32,7 +32,7 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
     private int mFlushCount = 0;
     private ReusableComplexBuffer mCurrentBuffer;
     private int mCurrentBufferPointer = 0;
-    private FloatBuffer mFloatBuffer;
+    private DoubleBuffer mDoubleBuffer;
     private LinkedList<ReusableComplexBuffer> mBufferList = new LinkedList<>();
     private int mBufferFetchLimit;
 
@@ -54,7 +54,7 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
     public OverflowableBufferStream(int maxSize, int resetThreshold, int arraySize)
     {
         super(maxSize, resetThreshold);
-        mFloatBuffer = FloatBuffer.allocate(arraySize);
+        mDoubleBuffer = DoubleBuffer.allocate(arraySize);
         mBufferFetchLimit = maxSize - resetThreshold;
     }
 
@@ -69,7 +69,7 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
      * @throws IOException if the buffer queue is/becomes empty and the samples cannot be provided
      * @throws IllegalArgumentException if the overlap argument is not less than the sample count argument
      */
-    public float[] get(int sampleCount, int overlap) throws IOException
+    public double[] get(int sampleCount, int overlap) throws IOException
     {
         if(overlap >= sampleCount)
         {
@@ -83,12 +83,12 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
         }
 
         //Resize the float buffer if the request size changes
-        if(mFloatBuffer.capacity() != sampleCount)
+        if(mDoubleBuffer.capacity() != sampleCount)
         {
-            mFloatBuffer = FloatBuffer.allocate(sampleCount);
+            mDoubleBuffer = DoubleBuffer.allocate(sampleCount);
         }
 
-        while(mFloatBuffer.hasRemaining())
+        while(mDoubleBuffer.hasRemaining())
         {
             int available = mCurrentBuffer.getSamples().length - mCurrentBufferPointer;
 
@@ -99,7 +99,7 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
             else
             {
                 //Fill the buffer to capacity
-                int toCopy = mFloatBuffer.remaining();
+                int toCopy = mDoubleBuffer.remaining();
 
                 if(available < toCopy)
                 {
@@ -108,21 +108,21 @@ public class OverflowableBufferStream extends OverflowableTransferQueue<Reusable
 
                 if(toCopy > 0)
                 {
-                    mFloatBuffer.put(mCurrentBuffer.getSamples(), mCurrentBufferPointer, toCopy);
+                    mDoubleBuffer.put(mCurrentBuffer.getSamples(), mCurrentBufferPointer, toCopy);
                     mCurrentBufferPointer += toCopy;
                 }
             }
         }
 
         //If we get to here, the float buffer is full.  Get the samples and then refill with overlap if non-zero
-        mFloatBuffer.rewind();
-        float[] samples = new float[sampleCount];
-        mFloatBuffer.get(samples);
-        mFloatBuffer.clear();
+        mDoubleBuffer.rewind();
+        double[] samples = new double[sampleCount];
+        mDoubleBuffer.get(samples);
+        mDoubleBuffer.clear();
 
         if(overlap > 0)
         {
-            mFloatBuffer.put(samples, samples.length - overlap, overlap);
+            mDoubleBuffer.put(samples, samples.length - overlap, overlap);
         }
 
         try

@@ -265,21 +265,21 @@ public abstract class AudioOutput implements LineListener, Listener<IdentifierUp
         mAudioSegmentPreemptTone = null;
         mAudioSegmentDropTone = null;
 
-        float[] start = mUserPreferences.getPlaybackPreference().getStartTone();
+        double[] start = mUserPreferences.getPlaybackPreference().getStartTone();
 
         if(start != null)
         {
             mAudioSegmentStartTone = convert(start);
         }
 
-        float[] preempt = mUserPreferences.getPlaybackPreference().getPreemptTone();
+        double[] preempt = mUserPreferences.getPlaybackPreference().getPreemptTone();
 
         if(preempt != null)
         {
             mAudioSegmentPreemptTone = convert(preempt);
         }
 
-        float[] drop = mUserPreferences.getPlaybackPreference().getDropTone();
+        double[] drop = mUserPreferences.getPlaybackPreference().getDropTone();
 
         if(drop != null)
         {
@@ -492,7 +492,7 @@ public abstract class AudioOutput implements LineListener, Listener<IdentifierUp
                    mCurrentBufferIndex < mCurrentAudioSegment.getAudioBufferCount() &&
                    !mCurrentAudioSegment.isDoNotMonitor())
             {
-                float[] audioBuffer = mCurrentAudioSegment.getAudioBuffers().get(mCurrentBufferIndex++);
+                double[] audioBuffer = mCurrentAudioSegment.getAudioBuffers().get(mCurrentBufferIndex++);
 
                 if(audioBuffer != null)
                 {
@@ -553,7 +553,7 @@ public abstract class AudioOutput implements LineListener, Listener<IdentifierUp
     /**
      * Converts the audio buffer data into a byte buffer format appropriate for the underlying source data line.
      */
-    protected abstract ByteBuffer convert(float[] buffer);
+    protected abstract ByteBuffer convert(double[] buffer);
 
     /**
      * Audio output channel name

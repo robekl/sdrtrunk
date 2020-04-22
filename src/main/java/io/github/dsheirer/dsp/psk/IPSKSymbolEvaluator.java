@@ -21,14 +21,14 @@ public interface IPSKSymbolEvaluator<T>
      * Phase error of the symbol relative to the closest reference symbol
      * @return angular phase error in radians
      */
-    float getPhaseError();
+    double getPhaseError();
 
     /**
      * Timing error of the symbol relative to the closest reference symbol
      * @return angular timing error in radians where a positive value indicates early sampling and sample timing needs
      * to be increased and a negative value indicates late sampling where sample timing needs to be decreased.
      */
-    float getTimingError();
+    double getTimingError();
 
     /**
      * Symbol decision indicating the reference symbol location closest to the symbol.

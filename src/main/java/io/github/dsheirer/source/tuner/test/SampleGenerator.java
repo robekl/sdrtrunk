@@ -85,7 +85,7 @@ public class SampleGenerator
      */
     private void updateSamplesPerInterval()
     {
-        mSamplesPerInterval = (int)((double)mOscillator.getSampleRate() * ((double)mInterval / 1000.0));
+        mSamplesPerInterval = (int)(mOscillator.getSampleRate() * ((double)mInterval / 1000.0));
     }
 
     /**

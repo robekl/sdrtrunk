@@ -29,7 +29,7 @@ public class PolyphaseChannelizerFilterFactory
 
     private static final double OBJECTIVE_BAND_EDGE_COEFFICIENT_AMPLITUDE = FastMath.sqrt(2.0) / 2.0; //.707xxx
 
-    public static float[] getFilter(int sampleRate, int channelBandwidth, double alpha)
+    public static double[] getFilter(int sampleRate, int channelBandwidth, double alpha)
     {
         FIRLinearPhaseFilterType type = FIRLinearPhaseFilterType.TYPE_2_EVEN_LENGTH_ODD_ORDER_SYMMETRICAL;
 
@@ -72,14 +72,14 @@ public class PolyphaseChannelizerFilterFactory
             channelBandwidth, channelBandwidth, OBJECTIVE_BAND_EDGE_COEFFICIENT_AMPLITUDE, transitionRipple, 5.0);
 
         FIRFilterSpecification.FrequencyBand stopBand = new FIRFilterSpecification.FrequencyBand(sampleRate,
-            stopBandStart, (int)(sampleRate / 2), 0.0, stopRipple);
+            stopBandStart, sampleRate / 2, 0.0, stopRipple);
 
         specification.addFrequencyBand(passBand);
         specification.addFrequencyBand(transitionBand);
         specification.addFrequencyBand(stopBand);
 
         double bandEdgeFrequency = FastMath.cos(FastMath.PI * (double)channelBandwidth / (double)(sampleRate / 2));
-        float[] filter = null;
+        double[] filter = null;
 
         try
         {

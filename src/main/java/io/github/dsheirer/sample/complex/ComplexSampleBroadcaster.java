@@ -28,7 +28,7 @@ public class ComplexSampleBroadcaster implements ComplexSampleListener
 			new CopyOnWriteArrayList<ComplexSampleListener>();
 
 	@Override
-    public void receive( float i, float q )
+    public void receive( double i, double q )
     {
 		broadcast( i, q );
     }
@@ -66,7 +66,7 @@ public class ComplexSampleBroadcaster implements ComplexSampleListener
 		mListeners.clear();
 	}
 
-    public void broadcast( float i, float q )
+    public void broadcast( double i, double q )
     {
     	for( ComplexSampleListener listener: mListeners )
     	{

@@ -394,7 +394,7 @@ public class PlaybackPreferenceEditor extends HBox
      * Plays the audio buffer over the default mono playback device
      * @param audioSamples with 8 kHz mono PCM samples
      */
-    private void play(float[] audioSamples)
+    private void play(double[] audioSamples)
     {
         if(audioSamples != null)
         {
@@ -403,7 +403,7 @@ public class PlaybackPreferenceEditor extends HBox
 
             ShortBuffer shortBuffer = buffer.asShortBuffer();
 
-            for(float sample : audioSamples)
+            for(double sample : audioSamples)
             {
                 shortBuffer.put((short) (sample * Short.MAX_VALUE));
             }

@@ -659,7 +659,7 @@ public abstract class RTL2832TunerController extends USBTunerController
             read(handle, address, Block.I2C, data);
         }
 
-        return (int) (data.get() & 0xFF);
+        return data.get() & 0xFF;
     }
 
     protected void writeI2CRegister(DeviceHandle handle,
@@ -736,11 +736,11 @@ public abstract class RTL2832TunerController extends USBTunerController
 
         if(length == 2)
         {
-            return (int) (buffer.getShort() & 0xFFFF);
+            return buffer.getShort() & 0xFFFF;
         }
         else
         {
-            return (int) (buffer.get() & 0xFF);
+            return buffer.get() & 0xFF;
         }
     }
 
@@ -785,11 +785,11 @@ public abstract class RTL2832TunerController extends USBTunerController
 
         if(length == 2)
         {
-            return (int) (buffer.getShort() & 0xFFFF);
+            return buffer.getShort() & 0xFFFF;
         }
         else
         {
-            return (int) (buffer.get() & 0xFF);
+            return buffer.get() & 0xFF;
         }
     }
 
@@ -946,7 +946,7 @@ public abstract class RTL2832TunerController extends USBTunerController
 
             int ratio = Integer.rotateLeft(high, 16) | low;
 
-            int rate = (int) (mOscillatorFrequency * TWO_TO_22_POWER / ratio);
+            int rate = mOscillatorFrequency * TWO_TO_22_POWER / ratio;
 
             SampleRate sampleRate = SampleRate.getClosest(rate);
 

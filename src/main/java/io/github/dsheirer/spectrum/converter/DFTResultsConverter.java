@@ -36,7 +36,7 @@ public abstract class DFTResultsConverter
 		mListeners.remove( listener );
     }
 
-	protected void dispatch( float[] results )
+	protected void dispatch( double[] results )
 	{
 		for( DFTResultsListener listener: mListeners )
 		{

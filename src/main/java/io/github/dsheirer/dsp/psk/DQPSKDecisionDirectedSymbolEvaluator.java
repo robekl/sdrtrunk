@@ -27,9 +27,9 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
     private static final Complex ROTATE_FROM_MINUS_135 = Complex.fromAngle(3.0 * FastMath.PI / 4.0);
 
     private Complex mEvaluationSymbol = new Complex(0, 0);
-    private float mPhaseError = 0.0f;
-    private float mTimingError = 0.0f;
-    private float mTimingErrorPolarity = 1.0f;
+    private double mPhaseError = 0.0d;
+    private double mTimingError = 0.0d;
+    private double mTimingErrorPolarity = 1.0d;
     private Dibit mSymbolDecision = Dibit.D00_PLUS_1;
 
     /**
@@ -62,41 +62,41 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
     {
         mEvaluationSymbol.setValues(current);
 
-        if(mEvaluationSymbol.quadrature() > 0.0f)
+        if(mEvaluationSymbol.quadrature() > 0.0d)
         {
-            if(mEvaluationSymbol.inphase() > 0.0f)
+            if(mEvaluationSymbol.inphase() > 0.0d)
             {
                 mSymbolDecision = Dibit.D00_PLUS_1;
-                mTimingErrorPolarity = (preceding.quadrature() > current.quadrature() ? 1.0f : -1.0f);
+                mTimingErrorPolarity = (preceding.quadrature() > current.quadrature() ? 1.0d : -1.0d);
                 mEvaluationSymbol.multiply(ROTATE_FROM_PLUS_45);
             }
             else
             {
                 mSymbolDecision = Dibit.D01_PLUS_3;
-                mTimingErrorPolarity = (preceding.quadrature() < current.quadrature() ? 1.0f : -1.0f);
+                mTimingErrorPolarity = (preceding.quadrature() < current.quadrature() ? 1.0d : -1.0d);
                 mEvaluationSymbol.multiply(ROTATE_FROM_PLUS_135);
             }
 
         }
         else
         {
-            if(mEvaluationSymbol.inphase() > 0.0f)
+            if(mEvaluationSymbol.inphase() > 0.0d)
             {
                 mSymbolDecision = Dibit.D10_MINUS_1;
-                mTimingErrorPolarity = (preceding.quadrature() > current.quadrature() ? 1.0f : -1.0f);
+                mTimingErrorPolarity = (preceding.quadrature() > current.quadrature() ? 1.0d : -1.0d);
                 mEvaluationSymbol.multiply(ROTATE_FROM_MINUS_45);
             }
             else
             {
                 mSymbolDecision = Dibit.D11_MINUS_3;
-                mTimingErrorPolarity = (preceding.quadrature() < current.quadrature() ? 1.0f : -1.0f);
+                mTimingErrorPolarity = (preceding.quadrature() < current.quadrature() ? 1.0d : -1.0d);
                 mEvaluationSymbol.multiply(ROTATE_FROM_MINUS_135);
             }
         }
 
         //Since we've rotated the error symbol back to 0 radians, the quadrature value closely approximates the
         //arctan of the error angle relative to 0 radians and this provides our error value
-        float errorNormalized = normalize(mEvaluationSymbol.quadrature(), 0.3f);
+        double errorNormalized = normalize(mEvaluationSymbol.quadrature(), 0.3d);
 
         mPhaseError = -errorNormalized;
 
@@ -107,7 +107,7 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
     /**
      * Constrains value to the range of ( -maximum <> maximum )
      */
-    private static float clip(float value, float maximum)
+    private static double clip(double value, double maximum)
     {
         if(value > maximum)
         {
@@ -125,11 +125,11 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
      * Constrains timing error to +/- the maximum value and corrects any
      * floating point invalid numbers
      */
-    private float normalize(float error, float maximum)
+    private double normalize(double error, double maximum)
     {
-        if(Float.isNaN(error))
+        if(Double.isNaN(error))
         {
-            return 0.0f;
+            return 0.0d;
         }
         else
         {
@@ -143,7 +143,7 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
      * @return phase error in radians of distance from the reference symbol.
      */
     @Override
-    public float getPhaseError()
+    public double getPhaseError()
     {
         return mPhaseError;
     }
@@ -156,7 +156,7 @@ public class DQPSKDecisionDirectedSymbolEvaluator implements IPSKSymbolEvaluator
      * if the symbol was sampled early (-) or late (+) relative to the reference symbol.
      */
     @Override
-    public float getTimingError()
+    public double getTimingError()
     {
         return mTimingError;
     }

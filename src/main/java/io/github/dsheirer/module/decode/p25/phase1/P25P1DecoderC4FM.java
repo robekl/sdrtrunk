@@ -44,14 +44,14 @@ public class P25P1DecoderC4FM extends P25P1Decoder
 {
     private final static Logger mLog = LoggerFactory.getLogger(P25P1DecoderC4FM.class);
 
-    protected static final float SAMPLE_COUNTER_GAIN = 0.3f;
+    protected static final double SAMPLE_COUNTER_GAIN = 0.3d;
     protected InterpolatingSampleBuffer mInterpolatingSampleBuffer;
     protected DQPSKDecisionDirectedDemodulator mQPSKDemodulator;
     protected CostasLoop mCostasLoop;
     protected FrequencyCorrectionSyncMonitor mFrequencyCorrectionSyncMonitor;
     protected P25P1MessageFramer mMessageFramer;
     private ComplexFeedForwardGainControl mAGC = new ComplexFeedForwardGainControl(32);
-    private Map<Double,float[]> mBasebandFilters = new HashMap<>();
+    private Map<Double,double[]> mBasebandFilters = new HashMap<>();
     private ComplexFIRFilter2 mBasebandFilter;
 
     /**
@@ -126,10 +126,10 @@ public class P25P1DecoderC4FM extends P25P1Decoder
     /**
      * Constructs a baseband filter for this decoder using the current sample rate
      */
-    private float[] getBasebandFilter()
+    private double[] getBasebandFilter()
     {
         //Attempt to reuse a cached (ie already-designed) filter if available
-        float[] filter = mBasebandFilters.get(getSampleRate());
+        double[] filter = mBasebandFilters.get(getSampleRate());
 
         if(filter == null)
         {

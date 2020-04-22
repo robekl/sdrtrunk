@@ -47,7 +47,7 @@ public class OneChannelOutputProcessor extends ChannelOutputProcessor
     }
 
     @Override
-    public void setSynthesisFilter(float[] filter)
+    public void setSynthesisFilter(double[] filter)
     {
         throw new IllegalArgumentException("The one channel output processor does not support filter updates");
     }

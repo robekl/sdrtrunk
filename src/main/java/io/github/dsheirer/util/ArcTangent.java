@@ -127,8 +127,8 @@ public class ArcTangent
 	 */
 	public static double getAngle( Complex sample )
 	{
-		return getAngle( ( (double) sample.inphase() ), 
-					     ( (double) sample.quadrature() ) );
+		return getAngle(sample.inphase(),
+				sample.quadrature());
 	}
 	/**
 	 * Lookup radian angle from polar coordinates x and y
@@ -182,9 +182,9 @@ public class ArcTangent
 		}
 		else
 		{
-			alpha = z * (double)( sTANGENT_MAP_SIZE - .5 );
+			alpha = z * ( sTANGENT_MAP_SIZE - .5 );
 			index = (int)alpha;
-			alpha -= (double)index;
+			alpha -= index;
 			
 			//Determine base angle based on quadrant and add or subtract table
 			//value from base angle, based on quadrant

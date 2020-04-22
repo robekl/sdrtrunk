@@ -36,7 +36,7 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
 {
     private final static Logger mLog = LoggerFactory.getLogger(EyeDiagramChart.class);
 
-    private ObservableList<Series<Double,Float>> mData = FXCollections.observableArrayList();
+    private ObservableList<Series<Double,Double>> mData = FXCollections.observableArrayList();
     private int mSeriesCount;
     private int mSeriesPointer;
     private int mSeriesLength;
@@ -61,9 +61,9 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
         setData(mData);
     }
 
-    private ObservableList<Data<Double,Float>> getSeries(int series, int length)
+    private ObservableList<Data<Double,Double>> getSeries(int series, int length)
     {
-        ObservableList<Data<Double,Float>> seriesData = mData.get(series).getData();
+        ObservableList<Data<Double,Double>> seriesData = mData.get(series).getData();
 
         while(seriesData.size() > length)
         {
@@ -72,7 +72,7 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
 
         while(seriesData.size() < length)
         {
-            seriesData.add(new Data<>(0.0,0.0f));
+            seriesData.add(new Data<>(0.0,0.0d));
         }
 
         return seriesData;
@@ -87,10 +87,10 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
         }
     }
 
-    private float[] conditionData(Complex[] samples)
+    private double[] conditionData(Complex[] samples)
     {
-        Float previousAngle = null;
-        float[] corrected = new float[samples.length];
+        Double previousAngle = null;
+        double[] corrected = new double[samples.length];
 
         int phaseRolloverIndex = -1;
 
@@ -128,7 +128,7 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
         Complex[] samples = symbolDecisionData.getSamples();
         int length = samples.length;
 
-        ObservableList<Data<Double,Float>> iSeries = getSeries(mSeriesPointer++, length);
+        ObservableList<Data<Double,Double>> iSeries = getSeries(mSeriesPointer++, length);
 //        checkChartLength(length);
 
         if(mSeriesPointer >= mSeriesCount)
@@ -136,11 +136,11 @@ public class EyeDiagramChart extends LineChart implements Listener<SymbolDecisio
             mSeriesPointer = 0;
         }
 
-        float[] angles = conditionData(samples);
+        double[] angles = conditionData(samples);
 
         for(int x = 0; x < samples.length; x++)
         {
-            Data<Double,Float> iDataPoint = iSeries.get(x);
+            Data<Double,Double> iDataPoint = iSeries.get(x);
             Complex sample = samples[x];
             iDataPoint.setXValue((double)x - symbolDecisionData.getSamplingPoint());
             iDataPoint.setYValue(angles[x]);

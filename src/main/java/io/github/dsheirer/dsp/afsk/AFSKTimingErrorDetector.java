@@ -33,7 +33,7 @@ public class AFSKTimingErrorDetector
 {
     protected boolean[] mBuffer;
     protected int mDetectedZeroCrossing;
-    protected float mSymbolMiddle;
+    protected double mSymbolMiddle;
     private int mZeroCrossingCount;
 
     /**
@@ -44,7 +44,7 @@ public class AFSKTimingErrorDetector
     public AFSKTimingErrorDetector(int samplesPerSymbol)
     {
         mBuffer = new boolean[samplesPerSymbol];
-        mSymbolMiddle = (float)(samplesPerSymbol - 1) / 2.0f;
+        mSymbolMiddle = (double)(samplesPerSymbol - 1) / 2.0d;
     }
 
     /**

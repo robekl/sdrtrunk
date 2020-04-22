@@ -226,7 +226,7 @@ public class MessageActivityPanel extends JPanel implements Listener<ProcessingC
                             "[grow,fill][][]"));
 
                     @SuppressWarnings("unchecked")
-                    FilterSet<IMessage> filter = (FilterSet<IMessage>) ((MessageActivityModel) mTable.getModel())
+                    FilterSet<IMessage> filter = ((MessageActivityModel) mTable.getModel())
                             .getMessageFilter();
 
                     FilterEditorPanel<IMessage> panel = new FilterEditorPanel<>(filter);

@@ -37,14 +37,11 @@ import io.github.dsheirer.module.decode.p25.phase2.timeslot.AbstractVoiceTimeslo
 import io.github.dsheirer.preference.UserPreferences;
 import io.github.dsheirer.sample.Listener;
 import jmbe.iface.IAudioWithMetadata;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class P25P2AudioModule extends AmbeAudioModule implements IdentifierUpdateProvider
 {
@@ -173,7 +170,12 @@ public class P25P2AudioModule extends AmbeAudioModule implements IdentifierUpdat
                 try
                 {
                     IAudioWithMetadata audioWithMetadata = getAudioCodec().getAudioWithMetadata(voiceFrameBytes);
-                    addAudio(audioWithMetadata.getAudio());
+                    float[] audio = audioWithMetadata.getAudio();
+                    double d[] = new double[audio.length];
+                    for (int i = 0; i < audio.length; i++) {
+                        d[i] = audio[i];
+                    }
+                    addAudio(d);
                     processMetadata(audioWithMetadata);
                 }
                 catch(Exception e)

@@ -53,7 +53,7 @@ public class ComplexDecimator implements ComplexSampleListener
      * to the registered listener
      */
     @Override
-    public void receive(float i, float q)
+    public void receive(double i, double q)
     {
         mCounter++;
 

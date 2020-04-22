@@ -26,14 +26,14 @@ public class HilbertTransform
 {
     private static final Logger mLog = LoggerFactory.getLogger(HilbertTransform.class);
 
-    private float[] mHilbertFilter;
-    private float[] mBuffer;
+    private double[] mHilbertFilter;
+    private double[] mBuffer;
     private int mBufferSize;
     private int mBufferPointer;
     private int[][] mIndexMap;
     private int mMapHeight;
     private int mCenterTapIndex;
-    private float mCenterCoefficent;
+    private double mCenterCoefficent;
 
     private boolean mInvertFlag = false;
 
@@ -59,7 +59,7 @@ public class HilbertTransform
         convertHalfBandToHilbert(Filters.HALF_BAND_FILTER_47T.getCoefficients());
 
         mBufferSize = mHilbertFilter.length + 1;
-        mBuffer = new float[mBufferSize];
+        mBuffer = new double[mBufferSize];
 
         mCenterCoefficent = mHilbertFilter[mHilbertFilter.length / 2];
 
@@ -86,16 +86,16 @@ public class HilbertTransform
      * Performs frequency translation by FS/2 on the final filtered values by
      * applying a sequence of 1,-1 (sign change) to each I/Q output sample.
      */
-    public float[] filter(float[] samples)
+    public double[] filter(double[] samples)
     {
-        float accumulator;
+        double accumulator;
 
         for(int y = 0; y < samples.length; y += 2)
         {
             insert(samples[y]);
             insert(samples[y + 1]);
 
-            accumulator = 0.0f;
+            accumulator = 0.0d;
 
             int index = mBufferPointer / 2;
 
@@ -133,7 +133,7 @@ public class HilbertTransform
     /**
      * Inserts the sample into the circular buffer, overwriting the oldest value
      */
-    private void insert(float sample)
+    private void insert(double sample)
     {
         mBuffer[mBufferPointer++] = sample;
 
@@ -221,9 +221,9 @@ public class HilbertTransform
      * Note: we apply a 2.0 gain to the coefficients to compensate for the loss
      * of splitting the signal via two filters.
      */
-    private void convertHalfBandToHilbert(float[] coefficients)
+    private void convertHalfBandToHilbert(double[] coefficients)
     {
-        mHilbertFilter = new float[coefficients.length];
+        mHilbertFilter = new double[coefficients.length];
 
         int middle = coefficients.length / 2;
 
@@ -231,15 +231,15 @@ public class HilbertTransform
         {
             if(x < middle)
             {
-                mHilbertFilter[x] = 2.0f * -FastMath.abs(coefficients[x]);
+                mHilbertFilter[x] = 2.0d * -FastMath.abs(coefficients[x]);
             }
             else if(x > middle)
             {
-                mHilbertFilter[x] = 2.0f * FastMath.abs(coefficients[x]);
+                mHilbertFilter[x] = 2.0d * FastMath.abs(coefficients[x]);
             }
             else
             {
-                mHilbertFilter[x] = 2.0f * coefficients[x];
+                mHilbertFilter[x] = 2.0d * coefficients[x];
             }
         }
     }

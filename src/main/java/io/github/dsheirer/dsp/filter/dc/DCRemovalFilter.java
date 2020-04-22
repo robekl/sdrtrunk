@@ -16,7 +16,7 @@
 package io.github.dsheirer.dsp.filter.dc;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 
 /**
  * DC removal filter for removing any DC offset that may be present when a signal is not aligned within the
@@ -25,15 +25,15 @@ import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
 public class DCRemovalFilter
 {
     private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("DC Removal Filter");
-    protected float mAverage;
-    protected float mRatio;
+    protected double mAverage;
+    protected double mRatio;
 
     /**
      * Creates a DC removal filter.
      *
      * @param ratio
      */
-    public DCRemovalFilter(float ratio)
+    public DCRemovalFilter(double ratio)
     {
         mRatio = ratio;
     }
@@ -43,7 +43,7 @@ public class DCRemovalFilter
      */
     public void reset()
     {
-        mAverage = 0.0f;
+        mAverage = 0.0d;
     }
 
     /**
@@ -51,14 +51,14 @@ public class DCRemovalFilter
      * @param sample to filter
      * @return filtered sample
      */
-    public float filter(float sample)
+    public double filter(double sample)
     {
-        float filtered = sample - mAverage;
+        double filtered = sample - mAverage;
         mAverage += mRatio * filtered;
         return filtered;
     }
 
-    public float[] filter( float[] samples )
+    public double[] filter( double[] samples )
     {
         for( int x = 0; x < samples.length; x++ )
         {
@@ -77,12 +77,12 @@ public class DCRemovalFilter
      * @param unfilteredBuffer containing samples to filter
      * @return a new reusable buffer containing the filtered samples with the user count set to 1.
      */
-    public ReusableFloatBuffer filter(ReusableFloatBuffer unfilteredBuffer)
+    public ReusableDoubleBuffer filter(ReusableDoubleBuffer unfilteredBuffer)
     {
-        ReusableFloatBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredBuffer.getSampleCount());
+        ReusableDoubleBuffer filteredBuffer = mReusableBufferQueue.getBuffer(unfilteredBuffer.getSampleCount());
 
-        float[] unfilteredSamples = unfilteredBuffer.getSamples();
-        float[] filteredSamples = filteredBuffer.getSamples();
+        double[] unfilteredSamples = unfilteredBuffer.getSamples();
+        double[] filteredSamples = filteredBuffer.getSamples();
 
         for(int x = 0; x < unfilteredSamples.length; x++)
         {

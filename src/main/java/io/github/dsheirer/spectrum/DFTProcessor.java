@@ -30,7 +30,7 @@ import io.github.dsheirer.source.ISourceEventProcessor;
 import io.github.dsheirer.source.SourceEvent;
 import io.github.dsheirer.spectrum.converter.DFTResultsConverter;
 import io.github.dsheirer.util.ThreadPool;
-import org.jtransforms.fft.FloatFFT_1D;
+import org.jtransforms.fft.DoubleFFT_1D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
     private double[] mWindow;
     private DFTSize mDFTSize = DFTSize.FFT04096;
     private DFTSize mNewDFTSize = DFTSize.FFT04096;
-    private FloatFFT_1D mFFT = new FloatFFT_1D(mDFTSize.getSize());
+    private DoubleFFT_1D mFFT = new DoubleFFT_1D(mDFTSize.getSize());
     private int mFrameRate;
     private int mSampleRate = 2400000; //Initial high value until we receive update from tuner
     private int mFrameSize;
@@ -69,7 +69,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
     private CopyOnWriteArrayList<DFTResultsConverter> mListeners = new CopyOnWriteArrayList<DFTResultsConverter>();
     private OverflowableBufferStream mOverflowableBufferStream = new OverflowableBufferStream(BUFFER_QUEUE_MAX_SIZE,
         BUFFER_QUEUE_OVERFLOW_RESET_THRESHOLD, mDFTSize.getSize());
-    private float[] mPreviousSamples;
+    private double[] mPreviousSamples;
 
     public DFTProcessor(SampleType sampleType)
     {
@@ -173,7 +173,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
         {
             //Schedule the DFT to run calculations at a fixed rate
             int initialDelay = 0;
-            int period = (int) (1000 / mFrameRate);
+            int period = 1000 / mFrameRate;
 
             mProcessorTaskHandle = ThreadPool.SCHEDULED.scheduleAtFixedRate(new DFTCalculationTask(), initialDelay, period,
                 TimeUnit.MILLISECONDS);
@@ -225,7 +225,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
             }
 
             //If this throws an IO exception, the buffer queue is (temporarily) empty and we return from the method
-            float[] samples = mOverflowableBufferStream.get(mFrameSize, mFrameOverlapCount);
+            double[] samples = mOverflowableBufferStream.get(mFrameSize, mFrameOverlapCount);
 
             Window.apply(mWindow, samples);
 
@@ -262,7 +262,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
      * Takes a calculated DFT results set, reformats the data, and sends it
      * out to all registered listeners.
      */
-    private void dispatch(float[] results)
+    private void dispatch(double[] results)
     {
 
         for (DFTResultsConverter mListener : mListeners) {
@@ -314,7 +314,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
 
             setWindowType(mWindowType);
 
-            mFFT = new FloatFFT_1D(mDFTSize.getSize());
+            mFFT = new DoubleFFT_1D(mDFTSize.getSize());
         }
     }
 
@@ -345,7 +345,7 @@ public class DFTProcessor implements Listener<ReusableComplexBuffer>, ISourceEve
         int floatsPerSample = mSampleType == SampleType.COMPLEX ? 2 : 1;
 
         mFrameSize = mDFTSize.getSize() * floatsPerSample;
-        mPreviousSamples = new float[mFrameSize];
+        mPreviousSamples = new double[mFrameSize];
 
         int productionRate = mSampleRate * floatsPerSample;
         int consumptionRate = mFrameRate * mFrameSize;

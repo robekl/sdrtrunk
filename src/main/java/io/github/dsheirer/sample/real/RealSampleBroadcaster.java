@@ -28,7 +28,7 @@ public class RealSampleBroadcaster implements RealSampleListener
 			new CopyOnWriteArrayList<RealSampleListener>();
 
 	@Override
-    public void receive( float sample )
+    public void receive( double sample )
     {
 		broadcast( sample );
     }
@@ -66,7 +66,7 @@ public class RealSampleBroadcaster implements RealSampleListener
 		mListeners.clear();
 	}
 
-    public void broadcast( float sample )
+    public void broadcast( double sample )
     {
     	for( RealSampleListener listener: mListeners )
     	{

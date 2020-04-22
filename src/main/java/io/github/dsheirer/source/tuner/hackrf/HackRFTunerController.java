@@ -445,11 +445,11 @@ public class HackRFTunerController extends USBTunerController
 
         if(signed)
         {
-            return (int)(buffer.get());
+            return buffer.get();
         }
         else
         {
-            return (int)(buffer.get() & 0xFF);
+            return buffer.get() & 0xFF;
         }
     }
 

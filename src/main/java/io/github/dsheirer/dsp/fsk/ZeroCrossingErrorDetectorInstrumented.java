@@ -26,27 +26,27 @@ public class ZeroCrossingErrorDetectorInstrumented extends ZeroCrossingErrorDete
      *
      * @param samplesPerSymbol
      */
-    public ZeroCrossingErrorDetectorInstrumented(float samplesPerSymbol)
+    public ZeroCrossingErrorDetectorInstrumented(double samplesPerSymbol)
     {
         super(samplesPerSymbol);
     }
 
     @Override
-    public float getError()
+    public double getError()
     {
-        float error = super.getError();
+        double error = super.getError();
 
         timingError.setValue(error);
 
         return error;
     }
 
-    public float getZeroCrossingIdeal()
+    public double getZeroCrossingIdeal()
     {
         return mZeroCrossingIdeal;
     }
 
-    public float getDetectedZeroCrossing()
+    public double getDetectedZeroCrossing()
     {
         return mDetectedZeroCrossing;
     }

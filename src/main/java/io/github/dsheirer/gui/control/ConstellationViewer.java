@@ -20,9 +20,9 @@ public class ConstellationViewer extends JPanel implements Listener<Complex>
 	
 	private int mSampleRate;
 	private int mSymbolRate;
-	private float mSamplesPerSymbol;
-	private float mCounter = 0;
-	private float mOffset = 0;
+	private double mSamplesPerSymbol;
+	private double mCounter = 0;
+	private double mOffset = 0;
 	private CircularBuffer<Complex> mBuffer =
 						new CircularBuffer<Complex>( 5000 );
 	private Complex mPrevious = new Complex( 1, 1 );
@@ -31,7 +31,7 @@ public class ConstellationViewer extends JPanel implements Listener<Complex>
 	{
 		mSampleRate = sampleRate;
 		mSymbolRate = symbolRate;
-		mSamplesPerSymbol = (float)mSampleRate / (float)mSymbolRate;
+		mSamplesPerSymbol = (double)mSampleRate / (double)mSymbolRate;
 		
 		initGui();
 	}
@@ -80,7 +80,7 @@ public class ConstellationViewer extends JPanel implements Listener<Complex>
 	 * 
 	 * @param offset
 	 */
-	public void setOffset( float offset )
+	public void setOffset( double offset )
 	{
 		mOffset = offset;
 		
@@ -136,7 +136,7 @@ public class ConstellationViewer extends JPanel implements Listener<Complex>
         			 * serves as the instantaneous amplitude of the demodulated signal
         			 */
         			double denominator = 1.0d / i;
-        			angle = FastMath.atan( (double)q * denominator );
+        			angle = FastMath.atan( q * denominator );
         		}
         		
         		Ellipse2D.Double ellipse = 
@@ -173,7 +173,7 @@ public class ConstellationViewer extends JPanel implements Listener<Complex>
         {
     		int value = ((JSlider)event.getSource()).getValue();
     		
-    		setOffset( (float)value / 10.0f );
+    		setOffset( (double)value / 10.0d );
         }
     }
 }

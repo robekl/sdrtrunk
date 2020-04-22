@@ -40,7 +40,7 @@ public class TwoChannelOutputProcessor extends ChannelOutputProcessor
      * @param channelIndexes containing two channel indices.
      * @param gain to apply to output.  Typically this is equal to the channelizer's channel count.
      */
-    public TwoChannelOutputProcessor(double sampleRate, List<Integer> channelIndexes, float[] filter, double gain)
+    public TwoChannelOutputProcessor(double sampleRate, List<Integer> channelIndexes, double[] filter, double gain)
     {
         //Set the frequency correction oscillator to 2 x output sample rate since we'll be correcting the frequency
         //after synthesizing both input channels
@@ -62,7 +62,7 @@ public class TwoChannelOutputProcessor extends ChannelOutputProcessor
 
 
     @Override
-    public void setSynthesisFilter(float[] filter)
+    public void setSynthesisFilter(double[] filter)
     {
         mSynthesizer = new TwoChannelSynthesizerM2(filter);
     }

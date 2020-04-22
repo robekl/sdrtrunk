@@ -17,7 +17,7 @@ package io.github.dsheirer.dsp.am;
 
 import io.github.dsheirer.sample.buffer.ReusableBufferQueue;
 import io.github.dsheirer.sample.buffer.ReusableComplexBuffer;
-import io.github.dsheirer.sample.buffer.ReusableFloatBuffer;
+import io.github.dsheirer.sample.buffer.ReusableDoubleBuffer;
 import org.apache.commons.math3.util.FastMath;
 
 /**
@@ -27,14 +27,14 @@ public class AMDemodulator
 {
     private ReusableBufferQueue mReusableBufferQueue = new ReusableBufferQueue("AMDemodulator");
     private int mOutputBufferPointer;
-    private float mGain;
+    private double mGain;
 
     /**
      * Constructs this demodulator where the specified gain is applied to demodulated output samples.
      *
      * @param gain to apply to demodulated output samples.
      */
-    public AMDemodulator(float gain)
+    public AMDemodulator(double gain)
     {
         mGain = gain;
     }
@@ -42,7 +42,7 @@ public class AMDemodulator
     /**
      * Sets the gain to the specified level.
      */
-    public void setGain(float gain)
+    public void setGain(double gain)
     {
         mGain = gain;
     }
@@ -54,9 +54,9 @@ public class AMDemodulator
      * @param quadrature sample
      * @return AM demodulated sample
      */
-    public float demodulate(float inphase, float quadrature)
+    public double demodulate(double inphase, double quadrature)
     {
-        return (float) FastMath.sqrt((inphase * inphase) + (quadrature * quadrature)) * mGain;
+        return FastMath.sqrt((inphase * inphase) + (quadrature * quadrature)) * mGain;
     }
 
     /**
@@ -64,11 +64,11 @@ public class AMDemodulator
      * @param complexBuffer to demodulate
      * @return demodulated audio buffer.
      */
-    public ReusableFloatBuffer demodulate(ReusableComplexBuffer complexBuffer)
+    public ReusableDoubleBuffer demodulate(ReusableComplexBuffer complexBuffer)
     {
-        ReusableFloatBuffer reusableFloatBuffer = mReusableBufferQueue.getBuffer(complexBuffer.getSampleCount());
-        float[] input = complexBuffer.getSamples();
-        float[] output = reusableFloatBuffer.getSamples();
+        ReusableDoubleBuffer reusableDoubleBuffer = mReusableBufferQueue.getBuffer(complexBuffer.getSampleCount());
+        double[] input = complexBuffer.getSamples();
+        double[] output = reusableDoubleBuffer.getSamples();
         mOutputBufferPointer = 0;
 
         for(int x= 0; x < complexBuffer.getSamples().length; x += 2)
@@ -78,6 +78,6 @@ public class AMDemodulator
 
         complexBuffer.decrementUserCount();
 
-        return reusableFloatBuffer;
+        return reusableDoubleBuffer;
     }
 }

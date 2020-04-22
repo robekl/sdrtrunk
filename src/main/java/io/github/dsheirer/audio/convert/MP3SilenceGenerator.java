@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MP3SilenceGenerator implements ISilenceGenerator
@@ -45,8 +46,7 @@ public class MP3SilenceGenerator implements ISilenceGenerator
     {
         int length = (int)(duration * 8);   //8000 Hz sample rate
 
-        List<float[]> silenceBuffers = new ArrayList<>();
-        silenceBuffers.add(new float[length]);
+        List<double[]> silenceBuffers = Collections.singletonList(new double[length]);
         byte[] frameData = mGenerator.convert(silenceBuffers);
 
         frameData = merge(mPreviousPartialFrameData, frameData);
@@ -65,7 +65,7 @@ public class MP3SilenceGenerator implements ISilenceGenerator
             }
             else
             {
-                int integralFrameLength = (int)(frameData.length / 144) * 144;
+                int integralFrameLength = (frameData.length / 144) * 144;
                 mPreviousPartialFrameData = Arrays.copyOfRange(frameData, integralFrameLength, frameData.length);
                 return Arrays.copyOf(frameData, integralFrameLength);
             }

@@ -13,7 +13,7 @@ public class RealInterpolator extends Interpolator
 {
     private final static Logger mLog = LoggerFactory.getLogger(RealInterpolator.class);
 
-    private float mGain;
+    private double mGain;
 
     /**
      * Provides an interpolated sample point along an eight-sample waveform representation using 128 filters to
@@ -21,7 +21,7 @@ public class RealInterpolator extends Interpolator
      *
      * @param gain to apply to the interpolated sample
      */
-    public RealInterpolator(float gain)
+    public RealInterpolator(double gain)
     {
         mGain = gain;
     }
@@ -38,7 +38,7 @@ public class RealInterpolator extends Interpolator
      * @param mu - interpolated sample position between 0.0 and 1.0
      * @return - interpolated sample value
      */
-    public float filter(float[] samples, int offset, float mu)
+    public double filter(double[] samples, int offset, double mu)
     {
         /* Ensure we have enough samples in the array */
         Validate.isTrue(samples.length >= offset + 7);
@@ -46,7 +46,7 @@ public class RealInterpolator extends Interpolator
         /* Identify the filter bank that corresponds to mu */
         int index = (int)(NSTEPS * mu);
 
-        float accumulator = (TAPS[index][7] * samples[offset]);
+        double accumulator = (TAPS[index][7] * samples[offset]);
         accumulator += (TAPS[index][6] * samples[offset + 1]);
         accumulator += (TAPS[index][5] * samples[offset + 2]);
         accumulator += (TAPS[index][4] * samples[offset + 3]);
@@ -58,31 +58,31 @@ public class RealInterpolator extends Interpolator
         return accumulator * mGain;
     }
 
-    public Complex filter(float[] iSamples, float[] qSamples, int offset, float mu)
+    public Complex filter(double[] iSamples, double[] qSamples, int offset, double mu)
     {
-        float i = filter(iSamples, offset, mu);
-        float q = filter(qSamples, offset, mu);
+        double i = filter(iSamples, offset, mu);
+        double q = filter(qSamples, offset, mu);
 
         return new Complex(i, q);
     }
 
     public static void main(String[] args)
     {
-        RealInterpolator interpolator = new RealInterpolator(1.0f);
+        RealInterpolator interpolator = new RealInterpolator(1.0d);
         DecimalFormat decimalFormat = new DecimalFormat("0.0000");
 
         double TWO_PI = FastMath.PI * 2.0;
 
-		float[] samples = new float[16];
+        double[] samples = new double[16];
 
 		for(int x = 0; x < 16; x++)
         {
-            samples[x] = (float) FastMath.sin(TWO_PI * (double)x / 8.0);
+            samples[x] = FastMath.sin(TWO_PI * (double)x / 8.0);
         }
 
         mLog.debug("Samples: " + Arrays.toString(samples));
 
-        for(float x = 0.0f; x <= 1.01f; x += 0.1f)
+        for(double x = 0.0d; x <= 1.01d; x += 0.1d)
         {
             mLog.debug(decimalFormat.format(x) + ": " + decimalFormat.format(interpolator.filter(samples, 1, x)));
         }
